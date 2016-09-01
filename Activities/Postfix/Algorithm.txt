@@ -1,0 +1,17 @@
+Postfix Expression Evaluation Algorithm:
+
+1) S = Empty Stack
+
+2) Read all tokens one by one. Label each token as 't'.
+
+3) If 't' is a number, then do S.Push(t).
+
+4) If 't' is an operator, then do:
+	x = S.Pop()
+	y = S.Pop()
+	S.Push(y operator x)
+
+5) Repeat 2 to 4 until all tokens have been evaluated.
+
+6) The Result should be the only element remaining in S.
+
