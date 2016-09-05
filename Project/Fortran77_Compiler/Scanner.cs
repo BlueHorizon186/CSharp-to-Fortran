@@ -131,7 +131,7 @@ namespace Fortran77_Compiler
 
                     if (keywords.ContainsKey(m.Value)) {
 
-                        // Matched string is a Buttercup keyword.
+                        // Matched string is a keyword.
                         yield return newTok(m, keywords[m.Value]);                                               
 
                     } else { 
