@@ -26,6 +26,46 @@ namespace Fortran77_Compiler
 	{
 		// Stores the source code file read from the console.
 		readonly string input;
+        
+        static readonly Regex regex = new Regex(
+           @"
+                (?<Assign>      [=]      )
+              | (?<Declaration> []       )
+              | (?<Constant>    []       )
+              | (?<Exponent>    [**]     )
+              | (?<Mul>         [*]      )
+              | (?<Div>         [/]      )
+              | (?<Add>         [+]      )
+              | (?<Neg>         [-]      )
+              | (?<Less_t>      [.lt.]   )
+              | (?<Less_or_e>   [.le.]   )
+              | (?<Greater_t>   [.gt.]   )
+              | (?<Greater_o_e> [.ge.]   )              
+              | (?<Equal>       [.eq.]   )
+              | (?<N_equal>     [.ne.]   )
+              | (?<WhiteSpace>  [\s]     )
+              | (?<Other>       .        ) 
+            ",
+            RegexOptions.IgnorePatternWhitespace
+                | RegexOptions.Compiled
+                | RegexOptions.Multiline
+            );
+            
+            static readonly IDictionary<string, TokenCategory> keywords =
+            new Dictionary<string, TokenCategory>() {
+                {"if", TokenCategory.IF},
+                {"then", TokenCategory.THEN},
+                {"else", TokenCategory.ELSE},
+                {"do", TokenCategory.DO},
+                {"stop", TokenCategory.STOP},
+                {"end", TokenCategory.END},
+                {"while", TokenCategory.WHILE}
+            };
+            
+            static readonly IDictionary<string, TokenCategory> nonKeywords =
+            new Dictionary<string, TokenCategory>() {
+                              
+            };
 
 		// Constructor
 		public Scanner(string input)
