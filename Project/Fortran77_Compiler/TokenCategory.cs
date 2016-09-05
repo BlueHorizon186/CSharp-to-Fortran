@@ -22,7 +22,40 @@ namespace Fortran77_Compiler
 	// Defines the possible categories a Token may belong to.
 	enum TokenCategory
 	{
-		TEST
+		AND,
+        ASSIGN,
+        DECLARATION,
+        STATEMENT,
+        CONSTANT,
+        EXPONENT,
+        MUL,
+        EOF,
+        DIVISION,
+        ADITTION,
+        SUBS,
+        NEGATION,
+        LESS_THAN,
+        LESS_OR_EQUAL,
+        GREATER_THAN,
+        GREATER_OR_EQUAL,
+        EQUAL,
+        NOT_EQUAL,
+        IF,
+        THEN,
+        ELSE,
+        DO,
+        WHILE,
+        ABS,
+        MIN,
+        MAX,
+        SIN,
+        COS,
+        TAN,
+        ATAN,
+        EXP,
+        LOG,
+        STOP,
+        END
 	}
 }
 
