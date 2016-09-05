@@ -29,22 +29,26 @@ namespace Fortran77_Compiler
         
         static readonly Regex regex = new Regex(
            @"
-                (?<Assign>      [=]      )
-              | (?<Declaration> []       )
-              | (?<Constant>    []       )
-              | (?<Exponent>    [**]     )
-              | (?<Mul>         [*]      )
-              | (?<Div>         [/]      )
-              | (?<Add>         [+]      )
-              | (?<Neg>         [-]      )
-              | (?<Less_t>      [.lt.]   )
-              | (?<Less_or_e>   [.le.]   )
-              | (?<Greater_t>   [.gt.]   )
-              | (?<Greater_o_e> [.ge.]   )              
-              | (?<Equal>       [.eq.]   )
-              | (?<N_equal>     [.ne.]   )
-              | (?<WhiteSpace>  [\s]     )
-              | (?<Other>       .        ) 
+                (?<Assign>         [=]       )
+              | (?<And>            [.and.]   )
+              | (?<Int_constant>   [0-9]+    )
+              | (?<Real_constant>  []        )
+              | (?<Logic_constant> []        )
+              | (?<Char_constant>  []        )
+              | (?<Exponent>       [**]      )
+              | (?<Mul>            [*]       )
+              | (?<Div>            [/]       )
+              | (?<Add>            [+]       )
+              | (?<Neg>            [-]       )
+              | (?<Less_t>         [.lt.]    )
+              | (?<Less_or_e>      [.le.]    )
+              | (?<Greater_t>      [.gt.]    )
+              | (?<Greater_o_e>    [.ge.]    )              
+              | (?<Equal>          [.eq.]    )
+              | (?<N_equal>        [.ne.]    )
+              | (?<Identifier>     [a-zA-Z]+ )
+              | (?<WhiteSpace>     [\s]      )
+              | (?<Other>          .         ) 
             ",
             RegexOptions.IgnorePatternWhitespace
                 | RegexOptions.Compiled
@@ -59,14 +63,40 @@ namespace Fortran77_Compiler
                 {"do", TokenCategory.DO},
                 {"stop", TokenCategory.STOP},
                 {"end", TokenCategory.END},
-                {"while", TokenCategory.WHILE}
+                {"while", TokenCategory.WHILE},
+                {"continue", TokenCategory.CONTINUE},
+                {"write", TokenCategory.WRITE},
+                {"read", TokenCategory.READ},
+                {"goto", TokenCategory.GOTO},
+                {"endif", TokenCategory.ENDIF},
+                {"program", TokenCategory.PROGRAM},
+                {"return", TokenCategory.RETURN},
+                {"call", TokenCategory.CALL},
+                {"common", TokenCategory.COMMON},
+                {"data", TokenCategory.DATA}
             };
             
             static readonly IDictionary<string, TokenCategory> nonKeywords =
             new Dictionary<string, TokenCategory>() {
-                              
-            };
-
+                {"Assign", TokenCategory.ASSIGN},
+                {"And", TokenCategory.AND},
+                {"Int_constant", TokenCategory.INT_CONSTANT},
+                {"Real_constant", TokenCategory.REAL_CONSTANT},
+                {"Logic_constant", TokenCategory.LOGIC_CONSTANT},
+                {"Char_constant", TokenCategory.CHAR_CONSTANT},
+                {"Exponent", TokenCategory.EXPONENT},
+                {"Mul", TokenCategory.MUL},
+                {"Div", TokenCategory.DIV},
+                {"Add", TokenCategory.ADD},
+                {"Neg", TokenCategory.NEG},
+                {"less_t", TokenCategory.LESS_THAN},
+                {"Less_or_e", TokenCategory.LESS_OR_EQUAL},
+                {"Greater_t", TokenCategory.LESS_OR_EQUAL},
+                {"Greater_o_e", TokenCategory.LESS_OR_EQUAL},
+                {"Equal", TokenCategory.LESS_OR_EQUAL},
+                {"N_equal", TokenCategory.LESS_OR_EQUAL}
+             };  
+                
 		// Constructor
 		public Scanner(string input)
 		{
