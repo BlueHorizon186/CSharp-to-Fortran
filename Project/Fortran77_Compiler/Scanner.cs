@@ -48,6 +48,7 @@ namespace Fortran77_Compiler
               | (?<N_equal>        [.ne.]    )
               | (?<Identifier>     [a-zA-Z]+ )
               | (?<WhiteSpace>     [\s]      )
+              | (?<Comment>        !.+       )
               | (?<Other>          .         ) 
             ",
             RegexOptions.IgnorePatternWhitespace
@@ -106,7 +107,60 @@ namespace Fortran77_Compiler
 		// Enumerable in charge of parsing the input into tokens.
 		public IEnumerable<Token> Start()
 		{
-			yield return new Token("", TokenCategory.TEST, 1, 1);
-		}
+
+            var row = 1;
+            var columnStart = 0;
+
+            Func<Match, TokenCategory, Token> newTok = (m, tc) =>
+                new Token(m.Value, tc, row, m.Index - columnStart + 1);
+
+            foreach (Match m in regex.Matches(input)) {
+
+                if (m.Groups["Newline"].Length > 0) {
+
+                    // Found a new line.
+                    row++;
+                    columnStart = m.Index + m.Length;
+
+                } else if (m.Groups["WhiteSpace"].Length > 0 
+                    || m.Groups["Comment"].Length > 0) {
+
+                    // Skip white space and comments.
+
+                } else if (m.Groups["Identifier"].Length > 0) {
+
+                    if (keywords.ContainsKey(m.Value)) {
+
+                        // Matched string is a Buttercup keyword.
+                        yield return newTok(m, keywords[m.Value]);                                               
+
+                    } else { 
+
+                        // Otherwise it's just a plain identifier.
+                        yield return newTok(m, TokenCategory.IDENTIFIER);
+                    }
+
+                } else if (m.Groups["Other"].Length > 0) {
+
+                    // Found an illegal character.
+                    yield return newTok(m, TokenCategory.ILLEGAL_CHAR);
+
+                } else {
+
+                    // Match must be one of the non keywords.
+                    foreach (var name in nonKeywords.Keys) {
+                        if (m.Groups[name].Length > 0) {
+                            yield return newTok(m, nonKeywords[name]);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            yield return new Token(null, 
+                                   TokenCategory.EOF, 
+                                   row, 
+                                   input.Length - columnStart + 1);
+        }
 	}
 }
