@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Fortran77_Compiler
 {
@@ -83,8 +84,8 @@ namespace Fortran77_Compiler
             new Dictionary<string, TokenCategory>() {
                 {"Assign", TokenCategory.ASSIGN},
                 {"And", TokenCategory.AND},
-		        {“Or”, TokenCategory.OR},
-	        	{“Not”, TokenCategory.NOT},
+		        {"Or", TokenCategory.OR},
+	        	{"Not", TokenCategory.NOT},
                 {"Int_constant", TokenCategory.INT_CONSTANT},
                 {"Real_constant", TokenCategory.REAL_CONSTANT},
                 {"Logic_constant", TokenCategory.LOGIC_CONSTANT},
