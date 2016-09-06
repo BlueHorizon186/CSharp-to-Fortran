@@ -37,7 +37,7 @@ namespace Fortran77_Compiler
               | (?<Int_constant>   [0-9]+    )
               | (?<Real_constant>  [\d+[.]\d+])
               | (?<Logic_constant> [.]([true]|[false])+[.] )
-              
+              | (?<Char_constant>  ['][a-zA-Z]+['])
               | (?<Exponent>       [**]      )
               | (?<Mul>            [*]       )
               | (?<Div>            [/]       )
@@ -89,7 +89,7 @@ namespace Fortran77_Compiler
                 {"Int_constant", TokenCategory.INT_CONSTANT},
                 {"Real_constant", TokenCategory.REAL_CONSTANT},
                 {"Logic_constant", TokenCategory.LOGIC_CONSTANT},
-                //{"Char_constant", TokenCategory.CHAR_CONSTANT},
+                {"Char_constant", TokenCategory.CHAR_CONSTANT},
                 {"Exponent", TokenCategory.EXPONENT},
                 {"Mul", TokenCategory.MUL},
                 {"Div", TokenCategory.DIV},

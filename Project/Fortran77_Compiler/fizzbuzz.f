@@ -9,7 +9,7 @@
 
       do 10 i = 1, 100
       
-          if (rem(i, 15.0) .eq. 0) then
+          if (rem(i, 15) .eq. 0) then
               write(*, *) 'fizzbuzz'
           elseif (rem(i, 3) .eq. 0) then
               write(*, *) 'fizz'
