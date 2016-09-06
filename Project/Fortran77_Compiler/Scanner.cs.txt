@@ -1,4 +1,4 @@
-﻿/*
+/*
   Fortran77 compiler - This class performs the lexical analysis, 
   (a.k.a. scanning).
   Copyright (C) 2016, ITESM CEM
@@ -31,6 +31,8 @@ namespace Fortran77_Compiler
            @"
                 (?<Assign>         [=]       )
               | (?<And>            [.and.]   )
+	      | (?<Or>             [.or.]    )
+	      | (?<Not>            [.not.]   )
               | (?<Int_constant>   [0-9]+    )
               | (?<Real_constant>  []        )
               | (?<Logic_constant> []        )
@@ -81,6 +83,8 @@ namespace Fortran77_Compiler
             new Dictionary<string, TokenCategory>() {
                 {"Assign", TokenCategory.ASSIGN},
                 {"And", TokenCategory.AND},
+		{“Or”, TokenCategory.OR},
+		{“Not”, TokenCategory.NOT},
                 {"Int_constant", TokenCategory.INT_CONSTANT},
                 {"Real_constant", TokenCategory.REAL_CONSTANT},
                 {"Logic_constant", TokenCategory.LOGIC_CONSTANT},
