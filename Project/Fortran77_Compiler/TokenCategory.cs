@@ -29,7 +29,7 @@ namespace Fortran77_Compiler
         INT_CONSTANT,
         REAL_CONSTANT,
         LOGIC_CONSTANT, //.true. .false.
-        CHAR_CONSTANT,
+     
         ILLEGAL_CHAR,
         EXPONENT,
         MUL,

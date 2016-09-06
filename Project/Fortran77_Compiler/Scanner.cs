@@ -31,24 +31,24 @@ namespace Fortran77_Compiler
         static readonly Regex regex = new Regex(
            @"
                 (?<Assign>         [=]       )
-              | (?<And>            [.and.]   )
-	          | (?<Or>             [.or.]    )
-	          | (?<Not>            [.not.]   )
+              | (?<And>            [.](and)[.]   )
+	          | (?<Or>             [.](or)[.]   )
+	          | (?<Not>            [.](not)[.]   )
               | (?<Int_constant>   [0-9]+    )
               | (?<Real_constant>  [\d+[.]\d+])
-              | (?<Logic_constant> []        )
-              | (?<Char_constant>  []        )
+              | (?<Logic_constant> [.]([true]|[false])+[.] )
+              
               | (?<Exponent>       [**]      )
               | (?<Mul>            [*]       )
               | (?<Div>            [/]       )
               | (?<Add>            [+]       )
               | (?<Neg>            [-]       )
-              | (?<Less_t>         [.lt.]    )
-              | (?<Less_or_e>      [.le.]    )
-              | (?<Greater_t>      [.gt.]    )
-              | (?<Greater_o_e>    [.ge.]    )              
-              | (?<Equal>          [.eq.]    )
-              | (?<N_equal>        [.ne.]    )
+              | (?<Less_t>         [.](lt)[.]    )
+              | (?<Less_or_e>      [.](le)[.]   )
+              | (?<Greater_t>      [.](gt)[.]    )
+              | (?<Greater_o_e>    [.](ge)[.]   )              
+              | (?<Equal>          [.](eq)[.]    )
+              | (?<N_equal>        [.](ne)[.]    )
               | (?<Identifier>     [a-zA-Z]+ )
               | (?<WhiteSpace>     [\s]      )
               | (?<Comment>        !.+       )
@@ -89,7 +89,7 @@ namespace Fortran77_Compiler
                 {"Int_constant", TokenCategory.INT_CONSTANT},
                 {"Real_constant", TokenCategory.REAL_CONSTANT},
                 {"Logic_constant", TokenCategory.LOGIC_CONSTANT},
-                {"Char_constant", TokenCategory.CHAR_CONSTANT},
+                //{"Char_constant", TokenCategory.CHAR_CONSTANT},
                 {"Exponent", TokenCategory.EXPONENT},
                 {"Mul", TokenCategory.MUL},
                 {"Div", TokenCategory.DIV},
@@ -97,10 +97,10 @@ namespace Fortran77_Compiler
                 {"Neg", TokenCategory.NEG},
                 {"less_t", TokenCategory.LESS_THAN},
                 {"Less_or_e", TokenCategory.LESS_OR_EQUAL},
-                {"Greater_t", TokenCategory.LESS_OR_EQUAL},
-                {"Greater_o_e", TokenCategory.LESS_OR_EQUAL},
-                {"Equal", TokenCategory.LESS_OR_EQUAL},
-                {"N_equal", TokenCategory.LESS_OR_EQUAL}
+                {"Greater_t", TokenCategory.GREATER_THAN},
+                {"Greater_o_e", TokenCategory.GREATER_OR_EQUAL},
+                {"Equal", TokenCategory.EQUAL},
+                {"N_equal", TokenCategory.NOT_EQUAL}
              };  
                 
 		// Constructor
