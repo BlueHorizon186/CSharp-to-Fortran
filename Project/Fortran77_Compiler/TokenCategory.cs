@@ -24,6 +24,8 @@ namespace Fortran77_Compiler
 	{
 		ASSIGN, 
         AND, //.and.
+        OR, //.or.
+        NOT, //.not.
         INT_CONSTANT,
         REAL_CONSTANT,
         LOGIC_CONSTANT, //.true. .false.
