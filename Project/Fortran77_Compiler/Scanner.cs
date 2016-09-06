@@ -31,10 +31,10 @@ namespace Fortran77_Compiler
            @"
                 (?<Assign>         [=]       )
               | (?<And>            [.and.]   )
-	      | (?<Or>             [.or.]    )
-	      | (?<Not>            [.not.]   )
+	          | (?<Or>             [.or.]    )
+	          | (?<Not>            [.not.]   )
               | (?<Int_constant>   [0-9]+    )
-              | (?<Real_constant>  []        )
+              | (?<Real_constant>  [\d+[.]\d+])
               | (?<Logic_constant> []        )
               | (?<Char_constant>  []        )
               | (?<Exponent>       [**]      )
@@ -83,8 +83,8 @@ namespace Fortran77_Compiler
             new Dictionary<string, TokenCategory>() {
                 {"Assign", TokenCategory.ASSIGN},
                 {"And", TokenCategory.AND},
-		{“Or”, TokenCategory.OR},
-		{“Not”, TokenCategory.NOT},
+		        {“Or”, TokenCategory.OR},
+	        	{“Not”, TokenCategory.NOT},
                 {"Int_constant", TokenCategory.INT_CONSTANT},
                 {"Real_constant", TokenCategory.REAL_CONSTANT},
                 {"Logic_constant", TokenCategory.LOGIC_CONSTANT},
