@@ -36,7 +36,7 @@ namespace Fortran77_Compiler
 			  | (?<Comment>        !.*       			)
 			  | (?<Div>            [/]       			)
 			  | (?<Equal>          [.](eq)[.]    		)
-			  | (?<Exponent>       (**)      			)
+			  | (?<Exponent>       (\*\*)      			)
 			  | (?<GreaterOrEqual> [.](ge)[.]   		)
 			  | (?<GreaterThan>    [.](gt)[.]    		)
 			  | (?<Identifier>     [a-zA-Z]+			)
@@ -52,7 +52,7 @@ namespace Fortran77_Compiler
               | (?<RealLiteral>	   (\d+[.]\d+)			)
               | (?<StringLiteral>  ['].*['] 			)
               | (?<WhiteSpace>     [\s]      			)
-              | (?<Other>          .         			) 
+              | (?<Other>          .*         			) 
             ",
             RegexOptions.IgnorePatternWhitespace
                 | RegexOptions.Compiled
