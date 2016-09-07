@@ -20,22 +20,23 @@
 namespace Fortran77_Compiler
 {
 	// Defines the possible categories a Token may belong to.
+	// IMPORTANT: Enum elements sorting pending... 
 	enum TokenCategory
 	{
+		ADD,
+		AND,
 		ASSIGN, 
-        AND, //.and.
-        OR, //.or.
-        NOT, //.not.
-        INT_CONSTANT,
-        REAL_CONSTANT,
-        LOGIC_CONSTANT, //.true. .false.
-        CHAR_CONSTANT,
+        OR,
+        NOT,
+        INT_LITERAL,
+        REAL_LITERAL,
+        LOGIC_LITERAL,
+        STRING_LITERAL,
         ILLEGAL_CHAR,
         EXPONENT,
         MUL,
         EOF,
         DIV,
-        ADD,
         SUBS,
         NEG,
         LESS_THAN,

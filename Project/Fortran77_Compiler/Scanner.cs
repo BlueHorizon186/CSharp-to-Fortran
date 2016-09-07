@@ -30,10 +30,10 @@ namespace Fortran77_Compiler
         
         static readonly Regex regex = new Regex(
            @"
-                (?<Assign>         [=]					)
-			  | (?<Add>            [+]       			)
+			  	(?<Add>            [+]       			)
               | (?<And>            [.](and)[.]   		)
-			  | (?<Comment>        !.+       			)
+			  | (?<Assign>         [=]					)
+			  | (?<Comment>        !.*       			)
 			  | (?<Div>            [/]       			)
 			  | (?<Equal>          [.](eq)[.]    		)
 			  | (?<Exponent>       (**)      			)
@@ -59,49 +59,49 @@ namespace Fortran77_Compiler
                 | RegexOptions.Multiline
             );
             
-            static readonly IDictionary<string, TokenCategory> keywords =
+        static readonly IDictionary<string, TokenCategory> keywords =
             new Dictionary<string, TokenCategory>() {
+				{"call", TokenCategory.CALL},
+				{"common", TokenCategory.COMMON},
+				{"continue", TokenCategory.CONTINUE},
+				{"data", TokenCategory.DATA},
+				{"do", TokenCategory.DO},
+				{"else", TokenCategory.ELSE},
+				{"end", TokenCategory.END},
+				{"endif", TokenCategory.ENDIF},
+				{"goto", TokenCategory.GOTO},
                 {"if", TokenCategory.IF},
+				{"program", TokenCategory.PROGRAM},
+				{"read", TokenCategory.READ},
+				{"return", TokenCategory.RETURN},
+				{"stop", TokenCategory.STOP},
                 {"then", TokenCategory.THEN},
-                {"else", TokenCategory.ELSE},
-                {"do", TokenCategory.DO},
-                {"stop", TokenCategory.STOP},
-                {"end", TokenCategory.END},
                 {"while", TokenCategory.WHILE},
-                {"continue", TokenCategory.CONTINUE},
-                {"write", TokenCategory.WRITE},
-                {"read", TokenCategory.READ},
-                {"goto", TokenCategory.GOTO},
-                {"endif", TokenCategory.ENDIF},
-                {"program", TokenCategory.PROGRAM},
-                {"return", TokenCategory.RETURN},
-                {"call", TokenCategory.CALL},
-                {"common", TokenCategory.COMMON},
-                {"data", TokenCategory.DATA}
+                {"write", TokenCategory.WRITE}
             };
             
-            static readonly IDictionary<string, TokenCategory> nonKeywords =
+        static readonly IDictionary<string, TokenCategory> nonKeywords =
             new Dictionary<string, TokenCategory>() {
+				{"Add", TokenCategory.ADD},
+				{"And", TokenCategory.AND},
                 {"Assign", TokenCategory.ASSIGN},
-                {"And", TokenCategory.AND},
+				{"Div", TokenCategory.DIV},
+				{"Equal", TokenCategory.EQUAL},
+				{"Exponent", TokenCategory.EXPONENT},
+				{"GreaterOrEqual", TokenCategory.GREATER_OR_EQUAL},
+				{"GreaterThan", TokenCategory.GREATER_THAN},
+				{"IntLiteral", TokenCategory.INT_LITERAL},
+				{"LessOrEqual", TokenCategory.LESS_OR_EQUAL},
+				{"LessThan", TokenCategory.LESS_THAN},
+				{"LogicLiteral", TokenCategory.LOGIC_LITERAL},
+				{"Mul", TokenCategory.MUL},
+				{"Neg", TokenCategory.NEG},
+				{"Not", TokenCategory.NOT},
+				{"NotEqual", TokenCategory.NOT_EQUAL},
 		        {"Or", TokenCategory.OR},
-	        	{"Not", TokenCategory.NOT},
-                {"Int_constant", TokenCategory.INT_CONSTANT},
-                {"Real_constant", TokenCategory.REAL_CONSTANT},
-                {"Logic_constant", TokenCategory.LOGIC_CONSTANT},
-                {"Char_constant", TokenCategory.CHAR_CONSTANT},
-                {"Exponent", TokenCategory.EXPONENT},
-                {"Mul", TokenCategory.MUL},
-                {"Div", TokenCategory.DIV},
-                {"Add", TokenCategory.ADD},
-                {"Neg", TokenCategory.NEG},
-                {"less_t", TokenCategory.LESS_THAN},
-                {"Less_or_e", TokenCategory.LESS_OR_EQUAL},
-                {"Greater_t", TokenCategory.GREATER_THAN},
-                {"Greater_o_e", TokenCategory.GREATER_OR_EQUAL},
-                {"Equal", TokenCategory.EQUAL},
-                {"N_equal", TokenCategory.NOT_EQUAL}
-             };  
+                {"RealLiteral", TokenCategory.REAL_LITERAL},
+                {"StringLiteral", TokenCategory.STRING_LITERAL}
+            };  
                 
 		// Constructor
 		public Scanner(string input)
@@ -116,7 +116,7 @@ namespace Fortran77_Compiler
             var row = 1;
             var columnStart = 0;
 
-            Func<Match, TokenCategory, Token> newTok = (m, tc) =>
+            Func<Match, TokenCategory, Token> generateToken = (m, tc) =>
                 new Token(m.Value, tc, row, m.Index - columnStart + 1);
 
             foreach (Match m in regex.Matches(input)) {
@@ -131,31 +131,32 @@ namespace Fortran77_Compiler
                     || m.Groups["Comment"].Length > 0) {
 
                     // Skip white space and comments.
+					continue;
 
                 } else if (m.Groups["Identifier"].Length > 0) {
 
                     if (keywords.ContainsKey(m.Value)) {
 
                         // Matched string is a keyword.
-                        yield return newTok(m, keywords[m.Value]);                                               
+                        yield return generateToken(m, keywords[m.Value]);                                               
 
                     } else { 
 
                         // Otherwise it's just a plain identifier.
-                        yield return newTok(m, TokenCategory.IDENTIFIER);
+                        yield return generateToken(m, TokenCategory.IDENTIFIER);
                     }
 
                 } else if (m.Groups["Other"].Length > 0) {
 
                     // Found an illegal character.
-                    yield return newTok(m, TokenCategory.ILLEGAL_CHAR);
+                    yield return generateToken(m, TokenCategory.ILLEGAL_CHAR);
 
                 } else {
 
                     // Match must be one of the non keywords.
                     foreach (var name in nonKeywords.Keys) {
                         if (m.Groups[name].Length > 0) {
-                            yield return newTok(m, nonKeywords[name]);
+                            yield return generateToken(m, nonKeywords[name]);
                             break;
                         }
                     }

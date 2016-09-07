@@ -96,7 +96,6 @@ namespace Fortran77_Compiler
 					);
 				}
 			}
-
 			catch (FileNotFoundException e)
 			{
 				Console.Error.WriteLine(e.Message);
