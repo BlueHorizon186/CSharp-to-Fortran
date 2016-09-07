@@ -33,6 +33,7 @@ namespace Fortran77_Compiler
 			  	(?<Add>            [+]       			)
               | (?<And>            [.](and)[.]   		)
 			  | (?<Assign>         [=]					)
+			  | (?<Comma>          [,]					)
 			  | (?<Comment>        !.*       			)
 			  | (?<Div>            [/]       			)
 			  | (?<Equal>          [.](eq)[.]    		)
@@ -46,9 +47,12 @@ namespace Fortran77_Compiler
 			  | (?<LogicLiteral>   [.](true|false)[.] 	)
 			  | (?<Mul>            [*]       			)
 			  | (?<Neg>            [-]       			)
+			  | (?<Newline>        \n       			)
 			  | (?<Not>            [.](not)[.]   		)
 			  | (?<NotEqual>       [.](ne)[.]    		)
 	          | (?<Or>             [.](or)[.]   		)
+			  | (?<ParLeft>        [(]			   		)
+			  | (?<ParRight>       [)]			   		)
               | (?<RealLiteral>	   (\d+[.]\d+)			)
               | (?<StringLiteral>  ['].*['] 			)
               | (?<WhiteSpace>     [\s]      			)
@@ -85,6 +89,7 @@ namespace Fortran77_Compiler
 				{"Add", TokenCategory.ADD},
 				{"And", TokenCategory.AND},
                 {"Assign", TokenCategory.ASSIGN},
+				{"Comma", TokenCategory.COMMA},
 				{"Div", TokenCategory.DIV},
 				{"Equal", TokenCategory.EQUAL},
 				{"Exponent", TokenCategory.EXPONENT},
@@ -99,6 +104,8 @@ namespace Fortran77_Compiler
 				{"Not", TokenCategory.NOT},
 				{"NotEqual", TokenCategory.NOT_EQUAL},
 		        {"Or", TokenCategory.OR},
+				{"ParLeft", TokenCategory.PARENTHESIS_OPEN},
+				{"ParRight", TokenCategory.PARENTHESIS_CLOSE},
                 {"RealLiteral", TokenCategory.REAL_LITERAL},
                 {"StringLiteral", TokenCategory.STRING_LITERAL}
             };  
