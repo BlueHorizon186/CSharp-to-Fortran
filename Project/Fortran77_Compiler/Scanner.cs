@@ -30,14 +30,14 @@ namespace Fortran77_Compiler
         
         static readonly Regex regex = new Regex(
            @"
-                (?<Assign>         [=]       )
+                (?<Assign>         ([a-zA-Z]+)\s?[=]|([a-zA-Z]+[0-9]+)\s?[=]      )
               | (?<And>            [.](and)[.]   )
 	          | (?<Or>             [.](or)[.]   )
 	          | (?<Not>            [.](not)[.]   )
               | (?<Int_constant>   [0-9]+    )
               | (?<Real_constant>  [\d+[.]\d+])
               | (?<Logic_constant> [.]([true]|[false])+[.] )
-              | (?<Char_constant>  ['][a-zA-Z]+['])
+              | (?<Char_constant>  ['][\w\s].+['] )
               | (?<Exponent>       [**]      )
               | (?<Mul>            [*]       )
               | (?<Div>            [/]       )

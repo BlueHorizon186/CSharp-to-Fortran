@@ -20,7 +20,7 @@
       i = 1
 10    if (a(i) .gt. biggest) then
           biggest = a(i)
-          write(*, *) 'Largest number found so far:', biggest
+          write(*, *) '=', biggest
           write(*, *) 'At index', i
       endif
       if (i .eq. n) goto 20
