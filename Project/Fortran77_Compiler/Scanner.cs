@@ -1,18 +1,18 @@
 /*
-  Fortran77 compiler - This class performs the lexical analysis, 
+  Fortran77 compiler - This class performs the lexical analysis,
   (a.k.a. scanning).
   Copyright (C) 2016, ITESM CEM
-  
+
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 3 of the License, or
   (at your option) any later version.
-  
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -27,10 +27,10 @@ namespace Fortran77_Compiler
     {
         // Stores the source code file read from the console.
         readonly string input;
-        
+
         static readonly Regex regex = new Regex(
            @"
-                  (?<Add>            [+]       			)
+                (?<Add>            [+]       			)
               | (?<And>            [.](and)[.]   		)
               | (?<Assign>         [=]					)
               | (?<Comma>          [,]					)
@@ -56,13 +56,13 @@ namespace Fortran77_Compiler
               | (?<RealLiteral>	   (\d+[.]\d+)			)
               | (?<StringLiteral>  ['].*['] 			)
               | (?<WhiteSpace>     [\s]      			)
-              | (?<Other>          .*         			) 
+              | (?<Other>          .*         			)
             ",
             RegexOptions.IgnorePatternWhitespace
                 | RegexOptions.Compiled
                 | RegexOptions.Multiline
             );
-            
+
         static readonly IDictionary<string, TokenCategory> keywords =
             new Dictionary<string, TokenCategory>() {
                 {"call", TokenCategory.CALL},
@@ -88,7 +88,7 @@ namespace Fortran77_Compiler
                 {"while", TokenCategory.WHILE},
                 {"write", TokenCategory.WRITE}
             };
-            
+
         static readonly IDictionary<string, TokenCategory> nonKeywords =
             new Dictionary<string, TokenCategory>() {
                 {"Add", TokenCategory.ADD},
@@ -113,8 +113,8 @@ namespace Fortran77_Compiler
                 {"ParRight", TokenCategory.PARENTHESIS_CLOSE},
                 {"RealLiteral", TokenCategory.REAL_LITERAL},
                 {"StringLiteral", TokenCategory.STRING_LITERAL}
-            };  
-                
+            };
+
         // Constructor
         public Scanner(string input)
         {
@@ -139,7 +139,7 @@ namespace Fortran77_Compiler
                     row++;
                     columnStart = m.Index + m.Length;
 
-                } else if (m.Groups["WhiteSpace"].Length > 0 
+                } else if (m.Groups["WhiteSpace"].Length > 0
                     || m.Groups["Comment"].Length > 0) {
 
                     // Skip white space and comments.
@@ -150,9 +150,9 @@ namespace Fortran77_Compiler
                     if (keywords.ContainsKey(m.Value)) {
 
                         // Matched string is a keyword.
-                        yield return generateToken(m, keywords[m.Value]);                                               
+                        yield return generateToken(m, keywords[m.Value]);
 
-                    } else { 
+                    } else {
 
                         // Otherwise it's just a plain identifier.
                         yield return generateToken(m, TokenCategory.IDENTIFIER);
@@ -175,9 +175,9 @@ namespace Fortran77_Compiler
                 }
             }
 
-            yield return new Token(null, 
-                                   TokenCategory.EOF, 
-                                   row, 
+            yield return new Token(null,
+                                   TokenCategory.EOF,
+                                   row,
                                    input.Length - columnStart + 1);
         }
     }
