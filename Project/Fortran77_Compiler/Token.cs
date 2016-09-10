@@ -21,45 +21,45 @@ using System;
 
 namespace Fortran77_Compiler
 {
-	class Token
-	{
-		// Stores the actual text of this token.
-		readonly string lexeme;
+    class Token
+    {
+        // Stores the actual text of this token.
+        readonly string lexeme;
 
-		// Stores which category this token belongs to.
-		readonly TokenCategory category;
+        // Stores which category this token belongs to.
+        readonly TokenCategory category;
 
-		// Stores which line or row this token was found in.
-		readonly int row;
+        // Stores which line or row this token was found in.
+        readonly int row;
 
-		// Stores which column this token was found in.
-		readonly int column;
+        // Stores which column this token was found in.
+        readonly int column;
 
-		// Properties to access the Token's fields.
-		public string Lexeme { get { return lexeme; }}
-		public TokenCategory Category { get { return category; }}
-		public int Row { get { return row; }}
-		public int Column { get { return column; }}
+        // Properties to access the Token's fields.
+        public string Lexeme { get { return lexeme; }}
+        public TokenCategory Category { get { return category; }}
+        public int Row { get { return row; }}
+        public int Column { get { return column; }}
 
-		// Token Constructor
-		public Token(
-			string lexeme,
-			TokenCategory category,
-			int row,
-			int column)
-		{
-			this.lexeme = lexeme;
-			this.category = category;
-			this.row = row;
-			this.column = column;
-		}
+        // Token Constructor
+        public Token(
+            string lexeme,
+            TokenCategory category,
+            int row,
+            int column)
+        {
+            this.lexeme = lexeme;
+            this.category = category;
+            this.row = row;
+            this.column = column;
+        }
 
-		// ToString method used to display the tokens accordingly.
-		public override string ToString()
-		{
-			return string.Format("{{{0}, \"{1}\", @({2}, {3})}}",
-				category, lexeme, row, column);
-		}
-	}
+        // ToString method used to display the tokens accordingly.
+        public override string ToString()
+        {
+            return string.Format("{{{0}, \"{1}\", @({2}, {3})}}",
+                category, lexeme, row, column);
+        }
+    }
 }
 

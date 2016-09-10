@@ -22,91 +22,91 @@ using System.IO;
 
 namespace Fortran77_Compiler
 {
-	public class Driver
-	{
-		// Current compiler version.
-		const string VERSION = "0.1";
+    public class Driver
+    {
+        // Current compiler version.
+        const string VERSION = "0.1";
 
-		//-----------------------------------------------------------
+        //-----------------------------------------------------------
 
-		// Features the compiler includes.
-		static readonly string[] ReleaseIncludes = {
-			"Lexical Analysis"
-		};
+        // Features the compiler includes.
+        static readonly string[] ReleaseIncludes = {
+            "Lexical Analysis"
+        };
 
-		//-----------------------------------------------------------
+        //-----------------------------------------------------------
 
-		// Information printed whenever the compiler is used.
-		void PrintAppHeader() {
-			Console.WriteLine("Buttercup compiler, version " + VERSION);
-			Console.WriteLine("Copyright \u00A9 2016, ITESM CEM.");
-			Console.WriteLine("This program is free software; you may "
-				+ "redistribute it under the terms of");
-			Console.WriteLine("the GNU General Public License version 3 or "
-				+ "later.");
-			Console.WriteLine("This program has absolutely no warranty.\n");
-		}
+        // Information printed whenever the compiler is used.
+        void PrintAppHeader() {
+            Console.WriteLine("Buttercup compiler, version " + VERSION);
+            Console.WriteLine("Copyright \u00A9 2016, ITESM CEM.");
+            Console.WriteLine("This program is free software; you may "
+                + "redistribute it under the terms of");
+            Console.WriteLine("the GNU General Public License version 3 or "
+                + "later.");
+            Console.WriteLine("This program has absolutely no warranty.\n");
+        }
 
-		void PrintReleaseIncludes() {
-			Console.WriteLine("Included in this release:");            
-			foreach (var phase in ReleaseIncludes) {
-				Console.WriteLine("   * " + phase);
-			}
-			Console.Write("\n");
-		}
+        void PrintReleaseIncludes() {
+            Console.WriteLine("Included in this release:");            
+            foreach (var phase in ReleaseIncludes) {
+                Console.WriteLine("   * " + phase);
+            }
+            Console.Write("\n");
+        }
 
-		//-----------------------------------------------------------
+        //-----------------------------------------------------------
 
-		// Compiler's method to opening and interpreting the input file.
-		void Run(string[] args)
-		{
-			// Print some general information.
-			PrintAppHeader();
-			PrintReleaseIncludes();
+        // Compiler's method to opening and interpreting the input file.
+        void Run(string[] args)
+        {
+            // Print some general information.
+            PrintAppHeader();
+            PrintReleaseIncludes();
 
-			// Check for input file and return an error if
-			// it was not provided.
-			if (args.Length != 1)
-			{
-				Console.Error.WriteLine(
-					"Please specify the name of the input file.");
-				Environment.Exit(1);
-			}
+            // Check for input file and return an error if
+            // it was not provided.
+            if (args.Length != 1)
+            {
+                Console.Error.WriteLine(
+                    "Please specify the name of the input file.");
+                Environment.Exit(1);
+            }
 
-			// Read the input file and parse the tokens, or
-			// return an error if the file was not found.
-			try
-			{
-				// Read the source file.
-				var inputPath = args[0];
-				var inputCode = File.ReadAllText(inputPath);
+            // Read the input file and parse the tokens, or
+            // return an error if the file was not found.
+            try
+            {
+                // Read the source file.
+                var inputPath = args[0];
+                var inputCode = File.ReadAllText(inputPath);
 
-				// Print header.
-				Console.WriteLine(String.Format(
-					"===== Tokens from: \"{0}\" =====", inputPath)
-				);
+                // Print header.
+                Console.WriteLine(String.Format(
+                    "===== Tokens from: \"{0}\" =====", inputPath)
+                );
 
-				// Iterate over the file's tokens and print them
-				// accordingly.
-				var count = 1;
-				foreach (var token in new Scanner(inputCode).Start())
-				{
-					Console.WriteLine(String.Format("[{0}] {1}", 
-						count++, token)
-					);
-				}
-			}
-			catch (FileNotFoundException e)
-			{
-				Console.Error.WriteLine(e.Message);
-				Environment.Exit(1);
-			}
-		}
+                // Iterate over the file's tokens and print them
+                // accordingly.
+                var count = 1;
+                foreach (var token in new Scanner(inputCode).Start())
+                {
+                    Console.WriteLine(String.Format("[{0}] {1}", 
+                        count++, token)
+                    );
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                Console.Error.WriteLine(e.Message);
+                Environment.Exit(1);
+            }
+        }
 
-		public static void Main(string[] args)
-		{
-			// Begin the compiling process.
-			new Driver().Run(args);
-		}
-	}
+        public static void Main(string[] args)
+        {
+            // Begin the compiling process.
+            new Driver().Run(args);
+        }
+    }
 }

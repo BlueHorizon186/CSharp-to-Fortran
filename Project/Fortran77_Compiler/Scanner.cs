@@ -23,36 +23,36 @@ using System.Text.RegularExpressions;
 
 namespace Fortran77_Compiler
 {
-	class Scanner
-	{
-		// Stores the source code file read from the console.
-		readonly string input;
+    class Scanner
+    {
+        // Stores the source code file read from the console.
+        readonly string input;
         
         static readonly Regex regex = new Regex(
            @"
-			  	(?<Add>            [+]       			)
+                  (?<Add>            [+]       			)
               | (?<And>            [.](and)[.]   		)
-			  | (?<Assign>         [=]					)
-			  | (?<Comma>          [,]					)
-			  | (?<Comment>        !.*       			)
-			  | (?<Div>            [/]       			)
-			  | (?<Equal>          [.](eq)[.]    		)
-			  | (?<Exponent>       (\*\*)      			)
-			  | (?<GreaterOrEqual> [.](ge)[.]   		)
-			  | (?<GreaterThan>    [.](gt)[.]    		)
-			  | (?<Identifier>     [a-zA-Z]+			)
-			  | (?<IntLiteral>	   \d+	    			)
-			  | (?<LessOrEqual>    [.](le)[.]   		)
-			  | (?<LessThan>       [.](lt)[.]    		)
-			  | (?<LogicLiteral>   [.](true|false)[.] 	)
-			  | (?<Mul>            [*]       			)
-			  | (?<Neg>            [-]       			)
-			  | (?<Newline>        \n       			)
-			  | (?<Not>            [.](not)[.]   		)
-			  | (?<NotEqual>       [.](ne)[.]    		)
-	          | (?<Or>             [.](or)[.]   		)
-			  | (?<ParLeft>        [(]			   		)
-			  | (?<ParRight>       [)]			   		)
+              | (?<Assign>         [=]					)
+              | (?<Comma>          [,]					)
+              | (?<Comment>        !.*       			)
+              | (?<Div>            [/]       			)
+              | (?<Equal>          [.](eq)[.]    		)
+              | (?<Exponent>       (\*\*)      			)
+              | (?<GreaterOrEqual> [.](ge)[.]   		)
+              | (?<GreaterThan>    [.](gt)[.]    		)
+              | (?<Identifier>     [a-zA-Z]+			)
+              | (?<IntLiteral>	   \d+	    			)
+              | (?<LessOrEqual>    [.](le)[.]   		)
+              | (?<LessThan>       [.](lt)[.]    		)
+              | (?<LogicLiteral>   [.](true|false)[.] 	)
+              | (?<Mul>            [*]       			)
+              | (?<Neg>            [-]       			)
+              | (?<Newline>        \n       			)
+              | (?<Not>            [.](not)[.]   		)
+              | (?<NotEqual>       [.](ne)[.]    		)
+              | (?<Or>             [.](or)[.]   		)
+              | (?<ParLeft>        [(]			   		)
+              | (?<ParRight>       [)]			   		)
               | (?<RealLiteral>	   (\d+[.]\d+)			)
               | (?<StringLiteral>  ['].*['] 			)
               | (?<WhiteSpace>     [\s]      			)
@@ -65,25 +65,25 @@ namespace Fortran77_Compiler
             
         static readonly IDictionary<string, TokenCategory> keywords =
             new Dictionary<string, TokenCategory>() {
-				{"call", TokenCategory.CALL},
-				{"common", TokenCategory.COMMON},
-				{"continue", TokenCategory.CONTINUE},
-				{"data", TokenCategory.DATA},
-				{"do", TokenCategory.DO},
-				{"else", TokenCategory.ELSE},
-				{"elseif", TokenCategory.ELSEIF},
-				{"end", TokenCategory.END},
-				{"endif", TokenCategory.ENDIF},
-				{"function", TokenCategory.FUNCTION},
-				{"goto", TokenCategory.GOTO},
+                {"call", TokenCategory.CALL},
+                {"common", TokenCategory.COMMON},
+                {"continue", TokenCategory.CONTINUE},
+                {"data", TokenCategory.DATA},
+                {"do", TokenCategory.DO},
+                {"else", TokenCategory.ELSE},
+                {"elseif", TokenCategory.ELSEIF},
+                {"end", TokenCategory.END},
+                {"endif", TokenCategory.ENDIF},
+                {"function", TokenCategory.FUNCTION},
+                {"goto", TokenCategory.GOTO},
                 {"if", TokenCategory.IF},
-				{"integer", TokenCategory.INTEGER},
-				{"program", TokenCategory.PROGRAM},
-				{"parameter", TokenCategory.PARAMETER},
-				{"read", TokenCategory.READ},
-				{"real", TokenCategory.REAL},
-				{"return", TokenCategory.RETURN},
-				{"stop", TokenCategory.STOP},
+                {"integer", TokenCategory.INTEGER},
+                {"program", TokenCategory.PROGRAM},
+                {"parameter", TokenCategory.PARAMETER},
+                {"read", TokenCategory.READ},
+                {"real", TokenCategory.REAL},
+                {"return", TokenCategory.RETURN},
+                {"stop", TokenCategory.STOP},
                 {"then", TokenCategory.THEN},
                 {"while", TokenCategory.WHILE},
                 {"write", TokenCategory.WRITE}
@@ -91,39 +91,39 @@ namespace Fortran77_Compiler
             
         static readonly IDictionary<string, TokenCategory> nonKeywords =
             new Dictionary<string, TokenCategory>() {
-				{"Add", TokenCategory.ADD},
-				{"And", TokenCategory.AND},
+                {"Add", TokenCategory.ADD},
+                {"And", TokenCategory.AND},
                 {"Assign", TokenCategory.ASSIGN},
-				{"Comma", TokenCategory.COMMA},
-				{"Div", TokenCategory.DIV},
-				{"Equal", TokenCategory.EQUAL},
-				{"Exponent", TokenCategory.EXPONENT},
-				{"GreaterOrEqual", TokenCategory.GREATER_OR_EQUAL},
-				{"GreaterThan", TokenCategory.GREATER_THAN},
-				{"IntLiteral", TokenCategory.INT_LITERAL},
-				{"LessOrEqual", TokenCategory.LESS_OR_EQUAL},
-				{"LessThan", TokenCategory.LESS_THAN},
-				{"LogicLiteral", TokenCategory.LOGIC_LITERAL},
-				{"Mul", TokenCategory.MUL},
-				{"Neg", TokenCategory.NEG},
-				{"Not", TokenCategory.NOT},
-				{"NotEqual", TokenCategory.NOT_EQUAL},
-		        {"Or", TokenCategory.OR},
-				{"ParLeft", TokenCategory.PARENTHESIS_OPEN},
-				{"ParRight", TokenCategory.PARENTHESIS_CLOSE},
+                {"Comma", TokenCategory.COMMA},
+                {"Div", TokenCategory.DIV},
+                {"Equal", TokenCategory.EQUAL},
+                {"Exponent", TokenCategory.EXPONENT},
+                {"GreaterOrEqual", TokenCategory.GREATER_OR_EQUAL},
+                {"GreaterThan", TokenCategory.GREATER_THAN},
+                {"IntLiteral", TokenCategory.INT_LITERAL},
+                {"LessOrEqual", TokenCategory.LESS_OR_EQUAL},
+                {"LessThan", TokenCategory.LESS_THAN},
+                {"LogicLiteral", TokenCategory.LOGIC_LITERAL},
+                {"Mul", TokenCategory.MUL},
+                {"Neg", TokenCategory.NEG},
+                {"Not", TokenCategory.NOT},
+                {"NotEqual", TokenCategory.NOT_EQUAL},
+                {"Or", TokenCategory.OR},
+                {"ParLeft", TokenCategory.PARENTHESIS_OPEN},
+                {"ParRight", TokenCategory.PARENTHESIS_CLOSE},
                 {"RealLiteral", TokenCategory.REAL_LITERAL},
                 {"StringLiteral", TokenCategory.STRING_LITERAL}
             };  
                 
-		// Constructor
-		public Scanner(string input)
-		{
-			this.input = input;
-		}
+        // Constructor
+        public Scanner(string input)
+        {
+            this.input = input;
+        }
 
-		// Enumerable in charge of parsing the input into tokens.
-		public IEnumerable<Token> Start()
-		{
+        // Enumerable in charge of parsing the input into tokens.
+        public IEnumerable<Token> Start()
+        {
 
             var row = 1;
             var columnStart = 0;
@@ -143,7 +143,7 @@ namespace Fortran77_Compiler
                     || m.Groups["Comment"].Length > 0) {
 
                     // Skip white space and comments.
-					continue;
+                    continue;
 
                 } else if (m.Groups["Identifier"].Length > 0) {
 
@@ -180,5 +180,5 @@ namespace Fortran77_Compiler
                                    row, 
                                    input.Length - columnStart + 1);
         }
-	}
+    }
 }
