@@ -3,39 +3,34 @@ using System.Collections.Generic;
 
 namespace Fortran77_Compiler {
 
-    class Parser {      
+    class Parser {
+
+        /*******************************************************************
+         * IMPORTANT NOTICE: This is just a template based on Buttercup's
+         * 2nd Stage Parser. Adding and/or removing Sets and Methods will
+         * most likely be required for the Fortran77 Version.
+         *******************************************************************/
 
         static readonly ISet<TokenCategory> firstOfDeclaration =
             new HashSet<TokenCategory>() {
-                TokenCategory.INT,
-                TokenCategory.BOOL
+                // Here will go the declaration keywords.
             };
 
         static readonly ISet<TokenCategory> firstOfStatement =
             new HashSet<TokenCategory>() {
-                TokenCategory.IDENTIFIER,
-                TokenCategory.PRINT,
-                TokenCategory.IF
+                // Here will go the statement keywords.
             };
 
         static readonly ISet<TokenCategory> firstOfOperator =
             new HashSet<TokenCategory>() {
-                TokenCategory.AND,
-                TokenCategory.LESS,
-                TokenCategory.PLUS,
-                TokenCategory.MUL
+                // Here will go the operator keywords.
             };
 
         static readonly ISet<TokenCategory> firstOfSimpleExpression =
             new HashSet<TokenCategory>() {
-                TokenCategory.IDENTIFIER,
-                TokenCategory.INT_LITERAL,
-                TokenCategory.TRUE,
-                TokenCategory.FALSE,
-                TokenCategory.PARENTHESIS_OPEN,
-                TokenCategory.NEG
+                // Here will go Simple Expression keywords.
             };
-                
+
         IEnumerator<Token> tokenStream;
 
         public Parser(IEnumerator<Token> tokenStream) {
@@ -53,11 +48,11 @@ namespace Fortran77_Compiler {
                 tokenStream.MoveNext();
                 return current;
             } else {
-                throw new SyntaxError(category, tokenStream.Current);                
+                throw new SyntaxError(category, tokenStream.Current);
             }
         }
 
-        public void Program() {            
+        public void Program() {
 
             while (firstOfDeclaration.Contains(CurrentToken)) {
                 Declaration();
@@ -71,76 +66,31 @@ namespace Fortran77_Compiler {
         }
 
         public void Declaration() {
-            Type();
-            Expect(TokenCategory.IDENTIFIER);
+            
         }
 
         public void Statement() {
 
-            switch (CurrentToken) {
-
-            case TokenCategory.IDENTIFIER:
-                Assignment();
-                break;
-
-            case TokenCategory.PRINT:
-                Print();
-                break;
-
-            case TokenCategory.IF:
-                If();
-                break;
-
-            default:
-                throw new SyntaxError(firstOfStatement, 
-                                      tokenStream.Current);
-            }
         }
 
         public void Type() {
-            switch (CurrentToken) {
-
-            case TokenCategory.INT:
-                Expect(TokenCategory.INT);
-                break;
-
-            case TokenCategory.BOOL:
-                Expect(TokenCategory.BOOL);
-                break;
-
-            default:
-                throw new SyntaxError(firstOfDeclaration, 
-                                      tokenStream.Current);
-            }
+            
         }
 
         public void Assignment() {
-            Expect(TokenCategory.IDENTIFIER);
-            Expect(TokenCategory.ASSIGN);
-            Expression();
+            
         }
 
         public void Print() {
-            Expect(TokenCategory.PRINT);
-            Expression();
+            
         }
 
         public void If() {
-            Expect(TokenCategory.IF);
-            Expression();
-            Expect(TokenCategory.THEN);
-            while (firstOfStatement.Contains(CurrentToken)) {
-                Statement();
-            }
-            Expect(TokenCategory.END);
+            
         }
 
         public void Expression() {
-            SimpleExpression();
-            while (firstOfOperator.Contains(CurrentToken)) {
-                Operator();
-                SimpleExpression();
-            }
+            
         }
 
         public void SimpleExpression() {
@@ -149,28 +99,6 @@ namespace Fortran77_Compiler {
 
         public void Operator() {
 
-            switch (CurrentToken) {
-
-            case TokenCategory.AND:
-                Expect(TokenCategory.AND);
-                break;
-
-            case TokenCategory.LESS:
-                Expect(TokenCategory.LESS);
-                break;
-
-            case  TokenCategory.PLUS:
-                Expect(TokenCategory.PLUS);
-                break;
-
-            case TokenCategory.MUL:
-                Expect(TokenCategory.MUL);
-                break;
-
-            default:
-                throw new SyntaxError(firstOfOperator, 
-                                      tokenStream.Current);
-            }
         }
     }
 }
