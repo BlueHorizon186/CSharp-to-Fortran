@@ -30,33 +30,33 @@ namespace Fortran77_Compiler
 
         static readonly Regex regex = new Regex(
            @"
-                (?<Add>            [+]       			)
-              | (?<And>            [.](and)[.]   		)
-              | (?<Assign>         [=]					)
-              | (?<Comma>          [,]					)
-              | (?<Comment>        !.*       			)
-              | (?<Div>            [/]       			)
-              | (?<Equal>          [.](eq)[.]    		)
-              | (?<Exponent>       (\*\*)      			)
-              | (?<GreaterOrEqual> [.](ge)[.]   		)
-              | (?<GreaterThan>    [.](gt)[.]    		)
-              | (?<Identifier>     [a-zA-Z]+			)
-              | (?<IntLiteral>	   \d+	    			)
-              | (?<LessOrEqual>    [.](le)[.]   		)
-              | (?<LessThan>       [.](lt)[.]    		)
-              | (?<LogicLiteral>   [.](true|false)[.] 	)
-              | (?<Mul>            [*]       			)
-              | (?<Neg>            [-]       			)
-              | (?<Newline>        \n       			)
-              | (?<Not>            [.](not)[.]   		)
-              | (?<NotEqual>       [.](ne)[.]    		)
-              | (?<Or>             [.](or)[.]   		)
-              | (?<ParLeft>        [(]			   		)
-              | (?<ParRight>       [)]			   		)
-              | (?<RealLiteral>	   (\d+[.]\d+)			)
-              | (?<StringLiteral>  ['].*['] 			)
-              | (?<WhiteSpace>     [\s]      			)
-              | (?<Other>          .*         			)
+                (?<Add>            [+]                  )
+              | (?<And>            [.](and)[.]          )
+              | (?<Assign>         [=]                  )
+              | (?<Comma>          [,]                  )
+              | (?<Comment>        !.*                  )
+              | (?<Div>            [/]                  )
+              | (?<Equal>          [.](eq)[.]           )
+              | (?<Exponent>       (\*\*)               )
+              | (?<GreaterOrEqual> [.](ge)[.]           )
+              | (?<GreaterThan>    [.](gt)[.]           )
+              | (?<Identifier>     [a-zA-Z]+            )
+              | (?<IntLiteral>     \d+                  )
+              | (?<LessOrEqual>    [.](le)[.]           )
+              | (?<LessThan>       [.](lt)[.]           )
+              | (?<LogicLiteral>   [.](true|false)[.]   )
+              | (?<Mul>            [*]                  )
+              | (?<Neg>            [-]                  )
+              | (?<Newline>        \n                   )
+              | (?<Not>            [.](not)[.]          )
+              | (?<NotEqual>       [.](ne)[.]           )
+              | (?<Or>             [.](or)[.]           )
+              | (?<ParLeft>        [(]                  )
+              | (?<ParRight>       [)]                  )
+              | (?<RealLiteral>	   (\d+[.]\d+)          )
+              | (?<StringLiteral>  ['].*[']             )
+              | (?<WhiteSpace>     [\s]                 )
+              | (?<Other>          .*                   )
             ",
             RegexOptions.IgnorePatternWhitespace
                 | RegexOptions.Compiled
@@ -66,6 +66,7 @@ namespace Fortran77_Compiler
         static readonly IDictionary<string, TokenCategory> keywords =
             new Dictionary<string, TokenCategory>() {
                 {"call", TokenCategory.CALL},
+                {"character", TokenCategory.CHARACTER},
                 {"common", TokenCategory.COMMON},
                 {"continue", TokenCategory.CONTINUE},
                 {"data", TokenCategory.DATA},
@@ -78,12 +79,14 @@ namespace Fortran77_Compiler
                 {"goto", TokenCategory.GOTO},
                 {"if", TokenCategory.IF},
                 {"integer", TokenCategory.INTEGER},
+                {"logical", TokenCategory.LOGICAL},
                 {"program", TokenCategory.PROGRAM},
                 {"parameter", TokenCategory.PARAMETER},
                 {"read", TokenCategory.READ},
                 {"real", TokenCategory.REAL},
                 {"return", TokenCategory.RETURN},
                 {"stop", TokenCategory.STOP},
+                {"subroutine", TokenCategory.SUBROUTINE},
                 {"then", TokenCategory.THEN},
                 {"while", TokenCategory.WHILE},
                 {"write", TokenCategory.WRITE}
