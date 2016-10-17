@@ -144,7 +144,10 @@ namespace Fortran77_Compiler
         public void Expression()
         {
             SimpleExpression();
-            // Just how do you tell an OrExpression might or might not come??
+            while (firstOfSimpleExpression.Contains(CurrentToken))
+            {
+                OrExpression();
+            }
         }
 
         public void OrExpression()
@@ -371,7 +374,19 @@ namespace Fortran77_Compiler
         {
             Expect(TokenCategory.IDENTIFIER);
             if (CurrentToken == TokenCategory.PARENTHESIS_OPEN)
-                SimpleExpression();
+            {
+                Expect(TokenCategory.PARENTHESIS_OPEN);
+                if (CurrentToken != TokenCategory.PARENTHESIS_CLOSE)
+                {
+                    Expression();
+                    while (CurrentToken == TokenCategory.COMMA)
+                    {
+                        Expect(TokenCategory.COMMA);
+                        Expression();
+                    }
+                }
+                Expect(TokenCategory.PARENTHESIS_CLOSE);
+            }
         }
     }
 }

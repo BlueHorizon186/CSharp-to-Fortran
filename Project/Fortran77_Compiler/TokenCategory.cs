@@ -38,6 +38,7 @@ namespace Fortran77_Compiler
         END,
         ENDIF,
         EOF,
+        EOL,
         EQUAL,
         EXPONENT,
         FUNCTION,
