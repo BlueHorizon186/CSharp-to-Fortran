@@ -45,10 +45,28 @@ namespace Fortran77_Compiler
                 TokenCategory.ADD,
                 TokenCategory.NEG
             };
+        
+        static readonly ISet<TokenCategory> multiplicationSymbols =
+            new HashSet<TokenCategory>() {
+                TokenCategory.MUL,
+                TokenCategory.DIV
+            }
+        
+        static readonly ISet<TokenCategory> negationSymbols =
+            new HashSet<TokenCategory>() {
+                TokenCategory.NOT,
+                TokenCategory.NEG
+            }
 
         static readonly ISet<TokenCategory> firstOfSimpleExpression =
             new HashSet<TokenCategory>() {
-                // Here will go Simple Expression keywords.
+                TokenCategory.CALL,
+                TokenCategory.IDENTIFIER,
+                TokenCategory.INT_LITERAL,
+                TokenCategory.LOGIC_LITERAL,
+                TokenCategory.REAL_LITERAL,
+                TokenCategory.STRING_LITERAL,
+                TokenCategory.PARENTHESIS_OPEN
             };
 
         IEnumerator<Token> tokenStream;
@@ -118,6 +136,11 @@ namespace Fortran77_Compiler
             
         }
         */
+
+        /*****************************************************************
+         *                      Expression Methods
+         ****************************************************************/
+
         public void Expression()
         {
             SimpleExpression();
@@ -177,15 +200,27 @@ namespace Fortran77_Compiler
         public void MultExpression()
         {
             PowExpression();
+            while (multiplicationSymbols.Contains(CurrentToken))
+            {
+                MultiplicationOperator();
+                PowExpression();
+            }
         }
 
         public void PowExpression()
         {
             NegExpression();
+            if (CurrentToken == TokenCategory.EXPONENT)
+            {
+                Expect(TokenCategory.EXPONENT);
+                PowExpression();
+            }
         }
 
         public void NegExpression()
         {
+            if (negationSymbols.Contains(CurrentToken))
+                NegationOperator();
             SimpleExpression();
         }
 
@@ -229,6 +264,10 @@ namespace Fortran77_Compiler
                                           tokenStream.Current);
             }
         }
+
+        /*****************************************************************
+         *                  Operator Auxiliary Methods
+         ****************************************************************/
 
         public void EqualityOperator()
         {
@@ -288,6 +327,42 @@ namespace Fortran77_Compiler
                 
                 default:
                     throw new SyntaxError(additionSymbols,
+                                          tokenStream.Current);
+            }
+        }
+
+        public void MultiplicationOperator()
+        {
+            switch (CurrentToken)
+            {
+                case TokenCategory.MUL:
+                    Expect(TokenCategory.MUL);
+                    break;
+                
+                case TokenCategory.DIV:
+                    Expect(TokenCategory.DIV);
+                    break;
+                
+                default:
+                    throw new SyntaxError(multiplicationSymbols,
+                                          tokenStream.Current);
+            }
+        }
+
+        public void NegationOperator()
+        {
+            switch (CurrentToken)
+            {
+                case TokenCategory.NOT:
+                    Expect(TokenCategory.NOT);
+                    break;
+                
+                case TokenCategory.NEG:
+                    Expect(TokenCategory.NEG);
+                    break;
+                
+                default:
+                    throw new SyntaxError(negationSymbols,
                                           tokenStream.Current);
             }
         }
