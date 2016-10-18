@@ -141,7 +141,7 @@ namespace Fortran77_Compiler
                     // Found a new line.
                     row++;
                     columnStart = m.Index + m.Length;
-                    yield return generateToken(m, TokenCategory.EOL);
+                    //yield return generateToken(m, TokenCategory.EOL);
 
                 } else if (m.Groups["WhiteSpace"].Length > 0
                     || m.Groups["Comment"].Length > 0) {

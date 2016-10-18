@@ -17,19 +17,30 @@ namespace Fortran77_Compiler
                 TokenCategory.INTEGER,
                 TokenCategory.REAL,
                 TokenCategory.LOGICAL,
-                TokenCategory.CHARACTER
+                TokenCategory.CHARACTER,
+                TokenCategory.PARAMETER,
+                TokenCategory.DATA,
+                TokenCategory.COMMON
             };
-        /*
+
+        static readonly ISet<TokenCategory> firstOfMultipleDeclarations =
+            new HashSet<TokenCategory>() {
+                TokenCategory.COMMA,
+                TokenCategory.PARENTHESIS_OPEN
+            };
+        
         static readonly ISet<TokenCategory> firstOfStatement =
             new HashSet<TokenCategory>() {
                 // Here will go the statement keywords.
+                TokenCategory.READ,
+                TokenCategory.WRITE
             };
             
         static readonly ISet<TokenCategory> firstOfOperator =
             new HashSet<TokenCategory>() {
                 // Here will go the operator keywords.
             };
-            */
+
         static readonly ISet<TokenCategory> equalitySymbols =
             new HashSet<TokenCategory>() {
                 TokenCategory.EQUAL,
@@ -54,13 +65,13 @@ namespace Fortran77_Compiler
             new HashSet<TokenCategory>() {
                 TokenCategory.MUL,
                 TokenCategory.DIV
-            }
+            };
         
         static readonly ISet<TokenCategory> negationSymbols =
             new HashSet<TokenCategory>() {
                 TokenCategory.NOT,
                 TokenCategory.NEG
-            }
+            };
 
         static readonly ISet<TokenCategory> firstOfSimpleExpression =
             new HashSet<TokenCategory>() {
@@ -106,9 +117,13 @@ namespace Fortran77_Compiler
 
         public void Program()
         {
+            Expect(TokenCategory.PROGRAM);
+            Expect(TokenCategory.IDENTIFIER);
+
             while (firstOfDeclaration.Contains(CurrentToken))
             {
-                Declaration();
+                if (CurrentToken == TokenCategory.PARAMETER) Parameter();
+                else Declaration();
             }
 
             while (firstOfStatement.Contains(CurrentToken))
@@ -116,15 +131,34 @@ namespace Fortran77_Compiler
                 Statement();
             }
 
+            Expect(TokenCategory.STOP);
+            Expect(TokenCategory.END);
             Expect(TokenCategory.EOF);
         }
         
-        public void Declaration() {
-            
+        public void Declaration()
+        {
+            Type();
+            Expect(TokenCategory.IDENTIFIER);
+
+            while (firstOfMultipleDeclarations.Contains(CurrentToken))
+            {
+                if (CurrentToken == TokenCategory.PARENTHESIS_OPEN)
+                    ArrayDeclaration();
+                else if (CurrentToken == TokenCategory.COMMA)
+                {
+                    Expect(TokenCategory.COMMA);
+                    Expect(TokenCategory.IDENTIFIER);
+                }
+            }
         }
 
-        public void Statement() {
-
+        public void ArrayDeclaration()
+        {
+            Expect(TokenCategory.PARENTHESIS_OPEN);
+            IdentifierOrLiteral();
+            while (CurrentToken == TokenCategory.COMMA) IdentifierOrLiteral();
+            Expect(TokenCategory.PARENTHESIS_CLOSE);
         }
 
         public void Type()
@@ -136,7 +170,7 @@ namespace Fortran77_Compiler
                     break;
 
                 case TokenCategory.REAL:
-                Expect(TokenCategory.REAL);
+                    Expect(TokenCategory.REAL);
                     break;
 
                 case TokenCategory.LOGICAL:
@@ -145,6 +179,32 @@ namespace Fortran77_Compiler
 
                 case TokenCategory.CHARACTER:
                     Expect(TokenCategory.CHARACTER);
+                    break;
+
+                default:
+                    throw new SyntaxError(firstOfStatement, 
+                                        tokenStream.Current);
+            }
+        }
+
+        public void Statement()
+        {
+            switch (CurrentToken)
+            {
+                case TokenCategory.IDENTIFIER:
+                    Assignment();
+                    break;
+
+                case TokenCategory.READ:
+                    Read();
+                    break;
+
+                case TokenCategory.WRITE:
+                    Write();
+                    break;
+
+                case TokenCategory.GOTO:
+                    Goto();
                     break;
 
                 default:
@@ -164,7 +224,7 @@ namespace Fortran77_Compiler
         {
             Expect(TokenCategory.PARAMETER);
             Expect(TokenCategory.PARENTHESIS_OPEN);
-            Assigment();
+            Assignment();
             Expect(TokenCategory.PARENTHESIS_CLOSE);
         }
 
@@ -190,7 +250,7 @@ namespace Fortran77_Compiler
             
             do
             {
-                Identifier();
+                //Identifier();
             } while (firstOfStatement.Contains(CurrentToken));
         }
 
@@ -450,6 +510,14 @@ namespace Fortran77_Compiler
                 }
                 Expect(TokenCategory.PARENTHESIS_CLOSE);
             }
+        }
+
+        private void IdentifierOrLiteral()
+        {
+            if (CurrentToken == TokenCategory.IDENTIFIER)
+                Expect(TokenCategory.IDENTIFIER);
+            else
+                Expect(TokenCategory.INT_LITERAL);
         }
 
         /*****************************************************************
