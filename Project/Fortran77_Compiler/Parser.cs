@@ -10,12 +10,16 @@ namespace Fortran77_Compiler
          * 2nd Stage Parser. Adding and/or removing Sets and Methods will
          * most likely be required for the Fortran77 Version.
          *******************************************************************/
-         /*
+         
         static readonly ISet<TokenCategory> firstOfDeclaration =
             new HashSet<TokenCategory>() {
                 // Here will go the declaration keywords.
+                TokenCategory.INTEGER,
+                TokenCategory.REAL,
+                TokenCategory.LOGICAL,
+                TokenCategory.CHARACTER
             };
-
+        /*
         static readonly ISet<TokenCategory> firstOfStatement =
             new HashSet<TokenCategory>() {
                 // Here will go the statement keywords.
@@ -77,7 +81,8 @@ namespace Fortran77_Compiler
             this.tokenStream.MoveNext();
         }
 
-        public TokenCategory CurrentToken {
+        public TokenCategory CurrentToken 
+        {
             get { return tokenStream.Current.Category; }
         }
 
@@ -101,17 +106,19 @@ namespace Fortran77_Compiler
 
         public void Program()
         {
-            while (firstOfDeclaration.Contains(CurrentToken)) {
+            while (firstOfDeclaration.Contains(CurrentToken))
+            {
                 Declaration();
             }
 
-            while (firstOfStatement.Contains(CurrentToken)) {
+            while (firstOfStatement.Contains(CurrentToken))
+            {
                 Statement();
             }
 
             Expect(TokenCategory.EOF);
         }
-        /*
+        
         public void Declaration() {
             
         }
@@ -120,22 +127,78 @@ namespace Fortran77_Compiler
 
         }
 
-        public void Type() {
-            
+        public void Type()
+        {
+            switch (CurrentToken)
+            {
+                case TokenCategory.INTEGER:
+                    Expect(TokenCategory.INTEGER);
+                    break;
+
+                case TokenCategory.REAL:
+                Expect(TokenCategory.REAL);
+                    break;
+
+                case TokenCategory.LOGICAL:
+                    Expect(TokenCategory.LOGICAL);
+                    break;
+
+                case TokenCategory.CHARACTER:
+                    Expect(TokenCategory.CHARACTER);
+                    break;
+
+                default:
+                    throw new SyntaxError(firstOfStatement, 
+                                        tokenStream.Current);
+            }
         }
 
-        public void Assignment() {
-            
+        public void Assignment()
+        {
+            Expect(TokenCategory.IDENTIFIER);
+            Expect(TokenCategory.ASSIGN);
+            Expression();
         }
 
-        public void Print() {
-            
+        public void Parameter()
+        {
+            Expect(TokenCategory.PARAMETER);
+            Expect(TokenCategory.PARENTHESIS_OPEN);
+            Assigment();
+            Expect(TokenCategory.PARENTHESIS_CLOSE);
         }
 
-        public void If() {
-            
+        public void Write()
+        {
+            Expect(TokenCategory.WRITE);
+            Expect(TokenCategory.PARENTHESIS_OPEN);
+            Expect(TokenCategory.MUL);
+            Expect(TokenCategory.COMMA);
+            Expect(TokenCategory.MUL);
+            Expect(TokenCategory.PARENTHESIS_CLOSE);
+            Expression();
         }
-        */
+
+        public void Read()
+        {
+            Expect(TokenCategory.READ);
+            Expect(TokenCategory.PARENTHESIS_OPEN);
+            Expect(TokenCategory.MUL);
+            Expect(TokenCategory.COMMA);
+            Expect(TokenCategory.MUL);
+            Expect(TokenCategory.PARENTHESIS_CLOSE);
+            
+            do
+            {
+                Identifier();
+            } while (firstOfStatement.Contains(CurrentToken));
+        }
+
+        public void Goto()
+        {
+            Expect(TokenCategory.GOTO);
+            Expect(TokenCategory.INT_LITERAL);
+        }
 
         /*****************************************************************
          *                      Expression Methods
@@ -388,5 +451,9 @@ namespace Fortran77_Compiler
                 Expect(TokenCategory.PARENTHESIS_CLOSE);
             }
         }
+
+        /*****************************************************************
+         *                          END
+         ****************************************************************/
     }
 }
