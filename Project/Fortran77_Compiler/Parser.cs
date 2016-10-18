@@ -232,6 +232,7 @@ namespace Fortran77_Compiler
         public void Data()
         {
             Expect(TokenCategory.DATA);
+            Expect(TokenCategory.IDENTIFIER);
             Expect(TokenCategory.DIV);
             ExpectLiteral();
 
