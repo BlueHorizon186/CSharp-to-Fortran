@@ -98,6 +98,28 @@ namespace Fortran77_Compiler {
         }
 
         public void Type() {
+            switch (CurrentToken) {
+
+            case TokenCategory.INTEGER:
+                Expect(TokenCategory.INTEGER);
+                break;
+
+            case TokenCategory.REAL:
+               Expect(TokenCategory.REAL);
+                break;
+
+            case TokenCategory.LOGICAL:
+                Expect(TokenCategory.LOGICAL);
+                break;
+
+ 	        case TokenCategory.CHARACTER:
+                Expect(TokenCategory.CHARACTER);
+                break;
+
+            default:
+                throw new SyntaxError(firstOfStatement, 
+                                      tokenStream.Current);
+            }
             
         }
 
