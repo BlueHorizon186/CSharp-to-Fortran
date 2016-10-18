@@ -39,6 +39,11 @@ namespace Fortran77_Compiler
         static readonly ISet<TokenCategory> firstOfStatement =
             new HashSet<TokenCategory>() {
                 // Here will go the statement keywords.
+                TokenCategory.CONTINUE,
+                TokenCategory.DO,
+                TokenCategory.GOTO,
+                TokenCategory.IDENTIFIER,
+                TokenCategory.IF,
                 TokenCategory.READ,
                 TokenCategory.WRITE
             };
@@ -153,25 +158,52 @@ namespace Fortran77_Compiler
             Expect(TokenCategory.PROGRAM);
             Expect(TokenCategory.IDENTIFIER);
 
+            EvaluateDeclarations();
+            EvaluateStatements();
+
+            Expect(TokenCategory.STOP);
+            Expect(TokenCategory.END);
+
+            while (CurrentToken != TokenCategory.EOF)
+            {
+                if (CurrentToken == TokenCategory.SUBROUTINE)
+                    Subroutine();
+                else
+                    Function();
+            }
+            
+            Expect(TokenCategory.EOF);
+        }
+        
+        private void EvaluateDeclarations()
+        {
             while (firstOfDeclaration.Contains(CurrentToken))
             {
                 if (CurrentToken == TokenCategory.PARAMETER) Parameter();
                 else if (CurrentToken == TokenCategory.DATA) Data();
                 else Declaration();
+                // TODO: Missing "Common" implementation.
             }
-
+        }
+        
+        private void EvaluateStatements()
+        {
+            CheckForLabel();
+            //CheckForLineContinuation();
+            
             while (firstOfStatement.Contains(CurrentToken))
             {
+                CheckForLabel();
+                //CheckForLineContinuation();
                 Statement();
+                CheckForLabel();
+                //CheckForLineContinuation();
             }
-
-            Expect(TokenCategory.STOP);
-            Expect(TokenCategory.END);
-            Expect(TokenCategory.EOF);
         }
         
         public void Declaration()
         {
+            //Console.WriteLine("{0}", tokenStream.Current.Column);
             Type();
             Expect(TokenCategory.IDENTIFIER);
 
@@ -251,6 +283,14 @@ namespace Fortran77_Compiler
                 case TokenCategory.IDENTIFIER:
                     Assignment();
                     break;
+                
+                case TokenCategory.IF:
+                    IfCondition();
+                    break;
+                
+                case TokenCategory.DO:
+                    DoLoop();
+                    break;
 
                 case TokenCategory.READ:
                     Read();
@@ -263,11 +303,60 @@ namespace Fortran77_Compiler
                 case TokenCategory.GOTO:
                     Goto();
                     break;
+                
+                case TokenCategory.CONTINUE:
+                    Continue();
+                    break;
+                
+                case TokenCategory.CALL:
+                    Expression();
+                    break;
 
                 default:
                     throw new SyntaxError(firstOfStatement, 
                                         tokenStream.Current);
             }
+        }
+        
+        public void IfCondition()
+        {
+            Expect(TokenCategory.IF);
+            Expression();
+            
+            CheckForThen();
+            EvaluateStatements();
+            
+            while (CurrentToken == TokenCategory.ELSEIF)
+            {
+                Expect(TokenCategory.ELSEIF);
+                Expression();
+                CheckForThen();
+                EvaluateStatements();
+            }
+            
+            if (CurrentToken == TokenCategory.ELSE)
+            {
+                Expect(TokenCategory.ELSE);
+                EvaluateStatements();
+            }
+            
+            if (CurrentToken == TokenCategory.ENDIF)
+                Expect(TokenCategory.ENDIF);
+        }
+        
+        public void DoLoop()
+        {
+            Expect(TokenCategory.DO);
+            Expect(TokenCategory.INT_LITERAL);
+            Assignment();
+            
+            while (CurrentToken == TokenCategory.COMMA)
+            {
+                Expect(TokenCategory.COMMA);
+                Expression();
+            }
+            
+            EvaluateStatements();
         }
 
         public void Assignment()
@@ -286,6 +375,12 @@ namespace Fortran77_Compiler
             Expect(TokenCategory.MUL);
             Expect(TokenCategory.PARENTHESIS_CLOSE);
             Expression();
+            
+            while (CurrentToken == TokenCategory.COMMA)
+            {
+                Expect(TokenCategory.COMMA);
+                Expression();
+            }
         }
 
         public void Read()
@@ -308,6 +403,41 @@ namespace Fortran77_Compiler
             Expect(TokenCategory.GOTO);
             Expect(TokenCategory.INT_LITERAL);
         }
+        
+        public void Continue()
+        {
+            Expect(TokenCategory.CONTINUE);
+        }
+        
+        public void Function()
+        {
+            Type();
+            Expect(TokenCategory.FUNCTION);
+            Expect(TokenCategory.IDENTIFIER);
+            Expect(TokenCategory.PARENTHESIS_OPEN);
+            
+            if (CurrentToken != TokenCategory.PARENTHESIS_CLOSE)
+            {
+                Expect(TokenCategory.IDENTIFIER);
+                while (CurrentToken == TokenCategory.COMMA)
+                {
+                    Expect(TokenCategory.COMMA);
+                    Expect(TokenCategory.IDENTIFIER);
+                }
+            }
+            Expect(TokenCategory.PARENTHESIS_CLOSE);
+            
+            EvaluateDeclarations();
+            EvaluateStatements();
+            
+            Expect(TokenCategory.RETURN);
+            Expect(TokenCategory.END);
+        }
+        
+        public void Subroutine()
+        {
+            
+        }
 
         /*****************************************************************
          *                      Expression Methods
@@ -315,11 +445,13 @@ namespace Fortran77_Compiler
 
         public void Expression()
         {
-            SimpleExpression();
-            while (firstOfSimpleExpression.Contains(CurrentToken))
-            {
-                OrExpression();
-            }
+            //Console.WriteLine("Calling expression with: {0}", tokenStream.Current.Lexeme);
+            OrExpression();
+            // while (firstOfSimpleExpression.Contains(CurrentToken))
+            // {
+            //     //Console.WriteLine("ReCalling expression with: {0}", tokenStream.Current.Lexeme);
+            //     OrExpression();
+            // }
         }
 
         public void OrExpression()
@@ -567,6 +699,37 @@ namespace Fortran77_Compiler
                 Expect(TokenCategory.IDENTIFIER);
             else
                 Expect(TokenCategory.INT_LITERAL);
+        }
+        
+        private void CheckForLabel()
+        {
+            if (tokenStream.Current.Category == TokenCategory.INT_LITERAL
+                && tokenStream.Current.Column < 6)
+                Expect(TokenCategory.INT_LITERAL);
+        }
+        
+        private void CheckForLineContinuation()
+        {
+            var nextTokCol = tokenStream.Current.Column;
+            var nextTokCat = tokenStream.Current.Category;
+            
+            if (nextTokCat == TokenCategory.ADD
+                && nextTokCol == 6)
+            {
+                Expect(TokenCategory.ADD);
+            }
+            
+            else if (nextTokCat == TokenCategory.AMPERSAND
+                    && nextTokCol == 6)
+            {
+                Expect(TokenCategory.AMPERSAND);
+            }
+        }
+        
+        private void CheckForThen()
+        {
+            if (CurrentToken == TokenCategory.THEN)
+                Expect(TokenCategory.THEN);
         }
 
         /*****************************************************************

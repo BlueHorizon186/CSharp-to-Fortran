@@ -32,6 +32,7 @@ namespace Fortran77_Compiler
            @"
                 (?<Add>            [+]                  )
               | (?<And>            [.](and)[.]          )
+              | (?<Ampersand>      [&]                  )
               | (?<Assign>         [=]                  )
               | (?<Comma>          [,]                  )
               | (?<Comment>        !.*                  )
@@ -96,6 +97,7 @@ namespace Fortran77_Compiler
             new Dictionary<string, TokenCategory>() {
                 {"Add", TokenCategory.ADD},
                 {"And", TokenCategory.AND},
+                {"Ampersand", TokenCategory.AMPERSAND},
                 {"Assign", TokenCategory.ASSIGN},
                 {"Comma", TokenCategory.COMMA},
                 {"Div", TokenCategory.DIV},
