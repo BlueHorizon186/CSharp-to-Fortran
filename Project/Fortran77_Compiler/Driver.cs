@@ -25,20 +25,21 @@ namespace Fortran77_Compiler
     public class Driver
     {
         // Current compiler version.
-        const string VERSION = "0.1";
+        const string VERSION = "0.2";
 
         //-----------------------------------------------------------
 
         // Features the compiler includes.
         static readonly string[] ReleaseIncludes = {
-            "Lexical Analysis"
+            "Lexical Analysis",
+            "Syntactic Analysis"
         };
 
         //-----------------------------------------------------------
 
         // Information printed whenever the compiler is used.
         void PrintAppHeader() {
-            Console.WriteLine("Buttercup compiler, version " + VERSION);
+            Console.WriteLine("Fortran 77 compiler, version " + VERSION);
             Console.WriteLine("Copyright \u00A9 2016, ITESM CEM.");
             Console.WriteLine("This program is free software; you may "
                 + "redistribute it under the terms of");
@@ -62,7 +63,9 @@ namespace Fortran77_Compiler
         {
             // Print some general information.
             PrintAppHeader();
+            Console.WriteLine();
             PrintReleaseIncludes();
+            Console.WriteLine();
 
             // Check for input file and return an error if
             // it was not provided.
@@ -80,26 +83,18 @@ namespace Fortran77_Compiler
                 // Read the source file.
                 var inputPath = args[0];
                 var inputCode = File.ReadAllText(inputPath);
-
-                // Print header.
-                Console.WriteLine(String.Format(
-                    "===== Tokens from: \"{0}\" =====", inputPath)
-                );
-
-                // Iterate over the file's tokens and print them
-                // accordingly.
-                var count = 1;
-                foreach (var token in new Scanner(inputCode).Start())
-                {
-                    Console.WriteLine(String.Format("[{0}] {1}",
-                        count++, token)
-                    );
-                }
+                var parser = new Parser(new Scanner(inputCode).Start().GetEnumerator());
+                parser.Program();
+                Console.WriteLine("Syntax OK!");
             }
-            catch (FileNotFoundException e)
+            catch (Exception e)
             {
-                Console.Error.WriteLine(e.Message);
-                Environment.Exit(1);
+                if (e is FileNotFoundException || e is SyntaxError)
+                {
+                    Console.Error.WriteLine(e.Message);
+                    Environment.Exit(1);
+                }
+                throw;
             }
         }
 
