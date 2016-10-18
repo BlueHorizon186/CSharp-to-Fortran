@@ -64,8 +64,32 @@ namespace Fortran77_Compiler {
 
             Expect(TokenCategory.EOF);
         }
-
+    
         public void Declaration() {
+            Type();
+            Expect(TokenCategory.IDENTIFIER);
+    	
+    	    while (firstOfStatement.Contains(CurrentToken)){
+    		    if(firstOfStatement.Contains(CurrentToken ){
+    			    while (firstOfStatement.Contains(CurrentToken)) {
+                        Expect(TokenCategory.COMMA);
+                        Identifier();
+                    }
+    	
+    		    }else{
+    		  
+    		        Expect(TokenCategory.PARENTHESIS_OPEN);
+    	            Identifier();
+    	            while (firstOfStatement.Contains(CurrentToken)) {
+    			 	    Expect(TokenCategory.COMMA);
+    				    Identifier();
+    			
+    			}
+    		    Expect(TokenCategory.PARENTHESIS_CLOSE);
+    		}
+    	
+    
+    	    }
             
         }
 
