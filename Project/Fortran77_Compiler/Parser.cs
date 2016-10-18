@@ -160,6 +160,33 @@ namespace Fortran77_Compiler {
             }
             
         }
+        
+        public void Function() {
+	        Type();  
+ 	        Expect(TokenCategory.FUNCTION);
+	        Identifier();
+            Expect(TokenCategory.PARENTHESIS_OPEN);
+           
+            if(firstOfStatement.Contains(CurrentToken)){
+	            Expression();
+                while (firstOfStatement.Contains(CurrentToken)) {
+                    Expect(TokenCategory.COMMA);
+                    Expression();
+                }                
+            }
+            
+            Expect(TokenCategory.PARENTHESIS_CLOSE);
+	 
+		    while (firstOfStatement.Contains(CurrentToken)) {
+		        Declaration(); 
+	        }
+	        while (firstOfStatement.Contains(CurrentToken)) {
+	 	        Statement();
+	        }
+		    Expect(TokenCategory.RETURN)
+		    Expect(TokenCategory.END);
+        }
+
 
         public void Assignment() {
             
