@@ -94,6 +94,44 @@ namespace Fortran77_Compiler {
         }
 
         public void Statement() {
+            switch (CurrentToken) {
+
+            case TokenCategory.IDENTIFIER:
+                Assignment();
+                break;
+
+            case TokenCategory.PARAMETER:
+                Parameter();
+                break;
+
+            case TokenCategory.READ:
+                Read();
+                break;
+
+ 	        case TokenCategory.WRITE:
+                Write();
+                break;
+            
+  	        case TokenCategory.CONDITION:
+                Condition();
+                break;
+
+  	         case TokenCategory.DO:
+                Do();
+                break;
+
+       	    case TokenCategory.GOTO:
+                Goto();
+                break;
+
+ 	        case TokenCategory.SIMPLE:
+                Simple();
+                break;
+
+            default:
+                throw new SyntaxError(firstOfStatement, 
+                                      tokenStream.Current);
+            }
 
         }
 
