@@ -29,6 +29,13 @@ namespace Fortran77_Compiler
                 TokenCategory.PARENTHESIS_OPEN
             };
         
+        static readonly ISet<TokenCategory> literals =
+            new HashSet<TokenCategory>() {
+                TokenCategory.INT_LITERAL,
+                TokenCategory.LOGIC_LITERAL,
+                TokenCategory.REAL_LITERAL
+            };
+        
         static readonly ISet<TokenCategory> firstOfStatement =
             new HashSet<TokenCategory>() {
                 // Here will go the statement keywords.
@@ -98,6 +105,7 @@ namespace Fortran77_Compiler
         }
 
         /****************************************************************
+         *                  Expecting Tokens Methods
          ***************************************************************/
 
         public Token Expect(TokenCategory category)
@@ -115,6 +123,31 @@ namespace Fortran77_Compiler
             }
         }
 
+        public void ExpectLiteral()
+        {
+            switch (CurrentToken)
+            {
+                case TokenCategory.INT_LITERAL:
+                    Expect(TokenCategory.INT_LITERAL);
+                    break;
+                
+                case TokenCategory.LOGIC_LITERAL:
+                    Expect(TokenCategory.LOGIC_LITERAL);
+                    break;
+                
+                case TokenCategory.REAL_LITERAL:
+                    Expect(TokenCategory.REAL_LITERAL);
+                    break;
+                
+                default:
+                    throw new SyntaxError(literals, tokenStream.Current);
+            }
+        }
+
+        /****************************************************************
+         *                          Begin!!!
+         ***************************************************************/
+
         public void Program()
         {
             Expect(TokenCategory.PROGRAM);
@@ -123,6 +156,7 @@ namespace Fortran77_Compiler
             while (firstOfDeclaration.Contains(CurrentToken))
             {
                 if (CurrentToken == TokenCategory.PARAMETER) Parameter();
+                else if (CurrentToken == TokenCategory.DATA) Data();
                 else Declaration();
             }
 
@@ -182,9 +216,31 @@ namespace Fortran77_Compiler
                     break;
 
                 default:
-                    throw new SyntaxError(firstOfStatement, 
+                    throw new SyntaxError(firstOfStatement,
                                         tokenStream.Current);
             }
+        }
+
+        public void Parameter()
+        {
+            Expect(TokenCategory.PARAMETER);
+            Expect(TokenCategory.PARENTHESIS_OPEN);
+            Assignment();
+            Expect(TokenCategory.PARENTHESIS_CLOSE);
+        }
+
+        public void Data()
+        {
+            Expect(TokenCategory.DATA);
+            Expect(TokenCategory.DIV);
+            ExpectLiteral();
+
+            while (CurrentToken == TokenCategory.COMMA)
+            {
+                Expect(TokenCategory.COMMA);
+                ExpectLiteral();
+            }
+            Expect(TokenCategory.DIV);
         }
 
         public void Statement()
@@ -218,14 +274,6 @@ namespace Fortran77_Compiler
             Expect(TokenCategory.IDENTIFIER);
             Expect(TokenCategory.ASSIGN);
             Expression();
-        }
-
-        public void Parameter()
-        {
-            Expect(TokenCategory.PARAMETER);
-            Expect(TokenCategory.PARENTHESIS_OPEN);
-            Assignment();
-            Expect(TokenCategory.PARENTHESIS_CLOSE);
         }
 
         public void Write()
