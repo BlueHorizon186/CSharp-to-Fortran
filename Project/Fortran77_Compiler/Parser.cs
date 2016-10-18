@@ -186,6 +186,10 @@ namespace Fortran77_Compiler {
 		    Expect(TokenCategory.RETURN)
 		    Expect(TokenCategory.END);
         }
+        
+        public void Line(){
+            
+        }
 
 
         public void Assignment() {
