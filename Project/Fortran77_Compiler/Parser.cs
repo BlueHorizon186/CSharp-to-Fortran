@@ -33,7 +33,8 @@ namespace Fortran77_Compiler
             new HashSet<TokenCategory>() {
                 TokenCategory.INT_LITERAL,
                 TokenCategory.LOGIC_LITERAL,
-                TokenCategory.REAL_LITERAL
+                TokenCategory.REAL_LITERAL,
+                TokenCategory.STRING_LITERAL
             };
         
         static readonly ISet<TokenCategory> firstOfStatement =
@@ -141,6 +142,10 @@ namespace Fortran77_Compiler
                 
                 case TokenCategory.REAL_LITERAL:
                     Expect(TokenCategory.REAL_LITERAL);
+                    break;
+
+                case TokenCategory.STRING_LITERAL:
+                    Expect(TokenCategory.STRING_LITERAL);
                     break;
                 
                 default:
@@ -274,10 +279,6 @@ namespace Fortran77_Compiler
             while (CurrentToken == TokenCategory.COMMA)
             {
                 Expect(TokenCategory.COMMA);
-                // if (CurrentToken == TokenCategory.ADD)
-                //     Expect(TokenCategory.ADD);
-                // else if (CurrentToken == TokenCategory.AMPERSAND)
-                //     Expect(TokenCategory.AMPERSAND);
                 ExpectLiteral();
             }
             Expect(TokenCategory.DIV);
@@ -686,12 +687,10 @@ namespace Fortran77_Compiler
             {
                 case TokenCategory.ADD:
                     Expect(TokenCategory.ADD);
-                    CheckForLineContinuation();
                     break;
                 
                 case TokenCategory.NEG:
                     Expect(TokenCategory.NEG);
-                    CheckForLineContinuation();
                     break;
                 
                 default:
@@ -754,18 +753,6 @@ namespace Fortran77_Compiler
                 Expect(TokenCategory.PARENTHESIS_CLOSE);
             }
         }
-
-        // private void IdentifierOrLiteral()
-        // {
-        //     if (CurrentToken == TokenCategory.IDENTIFIER)
-        //         Expect(TokenCategory.IDENTIFIER);
-        //     else if (CurrentToken == TokenCategory.PARENTHESIS_OPEN)
-        //         Expression();
-        //     else if (CurrentToken == TokenCategory.REAL_LITERAL)
-        //         Expect(TokenCategory.REAL_LITERAL);
-        //     else
-        //         Expect(TokenCategory.INT_LITERAL);
-        // }
         
         private void CheckForLabel()
         {
