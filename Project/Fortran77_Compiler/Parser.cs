@@ -373,7 +373,9 @@ namespace Fortran77_Compiler
             Expect(TokenCategory.COMMA);
             Expect(TokenCategory.MUL);
             Expect(TokenCategory.PARENTHESIS_CLOSE);
-            Expression();
+
+            if (firstOfSimpleExpression.Contains(CurrentToken))
+                Expression();
             
             while (CurrentToken == TokenCategory.COMMA)
             {
@@ -437,7 +439,26 @@ namespace Fortran77_Compiler
         
         public void Subroutine()
         {
+            Expect(TokenCategory.SUBROUTINE);
+            Expect(TokenCategory.IDENTIFIER);
+            Expect(TokenCategory.PARENTHESIS_OPEN);
+
+            if (CurrentToken != TokenCategory.PARENTHESIS_CLOSE)
+            {
+                Expect(TokenCategory.IDENTIFIER);
+                while (CurrentToken == TokenCategory.COMMA)
+                {
+                    Expect(TokenCategory.COMMA);
+                    Expect(TokenCategory.IDENTIFIER);
+                }
+            }
+            Expect(TokenCategory.PARENTHESIS_CLOSE);
             
+            EvaluateDeclarations();
+            EvaluateStatements();
+            
+            Expect(TokenCategory.RETURN);
+            Expect(TokenCategory.END);
         }
 
         /*****************************************************************
