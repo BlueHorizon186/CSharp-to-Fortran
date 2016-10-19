@@ -39,6 +39,7 @@ namespace Fortran77_Compiler
         static readonly ISet<TokenCategory> firstOfStatement =
             new HashSet<TokenCategory>() {
                 // Here will go the statement keywords.
+                TokenCategory.CALL,
                 TokenCategory.CONTINUE,
                 TokenCategory.DO,
                 TokenCategory.GOTO,
@@ -222,7 +223,11 @@ namespace Fortran77_Compiler
         {
             Expect(TokenCategory.PARENTHESIS_OPEN);
             IdentifierOrLiteral();
-            while (CurrentToken == TokenCategory.COMMA) IdentifierOrLiteral();
+            while (CurrentToken == TokenCategory.COMMA)
+            {
+                Expect(TokenCategory.COMMA);
+                IdentifierOrLiteral();
+            }
             Expect(TokenCategory.PARENTHESIS_CLOSE);
         }
 
@@ -354,13 +359,16 @@ namespace Fortran77_Compiler
                 Expect(TokenCategory.COMMA);
                 Expression();
             }
-            
+
             EvaluateStatements();
         }
 
         public void Assignment()
         {
             Expect(TokenCategory.IDENTIFIER);
+            if (CurrentToken == TokenCategory.PARENTHESIS_OPEN)
+                ArrayDeclaration();
+
             Expect(TokenCategory.ASSIGN);
             Expression();
         }
@@ -394,10 +402,15 @@ namespace Fortran77_Compiler
             Expect(TokenCategory.PARENTHESIS_CLOSE);
 
             Expect(TokenCategory.IDENTIFIER);
-            while (CurrentToken == TokenCategory.COMMA)
+            while (firstOfMultipleDeclarations.Contains(CurrentToken))
             {
-                Expect(TokenCategory.COMMA);
-                Expect(TokenCategory.IDENTIFIER);
+                if (CurrentToken == TokenCategory.PARENTHESIS_OPEN)
+                    ArrayDeclaration();
+                else if (CurrentToken == TokenCategory.COMMA)
+                {
+                    Expect(TokenCategory.COMMA);
+                    Expect(TokenCategory.IDENTIFIER);
+                }
             }
         }
 
