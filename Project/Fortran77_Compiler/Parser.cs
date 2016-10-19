@@ -48,11 +48,6 @@ namespace Fortran77_Compiler
                 TokenCategory.READ,
                 TokenCategory.WRITE
             };
-            
-        static readonly ISet<TokenCategory> firstOfOperator =
-            new HashSet<TokenCategory>() {
-                // Here will go the operator keywords.
-            };
 
         static readonly ISet<TokenCategory> equalitySymbols =
             new HashSet<TokenCategory>() {
@@ -86,12 +81,14 @@ namespace Fortran77_Compiler
                 TokenCategory.NEG
             };
 
+        // Missing some keywords. Add them in Scanner.cs
         static readonly ISet<TokenCategory> firstOfSimpleExpression =
             new HashSet<TokenCategory>() {
                 TokenCategory.CALL,
                 TokenCategory.IDENTIFIER,
                 TokenCategory.INT_LITERAL,
                 TokenCategory.LOGIC_LITERAL,
+                TokenCategory.REAL,
                 TokenCategory.REAL_LITERAL,
                 TokenCategory.STRING_LITERAL,
                 TokenCategory.PARENTHESIS_OPEN
@@ -224,11 +221,11 @@ namespace Fortran77_Compiler
         public void ArrayDeclaration()
         {
             Expect(TokenCategory.PARENTHESIS_OPEN);
-            IdentifierOrLiteral();
+            Expression();
             while (CurrentToken == TokenCategory.COMMA)
             {
                 Expect(TokenCategory.COMMA);
-                IdentifierOrLiteral();
+                Expression();
             }
             Expect(TokenCategory.PARENTHESIS_CLOSE);
         }
@@ -610,6 +607,11 @@ namespace Fortran77_Compiler
                     Expect(TokenCategory.LOGIC_LITERAL);
                     break;
                 
+                case TokenCategory.REAL:
+                    Expect(TokenCategory.REAL);
+                    Expression();
+                    break;
+                
                 case TokenCategory.REAL_LITERAL:
                     Expect(TokenCategory.REAL_LITERAL);
                     break;
@@ -753,13 +755,17 @@ namespace Fortran77_Compiler
             }
         }
 
-        private void IdentifierOrLiteral()
-        {
-            if (CurrentToken == TokenCategory.IDENTIFIER)
-                Expect(TokenCategory.IDENTIFIER);
-            else
-                Expect(TokenCategory.INT_LITERAL);
-        }
+        // private void IdentifierOrLiteral()
+        // {
+        //     if (CurrentToken == TokenCategory.IDENTIFIER)
+        //         Expect(TokenCategory.IDENTIFIER);
+        //     else if (CurrentToken == TokenCategory.PARENTHESIS_OPEN)
+        //         Expression();
+        //     else if (CurrentToken == TokenCategory.REAL_LITERAL)
+        //         Expect(TokenCategory.REAL_LITERAL);
+        //     else
+        //         Expect(TokenCategory.INT_LITERAL);
+        // }
         
         private void CheckForLabel()
         {
