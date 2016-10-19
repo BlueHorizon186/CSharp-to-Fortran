@@ -1,4 +1,4 @@
-! This program uses Cramer's rule to solve a system of 3 linear equations
+! This program uses Cramers rule to solve a system of 3 linear equations
 ! with 3 unknows.
 !    
 ! You can try it with this input:
