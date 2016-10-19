@@ -181,6 +181,7 @@ namespace Fortran77_Compiler
             while (firstOfDeclaration.Contains(CurrentToken))
             {
                 if (CurrentToken == TokenCategory.PARAMETER) Parameter();
+                else if (CurrentToken == TokenCategory.COMMON) Common();
                 else if (CurrentToken == TokenCategory.DATA) Data();
                 else Declaration();
                 // TODO: Missing "Common" implementation.
@@ -278,6 +279,23 @@ namespace Fortran77_Compiler
                 ExpectLiteral();
             }
             Expect(TokenCategory.DIV);
+        }
+
+        public void Common()
+        {
+            Expect(TokenCategory.COMMON);
+            Expect(TokenCategory.DIV);
+            Expect(TokenCategory.IDENTIFIER);
+            Expect(TokenCategory.DIV);
+
+            if (CurrentToken == TokenCategory.IDENTIFIER)
+                Expect(TokenCategory.IDENTIFIER);
+            
+            while (CurrentToken == TokenCategory.COMMA)
+            {
+                Expect(TokenCategory.COMMA);
+                Expect(TokenCategory.IDENTIFIER);
+            }
         }
 
         public void Statement()

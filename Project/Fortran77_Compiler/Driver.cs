@@ -1,4 +1,4 @@
-﻿/*
+/*
   Fortran77 compiler - This class performs the lexical analysis,
   (a.k.a. scanning).
   Copyright (C) 2016, ITESM CEM
