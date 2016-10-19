@@ -160,7 +160,6 @@ namespace Fortran77_Compiler
 
             EvaluateDeclarations();
             EvaluateStatements();
-            Console.WriteLine("Finished Statements");
 
             Expect(TokenCategory.STOP);
             Expect(TokenCategory.END);
@@ -204,7 +203,6 @@ namespace Fortran77_Compiler
         
         public void Declaration()
         {
-            //Console.WriteLine("{0}", tokenStream.Current.Column);
             Type();
             Expect(TokenCategory.IDENTIFIER);
 
