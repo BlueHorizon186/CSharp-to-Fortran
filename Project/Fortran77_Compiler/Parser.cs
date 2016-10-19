@@ -120,6 +120,7 @@ namespace Fortran77_Compiler
             {
                 Token current = tokenStream.Current;
                 tokenStream.MoveNext();
+                CheckForLineContinuation();
                 return current;
             }
             
@@ -276,6 +277,10 @@ namespace Fortran77_Compiler
             while (CurrentToken == TokenCategory.COMMA)
             {
                 Expect(TokenCategory.COMMA);
+                // if (CurrentToken == TokenCategory.ADD)
+                //     Expect(TokenCategory.ADD);
+                // else if (CurrentToken == TokenCategory.AMPERSAND)
+                //     Expect(TokenCategory.AMPERSAND);
                 ExpectLiteral();
             }
             Expect(TokenCategory.DIV);
@@ -679,10 +684,12 @@ namespace Fortran77_Compiler
             {
                 case TokenCategory.ADD:
                     Expect(TokenCategory.ADD);
+                    CheckForLineContinuation();
                     break;
                 
                 case TokenCategory.NEG:
                     Expect(TokenCategory.NEG);
+                    CheckForLineContinuation();
                     break;
                 
                 default:
