@@ -39,6 +39,7 @@ namespace Fortran77_Compiler
         static readonly ISet<TokenCategory> firstOfStatement =
             new HashSet<TokenCategory>() {
                 // Here will go the statement keywords.
+                TokenCategory.CALL,
                 TokenCategory.CONTINUE,
                 TokenCategory.DO,
                 TokenCategory.GOTO,
@@ -180,6 +181,7 @@ namespace Fortran77_Compiler
             while (firstOfDeclaration.Contains(CurrentToken))
             {
                 if (CurrentToken == TokenCategory.PARAMETER) Parameter();
+                else if (CurrentToken == TokenCategory.COMMON) Common();
                 else if (CurrentToken == TokenCategory.DATA) Data();
                 else Declaration();
                 // TODO: Missing "Common" implementation.
@@ -203,7 +205,6 @@ namespace Fortran77_Compiler
         
         public void Declaration()
         {
-            //Console.WriteLine("{0}", tokenStream.Current.Column);
             Type();
             Expect(TokenCategory.IDENTIFIER);
 
@@ -223,7 +224,11 @@ namespace Fortran77_Compiler
         {
             Expect(TokenCategory.PARENTHESIS_OPEN);
             IdentifierOrLiteral();
-            while (CurrentToken == TokenCategory.COMMA) IdentifierOrLiteral();
+            while (CurrentToken == TokenCategory.COMMA)
+            {
+                Expect(TokenCategory.COMMA);
+                IdentifierOrLiteral();
+            }
             Expect(TokenCategory.PARENTHESIS_CLOSE);
         }
 
@@ -355,13 +360,16 @@ namespace Fortran77_Compiler
                 Expect(TokenCategory.COMMA);
                 Expression();
             }
-            
+
             EvaluateStatements();
         }
 
         public void Assignment()
         {
             Expect(TokenCategory.IDENTIFIER);
+            if (CurrentToken == TokenCategory.PARENTHESIS_OPEN)
+                ArrayDeclaration();
+
             Expect(TokenCategory.ASSIGN);
             Expression();
         }
@@ -374,7 +382,9 @@ namespace Fortran77_Compiler
             Expect(TokenCategory.COMMA);
             Expect(TokenCategory.MUL);
             Expect(TokenCategory.PARENTHESIS_CLOSE);
-            Expression();
+
+            if (firstOfSimpleExpression.Contains(CurrentToken))
+                Expression();
             
             while (CurrentToken == TokenCategory.COMMA)
             {
@@ -391,11 +401,18 @@ namespace Fortran77_Compiler
             Expect(TokenCategory.COMMA);
             Expect(TokenCategory.MUL);
             Expect(TokenCategory.PARENTHESIS_CLOSE);
-            
-            do
+
+            Expect(TokenCategory.IDENTIFIER);
+            while (firstOfMultipleDeclarations.Contains(CurrentToken))
             {
-                //Identifier();
-            } while (firstOfStatement.Contains(CurrentToken));
+                if (CurrentToken == TokenCategory.PARENTHESIS_OPEN)
+                    ArrayDeclaration();
+                else if (CurrentToken == TokenCategory.COMMA)
+                {
+                    Expect(TokenCategory.COMMA);
+                    Expect(TokenCategory.IDENTIFIER);
+                }
+            }
         }
 
         public void Goto()
@@ -436,6 +453,39 @@ namespace Fortran77_Compiler
         
         public void Subroutine()
         {
+            Expect(TokenCategory.SUBROUTINE);
+            Expect(TokenCategory.IDENTIFIER);
+            Expect(TokenCategory.PARENTHESIS_OPEN);
+
+            if (CurrentToken != TokenCategory.PARENTHESIS_CLOSE)
+            {
+                Expect(TokenCategory.IDENTIFIER);
+                while (CurrentToken == TokenCategory.COMMA)
+                {
+                    Expect(TokenCategory.COMMA);
+                    Expect(TokenCategory.IDENTIFIER);
+                }
+            }
+            Expect(TokenCategory.PARENTHESIS_CLOSE);
+            
+            EvaluateDeclarations();
+            EvaluateStatements();
+            
+            Expect(TokenCategory.RETURN);
+            Expect(TokenCategory.END);
+        }
+        
+        public void Common()
+        {
+            Expect(TokenCategory.COMMON);
+            Expect(TokenCategory.DIV);
+            Expect(TokenCategory.IDENTIFIER);
+            Expect(TokenCategory.DIV);
+            do{
+              Expect(TokenCategory.IDENTIFIER);  
+            } while(CurrentToken == TokenCategory.COMMA);
+            
+            
             
         }
 
