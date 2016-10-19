@@ -184,7 +184,7 @@ namespace Fortran77_Compiler
                 else if (CurrentToken == TokenCategory.COMMON) Common();
                 else if (CurrentToken == TokenCategory.DATA) Data();
                 else Declaration();
-                // TODO: Missing "Common" implementation.
+                // TODO: Missing "Common" implementation. Done!!!
             }
         }
         
