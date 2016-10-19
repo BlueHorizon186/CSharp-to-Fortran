@@ -160,6 +160,7 @@ namespace Fortran77_Compiler
 
             EvaluateDeclarations();
             EvaluateStatements();
+            Console.WriteLine("Finished Statements");
 
             Expect(TokenCategory.STOP);
             Expect(TokenCategory.END);
@@ -391,11 +392,13 @@ namespace Fortran77_Compiler
             Expect(TokenCategory.COMMA);
             Expect(TokenCategory.MUL);
             Expect(TokenCategory.PARENTHESIS_CLOSE);
-            
-            do
+
+            Expect(TokenCategory.IDENTIFIER);
+            while (CurrentToken == TokenCategory.COMMA)
             {
-                //Identifier();
-            } while (firstOfStatement.Contains(CurrentToken));
+                Expect(TokenCategory.COMMA);
+                Expect(TokenCategory.IDENTIFIER);
+            }
         }
 
         public void Goto()
