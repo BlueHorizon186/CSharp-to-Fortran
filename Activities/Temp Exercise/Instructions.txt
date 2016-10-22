@@ -1,0 +1,61 @@
+Un sensor meteorológico proporciona temperaturas tomadas a distintas horas
+del día.
+Cada varios días, no periódicamente, se toma la información que ha
+proporcionado, se guarda en un fichero de texto, y se analiza.
+
+
+El formato con que llega esta información es el siguiente:
+
+horaH  valor_temperatura  unidades_temperatura 
+horaH  valor_temperatura  unidades_temperatura
+... 
+horaH  valor_temperatura  unidades_temperatura 
+... 
+
+
+Notas: 
+• Cada línea es una medición de temperatura a una hora concreta. 
+• Hay un número desconocido de mediciones. 
+• El número de mediciones diarias es variable, pero se sabe que el sensor
+  siempre proporciona una medición diaria tomada a las 12 horas. 
+• hora es un entero (que puede tomar valores entre 0 y 23). 
+• valor_temperatura también es un número real (negativo o positivo y siempre
+  con punto decimal).
+• unidades_temperatura puede tomar dos valores:
+    C (celsius) y F (fahrenheit).
+
+
+1.1. Escribir un analizador léxico en FLEX para el fichero con la sintaxis dada:
+     Este analizador deberá reconocer los siguientes tokens: 
+
+Un token para las horas y otro para las temperaturas. Las horas serán un entero seguido 
+de una H (ver el ejemplo de fichero de antes) mientras que las temperaturas serán 
+simplemente un número real. Además se deberán pasar los valores leídos (tanto las 
+horas como las temperaturas) a BISON para su posterior análisis. 
+
+Un token para cada unidad de temperatura (serán 2 tokens). 
+
+Ayudas: 
+1)   Para las horas, no hace falta comprobar que las horas están entre las 0 y las 23, si no 
+     que basta reconocer un número entero seguido de una H, suponiendo pues que son 
+     correctas. 
+    
+
+1.2. Escribid un analizador sintáctico en BISON que reconozca una lista de mediciones con la 
+    sintaxis dada. Este analizador sintáctico usará el analizador léxico resultante del apartado 
+    anterior. También deberá calcular e imprimir por pantalla: 
+
+El valor de la temperatura a las 12 horas, para cada medición tomada a esa hora y 
+siempre en grados centígrados
+
+
+El valor medio, en grados centígrados, de la temperatura entre todas las recibidas.  
+
+
+
+La salida del analizador con el fichero de ejemplo de antes debería ser algo así:
+
+Temp a las 12 son: 24.520000 C 
+Temp a las 12 son: 34.555553 C 
+Temp a las 12 son: 37.888885 C 
+Temperatura Media en Total: 25.804583 C 

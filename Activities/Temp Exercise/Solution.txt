@@ -1,0 +1,80 @@
+-- FLEX
+
+%{
+
+#include <stdlib.h> 
+#include "y.tab.h" 
+
+%} 
+
+
+entero "-"?[0-9]+ 
+real   "-"?[0-9]+"."[0-9]+ 
+
+
+%% 
+
+C                  {return      tCentigrados;}      
+F                  {return      tFarenheit;}                  
+{entero}H         {yylval.valInt = atoi(yytext); return tHora;} 
+{real}            {yylval.valFloat = atof(yytext); return tValorTemperatura;} 
+.                  ;      
+\n                  ;
+
+%%
+
+
+
+-- BISON
+
+%{ 
+
+int numMedidas = 0; 
+
+%} 
+
+%union{ 
+    int valInt; 
+    float valFloat; 
+}
+
+%token tCentigrados tFarenheit  
+%token <valInt> tHora  
+%token <valFloat> tValorTemperatura 
+%type <valFloat> TEMPERATURA MEDICION LISTA_TEMPERATURAS 
+%start S 
+
+
+%% 
+S:
+    LISTA_TEMPERATURAS {
+            printf("Temperatura Media en Total: %f C\n", $1/(float)numMedidas);
+                    } 
+;
+
+LISTA_TEMPERATURAS:
+    LISTA_TEMPERATURAS MEDICION { $$ = $1 + $2;
+                                    numMedidas++; } 
+    | MEDICION { $$ = $1;
+                numMedidas++; }
+; 
+
+MEDICION:
+    tHora TEMPERATURA {
+                        if ($1 == 12) {  
+                            printf ("Temp a las 12 son: %f C\n", $2); 
+                        }
+                        $$ = $2;
+                    }
+;
+
+TEMPERATURA :
+        tValorTemperatura tCentigrados {$$ = $1;} 
+        | tValorTemperatura tFarenheit   {$$ = (($1 - 32.0) * 5.0) / 9.0;} 
+; 
+%%
+
+main() { 
+  yyparse(); 
+}
+
