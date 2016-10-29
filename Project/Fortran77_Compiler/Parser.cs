@@ -118,6 +118,7 @@ namespace Fortran77_Compiler
             {
                 Token current = tokenStream.Current;
                 tokenStream.MoveNext();
+                CheckForLabel();
                 CheckForLineContinuation();
                 return current;
             }
@@ -193,15 +194,15 @@ namespace Fortran77_Compiler
         
         private void EvaluateStatements()
         {
-            CheckForLabel();
+            //CheckForLabel();
             //CheckForLineContinuation();
             
             while (firstOfStatement.Contains(CurrentToken))
             {
-                CheckForLabel();
+                //CheckForLabel();
                 //CheckForLineContinuation();
                 Statement();
-                CheckForLabel();
+                //CheckForLabel();
                 //CheckForLineContinuation();
             }
         }
