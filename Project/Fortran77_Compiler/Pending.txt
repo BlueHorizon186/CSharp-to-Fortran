@@ -1,0 +1,21 @@
+Pending Tasks:
+- Expression
+- Or Expression
+- And Expression
+- Equality Expression
+- Comp Expression
+- Add Expression
+- Mult Expression
+- Pow Expression
+- Neg Expression
+- Simple Expression
+
+- Equality Operator
+- Comparing Operator
+- Addition Operator
+- Multiplication Operator
+- Negation Operator
+- Identifier Found
+
+Completed Tasks:
+- None yet! :(

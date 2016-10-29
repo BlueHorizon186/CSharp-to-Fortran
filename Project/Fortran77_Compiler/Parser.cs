@@ -588,7 +588,7 @@ namespace Fortran77_Compiler
             SimpleExpression();
         }
 
-        public void SimpleExpression()
+        public Node SimpleExpression()
         {
             switch (CurrentToken)
             {
