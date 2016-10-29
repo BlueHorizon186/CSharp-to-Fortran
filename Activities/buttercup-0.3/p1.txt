@@ -1,0 +1,59 @@
+Buttercup compiler, version 0.3
+Copyright © 2013 by A. Ortiz, ITESM CEM.
+This program is free software; you may redistribute it under the terms of
+the GNU General Public License version 3 or later.
+This program has absolutely no warranty.
+
+Included in this release:
+   * Lexical analysis
+   * Syntactic analysis
+   * AST construction
+
+Program 
+  DeclarationList 
+    Declaration {INT, "int", @(5, 1)}
+      Identifier {IDENTIFIER, "x", @(5, 5)}
+    Declaration {BOOL, "bool", @(6, 1)}
+      Identifier {IDENTIFIER, "b", @(6, 6)}
+  StatementList 
+    Assignment {IDENTIFIER, "b", @(8, 1)}
+      And {AND, "&", @(8, 16)}
+        And {AND, "&", @(8, 11)}
+          Less {LESS, "<", @(8, 7)}
+            IntLiteral {INT_LITERAL, "1", @(8, 5)}
+            IntLiteral {INT_LITERAL, "5", @(8, 9)}
+          False {FALSE, "#f", @(8, 13)}
+        True {TRUE, "#t", @(8, 18)}
+    Assignment {IDENTIFIER, "x", @(9, 1)}
+      IntLiteral {INT_LITERAL, "1", @(9, 5)}
+    If {IF, "if", @(10, 1)}
+      And {AND, "&", @(10, 44)}
+        And {AND, "&", @(10, 17)}
+          Less {LESS, "<", @(10, 6)}
+            Identifier {IDENTIFIER, "x", @(10, 4)}
+            Plus {PLUS, "+", @(10, 12)}
+              IntLiteral {INT_LITERAL, "10", @(10, 9)}
+              Identifier {IDENTIFIER, "x", @(10, 14)}
+          Less {LESS, "<", @(10, 36)}
+            Mul {MUL, "*", @(10, 29)}
+              Plus {PLUS, "+", @(10, 24)}
+                Neg {NEG, "-", @(10, 21)}
+                  Identifier {IDENTIFIER, "x", @(10, 22)}
+                IntLiteral {INT_LITERAL, "20", @(10, 26)}
+              IntLiteral {INT_LITERAL, "500", @(10, 31)}
+            Neg {NEG, "-", @(10, 38)}
+              IntLiteral {INT_LITERAL, "100", @(10, 39)}
+        Identifier {IDENTIFIER, "b", @(10, 46)}
+      StatementList 
+        Print {PRINT, "print", @(11, 5)}
+          Identifier {IDENTIFIER, "x", @(11, 11)}
+        Print {PRINT, "print", @(12, 5)}
+          Identifier {IDENTIFIER, "b", @(12, 11)}
+    Print {PRINT, "print", @(14, 1)}
+      And {AND, "&", @(14, 19)}
+        And {AND, "&", @(14, 9)}
+          Identifier {IDENTIFIER, "b", @(14, 7)}
+          Less {LESS, "<", @(14, 14)}
+            IntLiteral {INT_LITERAL, "1", @(14, 12)}
+            IntLiteral {INT_LITERAL, "2", @(14, 16)}
+        True {TRUE, "#t", @(14, 21)}
