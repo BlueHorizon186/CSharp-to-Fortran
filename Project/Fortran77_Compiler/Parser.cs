@@ -500,86 +500,115 @@ namespace Fortran77_Compiler
          *                      Expression Methods
          ****************************************************************/
 
-        public void Expression()
-        {
-            OrExpression();
-        }
+        public Node Expression() { return OrExpression(); }
 
-        public void OrExpression()
+        public Node OrExpression()
         {
-            AndExpression();
+            var expr1 = AndExpression();
             if (CurrentToken == TokenCategory.OR)
             {
-                Expect(TokenCategory.OR);
-                AndExpression();
+                var expr2 = new Or() {
+                    AnchorToken = Expect(TokenCategory.OR)
+                };
+                expr2.Add(expr1);
+                expr2.Add(AndExpression());
+                expr1 = expr2;
             }
+            return expr1;
         }
 
-        public void AndExpression()
+        public Node AndExpression()
         {
-            EqualityExpression();
+            var expr1 = EqualityExpression();
             if (CurrentToken == TokenCategory.AND)
             {
-                Expect(TokenCategory.AND);
-                EqualityExpression();
+                var expr2 = new And() {
+                    AnchorToken = Expect(TokenCategory.AND)
+                };
+                expr2.Add(expr1);
+                expr2.Add(EqualityExpression());
+                expr1 = expr2;
             }
+            return expr1;
         }
 
-        public void EqualityExpression()
+        public Node EqualityExpression()
         {
-            CompExpression();
+            var expr1 = CompExpression();
             if (equalitySymbols.Contains(CurrentToken))
             {
-                EqualityOperator();
-                CompExpression();
+                var expr2 = EqualityOperator();
+                expr2.Add(expr1);
+                expr2.Add(CompExpression());
+                expr1 = expr2;
             }
+            return expr1;
         }
 
-        public void CompExpression()
+        public Node CompExpression()
         {
-            AddExpression();
+            var expr1 = AddExpression();
             if (comparingSymbols.Contains(CurrentToken))
             {
-                ComparingOperator();
-                AddExpression();
+                var expr2 = ComparingOperator();
+                expr2.Add(expr1);
+                expr2.Add(AddExpression());
+                expr1 = expr2;
             }
+            return expr1;
         }
 
-        public void AddExpression()
+        public Node AddExpression()
         {
-            MultExpression();
+            var expr1 = MultExpression();
             while (additionSymbols.Contains(CurrentToken))
             {
-                AdditionOperator();
-                MultExpression();
+                var expr2 = AdditionOperator();
+                expr2.Add(expr1);
+                expr2.Add(MultExpression());
+                expr1 = expr2;
             }
+            return expr1;
         }
 
-        public void MultExpression()
+        public Node MultExpression()
         {
-            PowExpression();
+            var expr1 = PowExpression();
             while (multiplicationSymbols.Contains(CurrentToken))
             {
-                MultiplicationOperator();
-                PowExpression();
+                var expr2 = MultiplicationOperator();
+                expr2.Add(expr1);
+                expr2.Add(PowExpression());
+                expr1 = expr2;
             }
+            return expr1;
         }
 
-        public void PowExpression()
+        public Node PowExpression()
         {
-            NegExpression();
+            var expr1 = NegExpression();
             if (CurrentToken == TokenCategory.EXPONENT)
             {
-                Expect(TokenCategory.EXPONENT);
-                PowExpression();
+                var expr2 = new Power() {
+                    AnchorToken = Expect(TokenCategory.EXPONENT)
+                };
+                expr2.Add(expr1);
+                expr2.Add(PowExpression());
+                expr1 = expr2;
             }
+            return expr1;
         }
 
-        public void NegExpression()
+        public Node NegExpression()
         {
+            var expr = SimpleExpression();
             if (negationSymbols.Contains(CurrentToken))
-                NegationOperator();
-            SimpleExpression();
+            {
+                var negate = NegationOperator();
+                negate.Add(expr);
+                expr = negate;
+            }
+            return expr;
         }
 
         public Node SimpleExpression()
