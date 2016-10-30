@@ -1,13 +1,5 @@
 Pending Tasks:
-- Expression
-- Or Expression
-- And Expression
-- Equality Expression
-- Comp Expression
-- Add Expression
-- Mult Expression
-- Pow Expression
-- Neg Expression
+- Finished! Yay! :)
 
 Completed Tasks:
 - Identifier Found
@@ -18,3 +10,12 @@ Completed Tasks:
 - Negation Operator
 
 - Simple Expression
+- Expression
+- Or Expression
+- And Expression
+- Equality Expression
+- Comp Expression
+- Add Expression
+- Mult Expression
+- Pow Expression
+- Neg Expression
