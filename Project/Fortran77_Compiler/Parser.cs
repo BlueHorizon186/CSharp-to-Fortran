@@ -632,7 +632,7 @@ namespace Fortran77_Compiler
          *                  Operator Auxiliary Methods
          ****************************************************************/
 
-        public void EqualityOperator()
+        public Node EqualityOperator()
         {
             switch (CurrentToken)
             {
@@ -652,7 +652,7 @@ namespace Fortran77_Compiler
             }
         }
 
-        public void ComparingOperator()
+        public Node ComparingOperator()
         {
             switch (CurrentToken)
             {
@@ -682,7 +682,7 @@ namespace Fortran77_Compiler
             }
         }
 
-        public void AdditionOperator()
+        public Node AdditionOperator()
         {
             switch (CurrentToken)
             {
@@ -702,7 +702,7 @@ namespace Fortran77_Compiler
             }
         }
 
-        public void MultiplicationOperator()
+        public Node MultiplicationOperator()
         {
             switch (CurrentToken)
             {
@@ -722,7 +722,7 @@ namespace Fortran77_Compiler
             }
         }
 
-        public void NegationOperator()
+        public Node NegationOperator()
         {
             switch (CurrentToken)
             {
