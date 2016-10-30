@@ -8,7 +8,6 @@ Pending Tasks:
 - Mult Expression
 - Pow Expression
 - Neg Expression
-- Simple Expression
 
 Completed Tasks:
 - Identifier Found
@@ -17,3 +16,5 @@ Completed Tasks:
 - Addition Operator
 - Multiplication Operator
 - Negation Operator
+
+- Simple Expression

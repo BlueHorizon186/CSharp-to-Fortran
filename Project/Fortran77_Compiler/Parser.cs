@@ -587,40 +587,45 @@ namespace Fortran77_Compiler
             switch (CurrentToken)
             {
                 case TokenCategory.CALL:
-                    Expect(TokenCategory.CALL);
-                    IdentifierFound();
-                    break;
+                    var callSub = new Call();
+                    callSub.AnchorToken = Expect(TokenCategory.CALL);
+                    callSub.Add(IdentifierFound());
+                    return callSub;
 
                 case TokenCategory.IDENTIFIER:
                     return IdentifierFound();
-                    break;
                 
                 case TokenCategory.INT_LITERAL:
-                    Expect(TokenCategory.INT_LITERAL);
-                    break;
+                    return new IntLiteral() {
+                        AnchorToken = Expect(TokenCategory.INT_LITERAL)
+                    };
                 
                 case TokenCategory.LOGIC_LITERAL:
-                    Expect(TokenCategory.LOGIC_LITERAL);
-                    break;
+                    return new LogicLiteral() {
+                        AnchorToken = Expect(TokenCategory.LOGIC_LITERAL)
+                    };
                 
                 case TokenCategory.REAL:
-                    Expect(TokenCategory.REAL);
-                    Expression();
-                    break;
+                    var realFunc = new Real();
+                    realFunc.AnchorToken = Expect(TokenCategory.REAL);
+                    realFunc.Add(Expression());
+                    return realFunc;
                 
                 case TokenCategory.REAL_LITERAL:
-                    Expect(TokenCategory.REAL_LITERAL);
-                    break;
+                    return new RealLiteral() {
+                        AnchorToken = Expect(TokenCategory.REAL_LITERAL)
+                    };
 
                 case TokenCategory.STRING_LITERAL:
-                    Expect(TokenCategory.STRING_LITERAL);
-                    break;
+                    return new StringLiteral() {
+                        AnchorToken = Expect(TokenCategory.STRING_LITERAL)
+                    };
 
                 case TokenCategory.PARENTHESIS_OPEN:
                     Expect(TokenCategory.PARENTHESIS_OPEN);
-                    Expression();
+                    var result = Expression();
                     Expect(TokenCategory.PARENTHESIS_CLOSE);
-                    break;
+                    return result;
 
                 default:
                     throw new SyntaxError(firstOfSimpleExpression,
