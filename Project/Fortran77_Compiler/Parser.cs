@@ -502,13 +502,7 @@ namespace Fortran77_Compiler
 
         public void Expression()
         {
-            //Console.WriteLine("Calling expression with: {0}", tokenStream.Current.Lexeme);
             OrExpression();
-            // while (firstOfSimpleExpression.Contains(CurrentToken))
-            // {
-            //     //Console.WriteLine("ReCalling expression with: {0}", tokenStream.Current.Lexeme);
-            //     OrExpression();
-            // }
         }
 
         public void OrExpression()
@@ -598,7 +592,7 @@ namespace Fortran77_Compiler
                     break;
 
                 case TokenCategory.IDENTIFIER:
-                    IdentifierFound();
+                    return IdentifierFound();
                     break;
                 
                 case TokenCategory.INT_LITERAL:
@@ -643,12 +637,14 @@ namespace Fortran77_Compiler
             switch (CurrentToken)
             {
                 case TokenCategory.EQUAL:
-                    Expect(TokenCategory.EQUAL);
-                    break;
+                    return new Equal() {
+                        AnchorToken = Expect(TokenCategory.EQUAL)
+                    };
                 
                 case TokenCategory.NOT_EQUAL:
-                    Expect(TokenCategory.NOT_EQUAL);
-                    break;
+                    return new NotEqual() {
+                        AnchorToken = Expect(TokenCategory.NOT_EQUAL)
+                    };
                 
                 default:
                     throw new SyntaxError(equalitySymbols,
@@ -661,20 +657,24 @@ namespace Fortran77_Compiler
             switch (CurrentToken)
             {
                 case TokenCategory.GREATER_OR_EQUAL:
-                    Expect(TokenCategory.GREATER_OR_EQUAL);
-                    break;
+                    return new GreaterOrEqual() {
+                        AnchorToken = Expect(TokenCategory.GREATER_OR_EQUAL)
+                    };
                 
                 case TokenCategory.GREATER_THAN:
-                    Expect(TokenCategory.GREATER_THAN);
-                    break;
+                    return new GreaterThan() {
+                        AnchorToken = Expect(TokenCategory.GREATER_THAN)
+                    };
                 
                 case TokenCategory.LESS_OR_EQUAL:
-                    Expect(TokenCategory.LESS_OR_EQUAL);
-                    break;
+                    return new LessOrEqual() {
+                        AnchorToken = Expect(TokenCategory.LESS_OR_EQUAL)
+                    };
                 
                 case TokenCategory.LESS_THAN:
-                    Expect(TokenCategory.LESS_THAN);
-                    break;
+                    return new LessThan() {
+                        AnchorToken = Expect(TokenCategory.LESS_THAN)
+                    };
                 
                 default:
                     throw new SyntaxError(comparingSymbols,
@@ -687,12 +687,14 @@ namespace Fortran77_Compiler
             switch (CurrentToken)
             {
                 case TokenCategory.ADD:
-                    Expect(TokenCategory.ADD);
-                    break;
+                    return new Addition() {
+                        AnchorToken = Expect(TokenCategory.ADD)
+                    };
                 
                 case TokenCategory.NEG:
-                    Expect(TokenCategory.NEG);
-                    break;
+                    return new Substraction() {
+                        AnchorToken = Expect(TokenCategory.NEG)
+                    };
                 
                 default:
                     throw new SyntaxError(additionSymbols,
@@ -705,12 +707,14 @@ namespace Fortran77_Compiler
             switch (CurrentToken)
             {
                 case TokenCategory.MUL:
-                    Expect(TokenCategory.MUL);
-                    break;
+                    return new Multiplication() {
+                        AnchorToken = Expect(TokenCategory.MUL)
+                    };
                 
                 case TokenCategory.DIV:
-                    Expect(TokenCategory.DIV);
-                    break;
+                    return new Division() {
+                        AnchorToken = Expect(TokenCategory.DIV)
+                    };
                 
                 default:
                     throw new SyntaxError(multiplicationSymbols,
@@ -723,12 +727,14 @@ namespace Fortran77_Compiler
             switch (CurrentToken)
             {
                 case TokenCategory.NOT:
-                    Expect(TokenCategory.NOT);
-                    break;
-                
+                    return new Not() {
+                        AnchorToken = Expect(TokenCategory.NOT)
+                    };
+
                 case TokenCategory.NEG:
-                    Expect(TokenCategory.NEG);
-                    break;
+                    return new Negation() {
+                        AnchorToken = Expect(TokenCategory.NEG)
+                    };
                 
                 default:
                     throw new SyntaxError(negationSymbols,
@@ -736,23 +742,36 @@ namespace Fortran77_Compiler
             }
         }
 
-        private void IdentifierFound()
+        private Node IdentifierFound()
         {
-            Expect(TokenCategory.IDENTIFIER);
+            var identifier = new Identifier() {
+                AnchorToken = Expect(TokenCategory.IDENTIFIER)
+            };
+
             if (CurrentToken == TokenCategory.PARENTHESIS_OPEN)
             {
-                Expect(TokenCategory.PARENTHESIS_OPEN);
+                identifier.Add(new ParenthesisOpen() {
+                    AnchorToken = Expect(TokenCategory.PARENTHESIS_OPEN)
+                });
+
                 if (CurrentToken != TokenCategory.PARENTHESIS_CLOSE)
                 {
-                    Expression();
+                    var expr = Expression();
+                    identifier.Add(expr);
+
                     while (CurrentToken == TokenCategory.COMMA)
                     {
                         Expect(TokenCategory.COMMA);
-                        Expression();
+                        expr = Expression();
+                        identifier.Add(expr);
                     }
                 }
-                Expect(TokenCategory.PARENTHESIS_CLOSE);
+                
+                identifier.Add(new ParenthesisClose() {
+                    AnchorToken = Expect(TokenCategory.PARENTHESIS_CLOSE)
+                });
             }
+            return identifier;
         }
         
         private void CheckForLabel()

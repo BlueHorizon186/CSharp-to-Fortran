@@ -10,12 +10,10 @@ Pending Tasks:
 - Neg Expression
 - Simple Expression
 
+Completed Tasks:
+- Identifier Found
 - Equality Operator
 - Comparing Operator
 - Addition Operator
 - Multiplication Operator
 - Negation Operator
-- Identifier Found
-
-Completed Tasks:
-- None yet! :(

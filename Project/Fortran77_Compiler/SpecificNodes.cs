@@ -10,12 +10,16 @@ namespace Fortran77_Compiler
 
     class StatementList: Node {}
 
+    class ParenthesisOpen: Node {}
+
+    class ParenthesisClose: Node {}
+
     /* *******************************************************************
      *                        Skip to Expressions.
      ********************************************************************/
 
     class Identifier: Node {}
-    
+
     class IntLiteral: Node {}
 
     class LogicLiteral: Node {}
