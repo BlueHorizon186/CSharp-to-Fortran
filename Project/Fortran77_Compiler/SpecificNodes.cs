@@ -10,9 +10,17 @@ namespace Fortran77_Compiler
 
     class StatementList: Node {}
 
+    class Assignment: Node {}
+
     class ParenthesisOpen: Node {}
 
     class ParenthesisClose: Node {}
+
+    class If: Node {}
+
+    class ElseIf: Node {}
+
+    class Else: Node {}
 
     /* *******************************************************************
      *                        Skip to Expressions.

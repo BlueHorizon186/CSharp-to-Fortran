@@ -157,6 +157,10 @@ namespace Fortran77_Compiler
         /****************************************************************
          *                          Begin!!!
          ***************************************************************/
+        
+        /****************************************************************
+         *                          Program Node
+         ***************************************************************/
 
         public void Program()
         {
@@ -179,6 +183,10 @@ namespace Fortran77_Compiler
             
             Expect(TokenCategory.EOF);
         }
+
+        /****************************************************************
+         *                    Declarations List Node
+         ***************************************************************/
         
         private void EvaluateDeclarations()
         {
@@ -191,21 +199,24 @@ namespace Fortran77_Compiler
                 // TODO: Missing "Common" implementation. Done!!!
             }
         }
+
+        /****************************************************************
+         *                    Statements List Node
+         ***************************************************************/
         
-        private void EvaluateStatements()
+        private Node EvaluateStatements()
         {
-            //CheckForLabel();
-            //CheckForLineContinuation();
-            
+            var stmts = new StatementList();
             while (firstOfStatement.Contains(CurrentToken))
             {
-                //CheckForLabel();
-                //CheckForLineContinuation();
-                Statement();
-                //CheckForLabel();
-                //CheckForLineContinuation();
+                stmts.Add(Statement());
             }
+            return stmts;
         }
+
+        /****************************************************************
+         *                       Declaration Node
+         ***************************************************************/
         
         public void Declaration()
         {
@@ -224,6 +235,10 @@ namespace Fortran77_Compiler
             }
         }
 
+        /****************************************************************
+         *                         Arrays Node
+         ***************************************************************/
+
         public void ArrayDeclaration()
         {
             Expect(TokenCategory.PARENTHESIS_OPEN);
@@ -235,6 +250,10 @@ namespace Fortran77_Compiler
             }
             Expect(TokenCategory.PARENTHESIS_CLOSE);
         }
+
+        /****************************************************************
+         *                          Type Node
+         ***************************************************************/
 
         public void Type()
         {
@@ -262,6 +281,10 @@ namespace Fortran77_Compiler
             }
         }
 
+        /****************************************************************
+         *                        Parameter Node
+         ***************************************************************/
+
         public void Parameter()
         {
             Expect(TokenCategory.PARAMETER);
@@ -269,6 +292,10 @@ namespace Fortran77_Compiler
             Assignment();
             Expect(TokenCategory.PARENTHESIS_CLOSE);
         }
+
+        /****************************************************************
+         *                           Data Node
+         ***************************************************************/
 
         public void Data()
         {
@@ -284,6 +311,10 @@ namespace Fortran77_Compiler
             }
             Expect(TokenCategory.DIV);
         }
+
+        /****************************************************************
+         *                         Common Node
+         ***************************************************************/
 
         public void Common()
         {
@@ -302,7 +333,11 @@ namespace Fortran77_Compiler
             }
         }
 
-        public void Statement()
+        /****************************************************************
+         *                        Statement Node
+         ***************************************************************/
+
+        public Node Statement()
         {
             switch (CurrentToken)
             {
@@ -315,8 +350,7 @@ namespace Fortran77_Compiler
                     break;
                 
                 case TokenCategory.DO:
-                    DoLoop();
-                    break;
+                    return DoLoop();
 
                 case TokenCategory.READ:
                     Read();
@@ -343,37 +377,60 @@ namespace Fortran77_Compiler
                                         tokenStream.Current);
             }
         }
+
+        /****************************************************************
+         *                      If Condition Node
+         ***************************************************************/
         
-        public void IfCondition()
+        public Node IfCondition()
         {
-            Expect(TokenCategory.IF);
-            Expression();
-            
+            var ifToken = Expect(TokenCategory.IF);
+            var expr1 = Expression();
             CheckForThen();
-            EvaluateStatements();
+            var stmtList1 = EvaluateStatements();
+
+            var result = new If() { expr1, stmtList };
+            result.AnchorToken = ifToken;
             
             while (CurrentToken == TokenCategory.ELSEIF)
             {
-                Expect(TokenCategory.ELSEIF);
-                Expression();
+                var elseIfToken = Expect(TokenCategory.ELSEIF);
+                var expr2 = Expression();
                 CheckForThen();
-                EvaluateStatements();
+                var stmtList2 = EvaluateStatements();
+
+                var elseIfResult = new ElseIf() { expr2, stmtList2 };
+                elseIfResult.AnchorToken = elseIfToken;
+                result.Add(elseIfResult);
             }
             
             if (CurrentToken == TokenCategory.ELSE)
             {
-                Expect(TokenCategory.ELSE);
-                EvaluateStatements();
+                var elseToken = Expect(TokenCategory.ELSE);
+                var stmtList3 = EvaluateStatements();
+                
+                var elseResult = new Else() {
+                    AnchorToken = elseToken
+                };
+                elseResult.Add(stmtList3);
+                result.Add(elseResult);
             }
             
             if (CurrentToken == TokenCategory.ENDIF)
                 Expect(TokenCategory.ENDIF);
+            
+            return result;
         }
+
+        /****************************************************************
+         *                         Do Loop Node
+         ***************************************************************/
         
-        public void DoLoop()
+        // Assignment is missing!
+        public Node DoLoop()
         {
-            Expect(TokenCategory.DO);
-            Expect(TokenCategory.INT_LITERAL);
+            var doToken = Expect(TokenCategory.DO);
+            var loopLabel = Expect(TokenCategory.INT_LITERAL);
             Assignment();
             
             while (CurrentToken == TokenCategory.COMMA)
@@ -385,15 +442,25 @@ namespace Fortran77_Compiler
             EvaluateStatements();
         }
 
+        /****************************************************************
+         *                        Assignment Node
+         ***************************************************************/
+
+        // Array Management is missing!
         public void Assignment()
         {
-            Expect(TokenCategory.IDENTIFIER);
+            var idToken = Expect(TokenCategory.IDENTIFIER);
             if (CurrentToken == TokenCategory.PARENTHESIS_OPEN)
                 ArrayDeclaration();
 
-            Expect(TokenCategory.ASSIGN);
-            Expression();
+            var assgnToken = Expect(TokenCategory.ASSIGN);
+            var expr = Expression();
+            return null;
         }
+
+        /****************************************************************
+         *                         Write Node
+         ***************************************************************/
 
         public void Write()
         {
@@ -413,6 +480,10 @@ namespace Fortran77_Compiler
                 Expression();
             }
         }
+
+        /****************************************************************
+         *                          Read Node
+         ***************************************************************/
 
         public void Read()
         {
@@ -436,16 +507,28 @@ namespace Fortran77_Compiler
             }
         }
 
+        /****************************************************************
+         *                         Goto Node
+         ***************************************************************/
+
         public void Goto()
         {
             Expect(TokenCategory.GOTO);
             Expect(TokenCategory.INT_LITERAL);
         }
+
+        /****************************************************************
+         *                         Continue Node
+         ***************************************************************/
         
         public void Continue()
         {
             Expect(TokenCategory.CONTINUE);
         }
+
+        /****************************************************************
+         *                         Function Node
+         ***************************************************************/
         
         public void Function()
         {
@@ -471,6 +554,10 @@ namespace Fortran77_Compiler
             Expect(TokenCategory.RETURN);
             Expect(TokenCategory.END);
         }
+
+        /****************************************************************
+         *                       Subroutine Node
+         ***************************************************************/
         
         public void Subroutine()
         {
@@ -500,7 +587,15 @@ namespace Fortran77_Compiler
          *                      Expression Methods
          ****************************************************************/
 
+         /****************************************************************
+         *                        Expression Node
+         ***************************************************************/
+
         public Node Expression() { return OrExpression(); }
+
+        /****************************************************************
+         *                        Or Expression
+         ***************************************************************/
 
         public Node OrExpression()
         {
@@ -517,6 +612,10 @@ namespace Fortran77_Compiler
             return expr1;
         }
 
+        /****************************************************************
+         *                       And Expression
+         ***************************************************************/
+
         public Node AndExpression()
         {
             var expr1 = EqualityExpression();
@@ -532,6 +631,10 @@ namespace Fortran77_Compiler
             return expr1;
         }
 
+        /****************************************************************
+         *                      Equality Expression
+         ***************************************************************/
+
         public Node EqualityExpression()
         {
             var expr1 = CompExpression();
@@ -544,6 +647,10 @@ namespace Fortran77_Compiler
             }
             return expr1;
         }
+
+        /****************************************************************
+         *                    Comparison Expression
+         ***************************************************************/
 
         public Node CompExpression()
         {
@@ -558,6 +665,10 @@ namespace Fortran77_Compiler
             return expr1;
         }
 
+        /****************************************************************
+         *                     Addition Expression
+         ***************************************************************/
+
         public Node AddExpression()
         {
             var expr1 = MultExpression();
@@ -571,6 +682,10 @@ namespace Fortran77_Compiler
             return expr1;
         }
 
+        /****************************************************************
+         *                  Multiplication Expression
+         ***************************************************************/
+
         public Node MultExpression()
         {
             var expr1 = PowExpression();
@@ -583,6 +698,10 @@ namespace Fortran77_Compiler
             }
             return expr1;
         }
+
+        /****************************************************************
+         *                       Power Expression
+         ***************************************************************/
 
         public Node PowExpression()
         {
@@ -599,6 +718,10 @@ namespace Fortran77_Compiler
             return expr1;
         }
 
+        /****************************************************************
+         *                     Negation Expression
+         ***************************************************************/
+
         public Node NegExpression()
         {
             var expr = SimpleExpression();
@@ -610,6 +733,10 @@ namespace Fortran77_Compiler
             }
             return expr;
         }
+
+        /****************************************************************
+         *                      Simple Expression
+         ***************************************************************/
 
         public Node SimpleExpression()
         {
@@ -776,6 +903,10 @@ namespace Fortran77_Compiler
             }
         }
 
+        /****************************************************************
+         *                 Identifier Auxiliary Method
+         ***************************************************************/
+
         private Node IdentifierFound()
         {
             var identifier = new Identifier() {
@@ -807,6 +938,10 @@ namespace Fortran77_Compiler
             }
             return identifier;
         }
+
+        /****************************************************************
+         *                   Optional Checks Methods
+         ***************************************************************/
         
         private void CheckForLabel()
         {

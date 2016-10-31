@@ -1,7 +1,31 @@
 Pending Tasks:
-- Finished! Yay! :)
+- Program
+- Evaluate Declarations
+- Declaration
+- Array Declaration
+
+- Type
+- Parameter
+- Data
+- Common
+- Statement
+- Do Loop
+- Assignment
+- Write
+- Read
+- Goto
+- Continue
+
+- Function
+- Subroutine
+
+/********************************************************************
+ *******************************************************************/
 
 Completed Tasks:
+- Evaluate Statements
+- If Condition
+
 - Identifier Found
 - Equality Operator
 - Comparing Operator
