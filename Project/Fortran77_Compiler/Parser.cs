@@ -5,15 +5,8 @@ namespace Fortran77_Compiler
 {
     class Parser
     {
-        /*******************************************************************
-         * IMPORTANT NOTICE: This is just a template based on Buttercup's
-         * 2nd Stage Parser. Adding and/or removing Sets and Methods will
-         * most likely be required for the Fortran77 Version.
-         *******************************************************************/
-         
         static readonly ISet<TokenCategory> firstOfDeclaration =
             new HashSet<TokenCategory>() {
-                // Here will go the declaration keywords.
                 TokenCategory.INTEGER,
                 TokenCategory.REAL,
                 TokenCategory.LOGICAL,
@@ -39,7 +32,6 @@ namespace Fortran77_Compiler
         
         static readonly ISet<TokenCategory> firstOfStatement =
             new HashSet<TokenCategory>() {
-                // Here will go the statement keywords.
                 TokenCategory.CALL,
                 TokenCategory.CONTINUE,
                 TokenCategory.DO,
@@ -82,7 +74,6 @@ namespace Fortran77_Compiler
                 TokenCategory.NEG
             };
 
-        // Missing some keywords. Add them in Scanner.cs
         static readonly ISet<TokenCategory> firstOfSimpleExpression =
             new HashSet<TokenCategory>() {
                 TokenCategory.CALL,
