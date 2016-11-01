@@ -1,4 +1,4 @@
-! Computes pi through numerical integration. 
+! Computes pi through numerical integration.
     
       program pi
       

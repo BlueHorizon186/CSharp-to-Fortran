@@ -30,6 +30,8 @@ namespace Fortran77_Compiler
 
     class Continue: Node {}
 
+    class Read: Node {}
+
     class Write: Node {}
 
     /* *******************************************************************

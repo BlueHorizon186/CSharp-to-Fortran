@@ -8,7 +8,6 @@ Pending Tasks:
 - Data
 - Common
 - Assignment (1/2)
-- Read
 - Goto
 
 - Function
@@ -24,6 +23,7 @@ Completed Tasks:
 - Statement
 - If Condition
 - Do Loop
+- Read
 - Write
 - Continue
 

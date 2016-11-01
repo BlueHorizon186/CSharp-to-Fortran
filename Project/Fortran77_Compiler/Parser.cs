@@ -357,8 +357,8 @@ namespace Fortran77_Compiler
         {
             switch (CurrentToken)
             {
-                //case TokenCategory.IDENTIFIER:
-                    //return Assignment();
+                case TokenCategory.IDENTIFIER:
+                    return Assignment();
                 
                 case TokenCategory.IF:
                     return IfCondition();
@@ -366,8 +366,8 @@ namespace Fortran77_Compiler
                 case TokenCategory.DO:
                     return DoLoop();
 
-                //case TokenCategory.READ:
-                    //return Read();
+                case TokenCategory.READ:
+                    return Read();
 
                 case TokenCategory.WRITE:
                     return Write();
@@ -511,26 +511,39 @@ namespace Fortran77_Compiler
          *                          Read Node
          ***************************************************************/
 
-        public void Read()
+        public Node Read()
         {
-            Expect(TokenCategory.READ);
+            var rdResult = new Read() {
+                AnchorToken = Expect(TokenCategory.READ)
+            };
+
             Expect(TokenCategory.PARENTHESIS_OPEN);
             Expect(TokenCategory.MUL);
             Expect(TokenCategory.COMMA);
             Expect(TokenCategory.MUL);
             Expect(TokenCategory.PARENTHESIS_CLOSE);
 
-            Expect(TokenCategory.IDENTIFIER);
+            rdResult.Add(new Identifier() {
+                AnchorToken = Expect(TokenCategory.IDENTIFIER)
+            });
+
             while (firstOfMultipleDeclarations.Contains(CurrentToken))
             {
+                // Pending...
+                ////////////////////////////////////////////////////////
                 if (CurrentToken == TokenCategory.PARENTHESIS_OPEN)
                     ArrayDeclaration();
+                ////////////////////////////////////////////////////////
+
                 else if (CurrentToken == TokenCategory.COMMA)
                 {
                     Expect(TokenCategory.COMMA);
-                    Expect(TokenCategory.IDENTIFIER);
+                    rdResult.Add(new Identifier() {
+                        AnchorToken = Expect(TokenCategory.IDENTIFIER)
+                    });
                 }
             }
+            return rdResult;
         }
 
         /****************************************************************
@@ -752,10 +765,15 @@ namespace Fortran77_Compiler
 
         public Node NegExpression()
         {
-            var expr = SimpleExpression();
+            dynamic negate = null;
             if (negationSymbols.Contains(CurrentToken))
             {
-                var negate = NegationOperator();
+                negate = NegationOperator();
+            }
+
+            var expr = SimpleExpression();
+            if (negate != null)
+            {
                 negate.Add(expr);
                 expr = negate;
             }
