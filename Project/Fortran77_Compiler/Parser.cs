@@ -206,8 +206,8 @@ namespace Fortran77_Compiler
             {
                 if (CurrentToken == TokenCategory.PARAMETER)
                     decls.Add(Parameter());
-                //else if (CurrentToken == TokenCategory.COMMON) // Pending...
-                    //decls.Add(Common());
+                else if (CurrentToken == TokenCategory.COMMON)
+                    decls.Add(Common());
                 else if (CurrentToken == TokenCategory.DATA)
                     decls.Add(Data());
                 else
@@ -354,21 +354,32 @@ namespace Fortran77_Compiler
          *                         Common Node
          ***************************************************************/
 
-        public void Common()
+        public Node Common()
         {
-            Expect(TokenCategory.COMMON);
+            var commonToken = Expect(TokenCategory.COMMON);
             Expect(TokenCategory.DIV);
-            Expect(TokenCategory.IDENTIFIER);
+            var commonId = Expect(TokenCategory.IDENTIFIER);
             Expect(TokenCategory.DIV);
 
+            var commonFields = new CommonList();
             if (CurrentToken == TokenCategory.IDENTIFIER)
-                Expect(TokenCategory.IDENTIFIER);
+            {
+                commonFields.Add(new Identifier() {
+                    AnchorToken = Expect(TokenCategory.IDENTIFIER)
+                });
+            }
             
             while (CurrentToken == TokenCategory.COMMA)
             {
                 Expect(TokenCategory.COMMA);
-                Expect(TokenCategory.IDENTIFIER);
+                commonFields.Add(new Identifier() {
+                    AnchorToken = Expect(TokenCategory.IDENTIFIER)
+                });
             }
+
+            var commonResult = new Common() { commonId, commonFields };
+            commonResult.AnchorToken = commonToken;
+            return commonResult;
         }
 
         /****************************************************************

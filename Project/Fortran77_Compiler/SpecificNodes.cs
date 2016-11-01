@@ -14,6 +14,10 @@ namespace Fortran77_Compiler
 
     class DataList: Node {}
 
+    class Common: Node {}
+
+    class CommonList: Node {}
+
     class StatementList: Node {}
 
     class ArgumentList: Node {}

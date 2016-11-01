@@ -1,10 +1,8 @@
 Pending Tasks:
 - Program (1/2)
-- Evaluate Declarations (1/2)
 - Declaration (1/2)
 - Array Declaration
 
-- Common
 - Assignment (1/2)
 
 - Function
@@ -13,10 +11,13 @@ Pending Tasks:
  *******************************************************************/
 
 Completed Tasks:
+- Evaluate Declarations
 - Evaluate Statements
+
 - Type
 - Parameter
 - Data
+- Common
 
 - Statement
 - If Condition
