@@ -1,17 +1,14 @@
 Pending Tasks:
-- Program
-- Evaluate Declarations
-- Declaration
+- Program (1/2)
+- Evaluate Declarations (1/2)
+- Declaration (1/2)
 - Array Declaration
 
-- Type
 - Parameter
 - Data
 - Common
-- Statement
 - Do Loop
 - Assignment
-- Write
 - Read
 - Goto
 - Continue
@@ -24,7 +21,11 @@ Pending Tasks:
 
 Completed Tasks:
 - Evaluate Statements
+- Type
+
+- Statement
 - If Condition
+- Write
 
 - Identifier Found
 - Equality Operator

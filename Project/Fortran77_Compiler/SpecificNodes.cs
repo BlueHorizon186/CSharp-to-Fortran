@@ -10,6 +10,10 @@ namespace Fortran77_Compiler
 
     class StatementList: Node {}
 
+    class Stop: Node {}
+
+    class End: Node {}
+
     class Assignment: Node {}
 
     class ParenthesisOpen: Node {}
@@ -21,6 +25,8 @@ namespace Fortran77_Compiler
     class ElseIf: Node {}
 
     class Else: Node {}
+
+    class Write: Node {}
 
     /* *******************************************************************
      *                        Skip to Expressions.

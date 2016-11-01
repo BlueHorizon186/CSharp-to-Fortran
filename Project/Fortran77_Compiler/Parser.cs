@@ -153,17 +153,26 @@ namespace Fortran77_Compiler
          *                          Program Node
          ***************************************************************/
 
-        public void Program()
+        public Node Program()
         {
-            Expect(TokenCategory.PROGRAM);
-            Expect(TokenCategory.IDENTIFIER);
+            var progToken = Expect(TokenCategory.PROGRAM);
+            var progName = new Identifier() {
+                AnchorToken = Expect(TokenCategory.IDENTIFIER)
+            };
 
-            EvaluateDeclarations();
-            EvaluateStatements();
+            var declList = EvaluateDeclarations();
+            var stmtList = EvaluateStatements();
 
-            Expect(TokenCategory.STOP);
-            Expect(TokenCategory.END);
+            var stop = new Stop() {
+                AnchorToken = Expect(TokenCategory.STOP)
+            };
 
+            var end = new End() {
+                AnchorToken = Expect(TokenCategory.END)
+            };
+
+            // Pending...
+            /***************************************************/
             while (CurrentToken != TokenCategory.EOF)
             {
                 if (CurrentToken == TokenCategory.SUBROUTINE)
@@ -171,24 +180,36 @@ namespace Fortran77_Compiler
                 else
                     Function();
             }
-            
+            /***************************************************/
+
             Expect(TokenCategory.EOF);
+
+            var prog = new Program() {
+                progName, declList, stmtList, stop, end
+            };
+            prog.AnchorToken = progToken;
+            return prog;
         }
 
         /****************************************************************
          *                    Declarations List Node
          ***************************************************************/
         
-        private void EvaluateDeclarations()
+        private Node EvaluateDeclarations()
         {
+            var decls = new DeclarationList();
             while (firstOfDeclaration.Contains(CurrentToken))
             {
-                if (CurrentToken == TokenCategory.PARAMETER) Parameter();
-                else if (CurrentToken == TokenCategory.COMMON) Common();
-                else if (CurrentToken == TokenCategory.DATA) Data();
-                else Declaration();
-                // TODO: Missing "Common" implementation. Done!!!
+                //if (CurrentToken == TokenCategory.PARAMETER) // Pending...
+                    //decls.Add(Parameter());
+                //else if (CurrentToken == TokenCategory.COMMON) // Pending...
+                    //decls.Add(Common());
+                //else if (CurrentToken == TokenCategory.DATA) // Pending...
+                    //decls.Add(Data());
+                //else
+                    decls.Add(Declaration());
             }
+            return decls;
         }
 
         /****************************************************************
@@ -209,21 +230,31 @@ namespace Fortran77_Compiler
          *                       Declaration Node
          ***************************************************************/
         
-        public void Declaration()
+        public Node Declaration()
         {
-            Type();
-            Expect(TokenCategory.IDENTIFIER);
+            var declResult = new Declaration() {
+                AnchorToken = Type()
+            };
+
+            declResult.Add(new Identifier() {
+                AnchorToken = Expect(TokenCategory.IDENTIFIER)
+            });
 
             while (firstOfMultipleDeclarations.Contains(CurrentToken))
             {
+                // Pending...
                 if (CurrentToken == TokenCategory.PARENTHESIS_OPEN)
                     ArrayDeclaration();
+                
                 else if (CurrentToken == TokenCategory.COMMA)
                 {
                     Expect(TokenCategory.COMMA);
-                    Expect(TokenCategory.IDENTIFIER);
+                    declResult.Add(new Identifier() {
+                        AnchorToken = Expect(TokenCategory.IDENTIFIER)
+                    });
                 }
             }
+            return declResult;
         }
 
         /****************************************************************
@@ -246,25 +277,21 @@ namespace Fortran77_Compiler
          *                          Type Node
          ***************************************************************/
 
-        public void Type()
+        public Token Type()
         {
             switch (CurrentToken)
             {
                 case TokenCategory.INTEGER:
-                    Expect(TokenCategory.INTEGER);
-                    break;
+                    return Expect(TokenCategory.INTEGER);
 
                 case TokenCategory.REAL:
-                    Expect(TokenCategory.REAL);
-                    break;
+                    return Expect(TokenCategory.REAL);
 
                 case TokenCategory.LOGICAL:
-                    Expect(TokenCategory.LOGICAL);
-                    break;
+                    return Expect(TokenCategory.LOGICAL);
 
                 case TokenCategory.CHARACTER:
-                    Expect(TokenCategory.CHARACTER);
-                    break;
+                    return Expect(TokenCategory.CHARACTER);
 
                 default:
                     throw new SyntaxError(firstOfStatement,
@@ -332,36 +359,29 @@ namespace Fortran77_Compiler
         {
             switch (CurrentToken)
             {
-                case TokenCategory.IDENTIFIER:
-                    Assignment();
-                    break;
+                //case TokenCategory.IDENTIFIER:
+                    //return Assignment();
                 
                 case TokenCategory.IF:
-                    IfCondition();
-                    break;
+                    return IfCondition();
                 
-                case TokenCategory.DO:
-                    return DoLoop();
+                //case TokenCategory.DO:
+                    //return DoLoop();
 
-                case TokenCategory.READ:
-                    Read();
-                    break;
+                //case TokenCategory.READ:
+                    //return Read();
 
                 case TokenCategory.WRITE:
-                    Write();
-                    break;
+                    return Write();
 
-                case TokenCategory.GOTO:
-                    Goto();
-                    break;
+                //case TokenCategory.GOTO:
+                    //return Goto();
                 
-                case TokenCategory.CONTINUE:
-                    Continue();
-                    break;
+                //case TokenCategory.CONTINUE:
+                    //return Continue();
                 
                 case TokenCategory.CALL:
-                    Expression();
-                    break;
+                    return Expression();
 
                 default:
                     throw new SyntaxError(firstOfStatement, 
@@ -380,7 +400,7 @@ namespace Fortran77_Compiler
             CheckForThen();
             var stmtList1 = EvaluateStatements();
 
-            var result = new If() { expr1, stmtList };
+            var result = new If() { expr1, stmtList1 };
             result.AnchorToken = ifToken;
             
             while (CurrentToken == TokenCategory.ELSEIF)
@@ -417,11 +437,10 @@ namespace Fortran77_Compiler
          *                         Do Loop Node
          ***************************************************************/
         
-        // Assignment is missing!
-        public Node DoLoop()
+        public void DoLoop()
         {
-            var doToken = Expect(TokenCategory.DO);
-            var loopLabel = Expect(TokenCategory.INT_LITERAL);
+            Expect(TokenCategory.DO);
+            Expect(TokenCategory.INT_LITERAL);
             Assignment();
             
             while (CurrentToken == TokenCategory.COMMA)
@@ -437,25 +456,26 @@ namespace Fortran77_Compiler
          *                        Assignment Node
          ***************************************************************/
 
-        // Array Management is missing!
         public void Assignment()
         {
-            var idToken = Expect(TokenCategory.IDENTIFIER);
+            Expect(TokenCategory.IDENTIFIER);
             if (CurrentToken == TokenCategory.PARENTHESIS_OPEN)
                 ArrayDeclaration();
 
-            var assgnToken = Expect(TokenCategory.ASSIGN);
-            var expr = Expression();
-            return null;
+            Expect(TokenCategory.ASSIGN);
+            Expression();
         }
 
         /****************************************************************
          *                         Write Node
          ***************************************************************/
 
-        public void Write()
+        public Node Write()
         {
-            Expect(TokenCategory.WRITE);
+            var wrtResult = new Write() {
+                AnchorToken = Expect(TokenCategory.WRITE)
+            };
+
             Expect(TokenCategory.PARENTHESIS_OPEN);
             Expect(TokenCategory.MUL);
             Expect(TokenCategory.COMMA);
@@ -463,13 +483,14 @@ namespace Fortran77_Compiler
             Expect(TokenCategory.PARENTHESIS_CLOSE);
 
             if (firstOfSimpleExpression.Contains(CurrentToken))
-                Expression();
+                wrtResult.Add(Expression());
             
             while (CurrentToken == TokenCategory.COMMA)
             {
                 Expect(TokenCategory.COMMA);
-                Expression();
+                wrtResult.Add(Expression());
             }
+            return wrtResult;
         }
 
         /****************************************************************
