@@ -7,11 +7,9 @@ Pending Tasks:
 - Parameter
 - Data
 - Common
-- Do Loop
-- Assignment
+- Assignment (1/2)
 - Read
 - Goto
-- Continue
 
 - Function
 - Subroutine
@@ -25,7 +23,9 @@ Completed Tasks:
 
 - Statement
 - If Condition
+- Do Loop
 - Write
+- Continue
 
 - Identifier Found
 - Equality Operator

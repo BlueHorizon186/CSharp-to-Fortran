@@ -26,6 +26,10 @@ namespace Fortran77_Compiler
 
     class Else: Node {}
 
+    class DoLoop: Node {}
+
+    class Continue: Node {}
+
     class Write: Node {}
 
     /* *******************************************************************
@@ -75,4 +79,6 @@ namespace Fortran77_Compiler
     class Not: Node {}
 
     class Real: Node {}
+
+    class Label: Node {}
 }
