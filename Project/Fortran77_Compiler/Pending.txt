@@ -4,8 +4,6 @@ Pending Tasks:
 - Declaration (1/2)
 - Array Declaration
 
-- Parameter
-- Data
 - Common
 - Assignment (1/2)
 
@@ -17,6 +15,8 @@ Pending Tasks:
 Completed Tasks:
 - Evaluate Statements
 - Type
+- Parameter
+- Data
 
 - Statement
 - If Condition

@@ -120,21 +120,29 @@ namespace Fortran77_Compiler
             }
         }
 
-        public Token ExpectLiteral()
+        public Node ExpectLiteral()
         {
             switch (CurrentToken)
             {
                 case TokenCategory.INT_LITERAL:
-                    return Expect(TokenCategory.INT_LITERAL);
+                    return new IntLiteral() {
+                        AnchorToken = Expect(TokenCategory.INT_LITERAL)
+                    };
                 
                 case TokenCategory.LOGIC_LITERAL:
-                    return Expect(TokenCategory.LOGIC_LITERAL);
+                    return new LogicLiteral() {
+                        AnchorToken = Expect(TokenCategory.LOGIC_LITERAL)
+                    };
                 
                 case TokenCategory.REAL_LITERAL:
-                    return Expect(TokenCategory.REAL_LITERAL);
+                    return new RealLiteral() {
+                        AnchorToken = Expect(TokenCategory.REAL_LITERAL)
+                    };
 
                 case TokenCategory.STRING_LITERAL:
-                    return Expect(TokenCategory.STRING_LITERAL);
+                    return new StringLiteral() {
+                        AnchorToken = Expect(TokenCategory.STRING_LITERAL)
+                    };
                 
                 default:
                     throw new SyntaxError(literals, tokenStream.Current);
@@ -167,23 +175,23 @@ namespace Fortran77_Compiler
                 AnchorToken = Expect(TokenCategory.END)
             };
 
+            var prog = new Program() {
+                progName, declList, stmtList, stop, end
+            };
+            prog.AnchorToken = progToken;
+
             // Pending...
             /***************************************************/
             while (CurrentToken != TokenCategory.EOF)
             {
                 if (CurrentToken == TokenCategory.SUBROUTINE)
-                    Subroutine();
+                    prog.Add(Subroutine());
                 else
                     Function();
             }
             /***************************************************/
 
             Expect(TokenCategory.EOF);
-
-            var prog = new Program() {
-                progName, declList, stmtList, stop, end
-            };
-            prog.AnchorToken = progToken;
             return prog;
         }
 
@@ -196,13 +204,13 @@ namespace Fortran77_Compiler
             var decls = new DeclarationList();
             while (firstOfDeclaration.Contains(CurrentToken))
             {
-                //if (CurrentToken == TokenCategory.PARAMETER) // Pending...
-                    //decls.Add(Parameter());
+                if (CurrentToken == TokenCategory.PARAMETER)
+                    decls.Add(Parameter());
                 //else if (CurrentToken == TokenCategory.COMMON) // Pending...
                     //decls.Add(Common());
-                //else if (CurrentToken == TokenCategory.DATA) // Pending...
-                    //decls.Add(Data());
-                //else
+                else if (CurrentToken == TokenCategory.DATA)
+                    decls.Add(Data());
+                else
                     decls.Add(Declaration());
             }
             return decls;
@@ -259,7 +267,7 @@ namespace Fortran77_Compiler
          *                         Arrays Node
          ***************************************************************/
 
-        public void ArrayDeclaration()
+        public Node ArrayDeclaration()
         {
             Expect(TokenCategory.PARENTHESIS_OPEN);
             Expression();
@@ -301,31 +309,45 @@ namespace Fortran77_Compiler
          *                        Parameter Node
          ***************************************************************/
 
-        public void Parameter()
+        public Node Parameter()
         {
-            Expect(TokenCategory.PARAMETER);
+            var paramResult = new Parameter() {
+                AnchorToken = Expect(TokenCategory.PARAMETER)
+            };
+
             Expect(TokenCategory.PARENTHESIS_OPEN);
-            Assignment();
+            paramResult.Add(Assignment());
             Expect(TokenCategory.PARENTHESIS_CLOSE);
+            return paramResult;
         }
 
         /****************************************************************
          *                           Data Node
          ***************************************************************/
 
-        public void Data()
+        public Node Data()
         {
-            Expect(TokenCategory.DATA);
-            Expect(TokenCategory.IDENTIFIER);
+            var dataResult = new Data() {
+                AnchorToken = Expect(TokenCategory.DATA)
+            };
+
+            dataResult.Add(new Identifier() {
+                AnchorToken = Expect(TokenCategory.IDENTIFIER)
+            });
+            
             Expect(TokenCategory.DIV);
-            ExpectLiteral();
+            var dataValues = new DataList();
+            dataValues.Add(ExpectLiteral());
 
             while (CurrentToken == TokenCategory.COMMA)
             {
                 Expect(TokenCategory.COMMA);
-                ExpectLiteral();
+                dataValues.Add(ExpectLiteral());
             }
+
             Expect(TokenCategory.DIV);
+            dataResult.Add(dataValues);
+            return dataResult;
         }
 
         /****************************************************************
@@ -607,7 +629,7 @@ namespace Fortran77_Compiler
          *                       Subroutine Node
          ***************************************************************/
         
-        public void Subroutine()
+        public Node Subroutine()
         {
             var subroutToken = Expect(TokenCategory.SUBROUTINE);
             var subroutName = new Identifier() {

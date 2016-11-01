@@ -8,6 +8,12 @@ namespace Fortran77_Compiler
 
     class Declaration: Node {}
 
+    class Parameter: Node {}
+
+    class Data: Node {}
+
+    class DataList: Node {}
+
     class StatementList: Node {}
 
     class ArgumentList: Node {}
