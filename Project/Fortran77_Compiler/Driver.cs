@@ -25,14 +25,15 @@ namespace Fortran77_Compiler
     public class Driver
     {
         // Current compiler version.
-        const string VERSION = "0.2";
+        const string VERSION = "0.3";
 
         //-----------------------------------------------------------
 
         // Features the compiler includes.
         static readonly string[] ReleaseIncludes = {
             "Lexical Analysis",
-            "Syntactic Analysis"
+            "Syntactic Analysis",
+            "AST Construction"
         };
 
         //-----------------------------------------------------------
@@ -84,8 +85,8 @@ namespace Fortran77_Compiler
                 var inputPath = args[0];
                 var inputCode = File.ReadAllText(inputPath);
                 var parser = new Parser(new Scanner(inputCode).Start().GetEnumerator());
-                parser.Program();
-                Console.WriteLine("Syntax OK!");
+                var program = parser.Program();
+                Console.WriteLine(program.ToStringTree());
             }
             catch (Exception e)
             {
