@@ -10,7 +10,11 @@ namespace Fortran77_Compiler
 
     class StatementList: Node {}
 
+    class ArgumentList: Node {}
+
     class Stop: Node {}
+
+    class Return: Node {}
 
     class End: Node {}
 
@@ -33,6 +37,8 @@ namespace Fortran77_Compiler
     class Read: Node {}
 
     class Write: Node {}
+
+    class GoTo: Node {}
 
     /* *******************************************************************
      *                        Skip to Expressions.
@@ -83,4 +89,8 @@ namespace Fortran77_Compiler
     class Real: Node {}
 
     class Label: Node {}
+
+    class Function: Node {}
+
+    class Subroutine: Node {}
 }

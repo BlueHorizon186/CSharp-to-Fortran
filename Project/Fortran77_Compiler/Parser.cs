@@ -372,8 +372,8 @@ namespace Fortran77_Compiler
                 case TokenCategory.WRITE:
                     return Write();
 
-                //case TokenCategory.GOTO:
-                    //return Goto();
+                case TokenCategory.GOTO:
+                    return Goto();
                 
                 case TokenCategory.CONTINUE:
                     return Continue();
@@ -550,10 +550,17 @@ namespace Fortran77_Compiler
          *                         Goto Node
          ***************************************************************/
 
-        public void Goto()
+        public Node Goto()
         {
-            Expect(TokenCategory.GOTO);
-            Expect(TokenCategory.INT_LITERAL);
+            var gotoResult = new GoTo() {
+                AnchorToken = Expect(TokenCategory.GOTO)
+            };
+
+            gotoResult.Add(new Label() {
+                AnchorToken = Expect(TokenCategory.INT_LITERAL)
+            });
+            
+            return gotoResult;
         }
 
         /****************************************************************
@@ -602,26 +609,46 @@ namespace Fortran77_Compiler
         
         public void Subroutine()
         {
-            Expect(TokenCategory.SUBROUTINE);
-            Expect(TokenCategory.IDENTIFIER);
+            var subroutToken = Expect(TokenCategory.SUBROUTINE);
+            var subroutName = new Identifier() {
+                AnchorToken = Expect(TokenCategory.IDENTIFIER)
+            };
+
             Expect(TokenCategory.PARENTHESIS_OPEN);
+            var args = new ArgumentList();
 
             if (CurrentToken != TokenCategory.PARENTHESIS_CLOSE)
             {
-                Expect(TokenCategory.IDENTIFIER);
+                args.Add(new Identifier() {
+                    AnchorToken = Expect(TokenCategory.IDENTIFIER)
+                });
+
                 while (CurrentToken == TokenCategory.COMMA)
                 {
                     Expect(TokenCategory.COMMA);
-                    Expect(TokenCategory.IDENTIFIER);
+                    args.Add(new Identifier() {
+                        AnchorToken = Expect(TokenCategory.IDENTIFIER)
+                    });
                 }
             }
             Expect(TokenCategory.PARENTHESIS_CLOSE);
             
-            EvaluateDeclarations();
-            EvaluateStatements();
+            var declList = EvaluateDeclarations();
+            var stmtList = EvaluateStatements();
             
-            Expect(TokenCategory.RETURN);
-            Expect(TokenCategory.END);
+            var ret = new Return() {
+                AnchorToken = Expect(TokenCategory.RETURN)
+            };
+
+            var end = new End() {
+                AnchorToken = Expect(TokenCategory.END)
+            };
+
+            var subroutResult = new Subroutine() {
+                subroutName, args, declList, stmtList, ret, end
+            };
+            subroutResult.AnchorToken = subroutToken;
+            return subroutResult;
         }
 
         /*****************************************************************
