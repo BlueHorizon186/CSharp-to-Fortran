@@ -495,8 +495,20 @@ namespace Fortran77_Compiler
                 loopResult.Add(Expression());
             }
 
-            loopResult.Add(EvaluateStatements());
+            loopResult.Add(EvaluateLoopStatements());
             return loopResult;
+        }
+
+        private Node EvaluateLoopStatements()
+        {
+            var stmts = new StatementList();
+            while (firstOfStatement.Contains(CurrentToken)
+                    && CurrentToken != TokenCategory.CONTINUE)
+            {
+                stmts.Add(Statement());
+            }
+            stmts.Add(Continue());
+            return stmts;
         }
 
         /****************************************************************
@@ -722,12 +734,12 @@ namespace Fortran77_Compiler
             return subroutResult;
         }
 
-        /*****************************************************************
+        /****************************************************************
          *                      Expression Methods
-         ****************************************************************/
+         ***************************************************************/
 
-         /****************************************************************
-         *                        Expression Node
+        /****************************************************************
+         *                       Expression Node
          ***************************************************************/
 
         public Node Expression() { return OrExpression(); }
