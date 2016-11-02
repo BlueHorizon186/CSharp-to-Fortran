@@ -1,0 +1,82 @@
+Fortran 77 compiler, version 0.3
+Copyright © 2016, ITESM CEM.
+This program is free software; you may redistribute it under the terms of
+the GNU General Public License version 3 or later.
+This program has absolutely no warranty.
+
+
+Included in this release:
+   * Lexical Analysis
+   * Syntactic Analysis
+   * AST Construction
+
+
+Program {PROGRAM, "program", @(3, 7)}
+  Identifier {IDENTIFIER, "pi", @(3, 15)}
+  DeclarationList 
+    Declaration {INTEGER, "integer", @(5, 7)}
+      Identifier {IDENTIFIER, "numrects", @(5, 15)}
+      Identifier {IDENTIFIER, "i", @(5, 25)}
+    Declaration {REAL, "real", @(6, 7)}
+      Identifier {IDENTIFIER, "mid", @(6, 12)}
+      Identifier {IDENTIFIER, "height", @(6, 17)}
+      Identifier {IDENTIFIER, "width", @(6, 25)}
+      Identifier {IDENTIFIER, "area", @(6, 32)}
+      Identifier {IDENTIFIER, "sum", @(6, 38)}
+  StatementList 
+    Assignment {ASSIGN, "=", @(8, 11)}
+      Identifier {IDENTIFIER, "sum", @(8, 7)}
+      IntLiteral {INT_LITERAL, "0", @(8, 13)}
+    Write {WRITE, "write", @(10, 7)}
+      StringLiteral {STRING_LITERAL, "'Number of rectangles:'", @(10, 19)}
+    Read {READ, "read", @(11, 7)}
+      Identifier {IDENTIFIER, "numrects", @(11, 18)}
+    Assignment {ASSIGN, "=", @(13, 13)}
+      Identifier {IDENTIFIER, "width", @(13, 7)}
+      Division {DIV, "/", @(13, 19)}
+        RealLiteral {REAL_LITERAL, "1.0", @(13, 15)}
+        Identifier {IDENTIFIER, "numrects", @(13, 21)}
+    DoLoop {DO, "do", @(14, 7)}
+      Label {INT_LITERAL, "42", @(14, 10)}
+      Assignment {ASSIGN, "=", @(14, 15)}
+        Identifier {IDENTIFIER, "i", @(14, 13)}
+        Substraction {NEG, "-", @(14, 26)}
+          Identifier {IDENTIFIER, "numrects", @(14, 17)}
+          IntLiteral {INT_LITERAL, "1", @(14, 28)}
+      IntLiteral {INT_LITERAL, "0", @(14, 31)}
+      Negation {NEG, "-", @(14, 34)}
+        IntLiteral {INT_LITERAL, "1", @(14, 35)}
+      StatementList 
+        Assignment {ASSIGN, "=", @(15, 15)}
+          Identifier {IDENTIFIER, "mid", @(15, 11)}
+          Multiplication {MUL, "*", @(15, 27)}
+            Addition {ADD, "+", @(15, 20)}
+              Identifier {IDENTIFIER, "i", @(15, 18)}
+              RealLiteral {REAL_LITERAL, "0.5", @(15, 22)}
+            Identifier {IDENTIFIER, "width", @(15, 29)}
+        Assignment {ASSIGN, "=", @(16, 18)}
+          Identifier {IDENTIFIER, "height", @(16, 11)}
+          Division {DIV, "/", @(16, 24)}
+            RealLiteral {REAL_LITERAL, "4.0", @(16, 20)}
+            Addition {ADD, "+", @(16, 31)}
+              RealLiteral {REAL_LITERAL, "1.0", @(16, 27)}
+              Power {EXPONENT, "**", @(16, 37)}
+                Identifier {IDENTIFIER, "mid", @(16, 33)}
+                IntLiteral {INT_LITERAL, "2", @(16, 40)}
+        Assignment {ASSIGN, "=", @(17, 15)}
+          Identifier {IDENTIFIER, "sum", @(17, 11)}
+          Addition {ADD, "+", @(17, 21)}
+            Identifier {IDENTIFIER, "sum", @(17, 17)}
+            Identifier {IDENTIFIER, "height", @(17, 23)}
+        Continue {CONTINUE, "continue", @(18, 7)}
+    Assignment {ASSIGN, "=", @(20, 12)}
+      Identifier {IDENTIFIER, "area", @(20, 7)}
+      Multiplication {MUL, "*", @(20, 20)}
+        Identifier {IDENTIFIER, "width", @(20, 14)}
+        Identifier {IDENTIFIER, "sum", @(20, 22)}
+    Write {WRITE, "write", @(21, 7)}
+      StringLiteral {STRING_LITERAL, "'Computed pi = '", @(21, 19)}
+      Identifier {IDENTIFIER, "area", @(21, 37)}
+  Stop {STOP, "stop", @(23, 7)}
+  End {END, "end", @(24, 7)}
+

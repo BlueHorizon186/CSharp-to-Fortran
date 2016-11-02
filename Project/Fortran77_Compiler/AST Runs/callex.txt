@@ -1,0 +1,74 @@
+Fortran 77 compiler, version 0.3
+Copyright © 2016, ITESM CEM.
+This program is free software; you may redistribute it under the terms of
+the GNU General Public License version 3 or later.
+This program has absolutely no warranty.
+
+
+Included in this release:
+   * Lexical Analysis
+   * Syntactic Analysis
+   * AST Construction
+
+
+Program {PROGRAM, "program", @(3, 7)}
+  Identifier {IDENTIFIER, "callex", @(3, 15)}
+  DeclarationList 
+    Declaration {INTEGER, "integer", @(4, 7)}
+      Identifier {IDENTIFIER, "m", @(4, 15)}
+      Identifier {IDENTIFIER, "n", @(4, 18)}
+  StatementList 
+    Assignment {ASSIGN, "=", @(6, 9)}
+      Identifier {IDENTIFIER, "m", @(6, 7)}
+      IntLiteral {INT_LITERAL, "1", @(6, 11)}
+    Assignment {ASSIGN, "=", @(7, 9)}
+      Identifier {IDENTIFIER, "n", @(7, 7)}
+      IntLiteral {INT_LITERAL, "2", @(7, 11)}
+    Call {CALL, "call", @(9, 7)}
+      Identifier {IDENTIFIER, "iswap", @(9, 12)}
+        ParenthesisOpen {PARENTHESIS_OPEN, "(", @(9, 17)}
+        Identifier {IDENTIFIER, "m", @(9, 18)}
+        Identifier {IDENTIFIER, "n", @(9, 21)}
+        ParenthesisClose {PARENTHESIS_CLOSE, ")", @(9, 22)}
+    Write {WRITE, "write", @(10, 7)}
+      Identifier {IDENTIFIER, "m", @(10, 19)}
+      Identifier {IDENTIFIER, "n", @(10, 22)}
+    Call {CALL, "call", @(12, 7)}
+      Identifier {IDENTIFIER, "iswap", @(12, 12)}
+        ParenthesisOpen {PARENTHESIS_OPEN, "(", @(12, 17)}
+        Addition {ADD, "+", @(12, 20)}
+          Identifier {IDENTIFIER, "m", @(12, 18)}
+          IntLiteral {INT_LITERAL, "0", @(12, 22)}
+        Multiplication {MUL, "*", @(12, 27)}
+          Identifier {IDENTIFIER, "n", @(12, 25)}
+          IntLiteral {INT_LITERAL, "1", @(12, 29)}
+        ParenthesisClose {PARENTHESIS_CLOSE, ")", @(12, 30)}
+    Write {WRITE, "write", @(13, 7)}
+      Identifier {IDENTIFIER, "m", @(13, 19)}
+      Identifier {IDENTIFIER, "n", @(13, 22)}
+  Stop {STOP, "stop", @(15, 7)}
+  End {END, "end", @(16, 7)}
+  Subroutine {SUBROUTINE, "subroutine", @(21, 7)}
+    Identifier {IDENTIFIER, "iswap", @(21, 18)}
+    ArgumentList 
+      Identifier {IDENTIFIER, "a", @(21, 24)}
+      Identifier {IDENTIFIER, "b", @(21, 27)}
+    DeclarationList 
+      Declaration {INTEGER, "integer", @(22, 7)}
+        Identifier {IDENTIFIER, "a", @(22, 15)}
+        Identifier {IDENTIFIER, "b", @(22, 18)}
+      Declaration {INTEGER, "integer", @(23, 7)}
+        Identifier {IDENTIFIER, "tmp", @(23, 15)}
+    StatementList 
+      Assignment {ASSIGN, "=", @(25, 11)}
+        Identifier {IDENTIFIER, "tmp", @(25, 7)}
+        Identifier {IDENTIFIER, "a", @(25, 13)}
+      Assignment {ASSIGN, "=", @(26, 9)}
+        Identifier {IDENTIFIER, "a", @(26, 7)}
+        Identifier {IDENTIFIER, "b", @(26, 11)}
+      Assignment {ASSIGN, "=", @(27, 9)}
+        Identifier {IDENTIFIER, "b", @(27, 7)}
+        Identifier {IDENTIFIER, "tmp", @(27, 11)}
+    Return {RETURN, "return", @(29, 7)}
+    End {END, "end", @(30, 7)}
+

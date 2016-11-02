@@ -1,0 +1,289 @@
+Fortran 77 compiler, version 0.3
+Copyright © 2016, ITESM CEM.
+This program is free software; you may redistribute it under the terms of
+the GNU General Public License version 3 or later.
+This program has absolutely no warranty.
+
+
+Included in this release:
+   * Lexical Analysis
+   * Syntactic Analysis
+   * AST Construction
+
+
+Program {PROGRAM, "program", @(10, 7)}
+  Identifier {IDENTIFIER, "cramer", @(10, 15)}
+  DeclarationList 
+    Declaration {REAL, "real", @(12, 7)}
+      Identifier {IDENTIFIER, "det", @(12, 12)}
+      Identifier {IDENTIFIER, "d", @(12, 17)}
+      Identifier {IDENTIFIER, "x", @(12, 20)}
+    Declaration {REAL, "real", @(13, 7)}
+      Identifier {IDENTIFIER, "a", @(13, 12)}
+        FArray 
+          IntLiteral {INT_LITERAL, "3", @(13, 14)}
+          IntLiteral {INT_LITERAL, "3", @(13, 17)}
+    Declaration {REAL, "real", @(14, 7)}
+      Identifier {IDENTIFIER, "b", @(14, 12)}
+        FArray 
+          IntLiteral {INT_LITERAL, "3", @(14, 14)}
+    Declaration {REAL, "real", @(15, 7)}
+      Identifier {IDENTIFIER, "ai", @(15, 12)}
+        FArray 
+          IntLiteral {INT_LITERAL, "3", @(15, 15)}
+          IntLiteral {INT_LITERAL, "3", @(15, 18)}
+    Declaration {INTEGER, "integer", @(16, 7)}
+      Identifier {IDENTIFIER, "i", @(16, 15)}
+  StatementList 
+    Write {WRITE, "write", @(18, 7)}
+      StringLiteral {STRING_LITERAL, "'This program will find the values of x1, x2, and x3'", @(18, 19)}
+    Write {WRITE, "write", @(19, 7)}
+      StringLiteral {STRING_LITERAL, "'given a system of 3 linear equations:'", @(19, 19)}
+    Write {WRITE, "write", @(20, 7)}
+    Write {WRITE, "write", @(21, 7)}
+      StringLiteral {STRING_LITERAL, "'   a1*x1 + b1*x2 + c1*x3 = d1'", @(21, 19)}
+    Write {WRITE, "write", @(22, 7)}
+      StringLiteral {STRING_LITERAL, "'   a2*x1 + b2*x2 + c2*x3 = d2'", @(22, 19)}
+    Write {WRITE, "write", @(23, 7)}
+      StringLiteral {STRING_LITERAL, "'   a3*x1 + b3*x2 + c3*x3 = d3'", @(23, 19)}
+    Write {WRITE, "write", @(24, 7)}
+    DoLoop {DO, "do", @(25, 7)}
+      Label {INT_LITERAL, "10", @(25, 10)}
+      Assignment {ASSIGN, "=", @(25, 15)}
+        Identifier {IDENTIFIER, "i", @(25, 13)}
+        IntLiteral {INT_LITERAL, "1", @(25, 17)}
+      IntLiteral {INT_LITERAL, "3", @(25, 20)}
+      StatementList 
+        Write {WRITE, "write", @(26, 11)}
+          StringLiteral {STRING_LITERAL, "'Type the values of a, b, c, and d for row'", @(26, 23)}
+          Identifier {IDENTIFIER, "i", @(26, 68)}
+        Read {READ, "read", @(27, 11)}
+          Identifier {IDENTIFIER, "a", @(27, 21)}
+            FArray 
+              Identifier {IDENTIFIER, "i", @(27, 23)}
+              IntLiteral {INT_LITERAL, "1", @(27, 26)}
+          Identifier {IDENTIFIER, "a", @(27, 30)}
+            FArray 
+              Identifier {IDENTIFIER, "i", @(27, 32)}
+              IntLiteral {INT_LITERAL, "2", @(27, 35)}
+          Identifier {IDENTIFIER, "a", @(27, 39)}
+            FArray 
+              Identifier {IDENTIFIER, "i", @(27, 41)}
+              IntLiteral {INT_LITERAL, "3", @(27, 44)}
+          Identifier {IDENTIFIER, "b", @(27, 48)}
+            FArray 
+              Identifier {IDENTIFIER, "i", @(27, 50)}
+        Continue {CONTINUE, "continue", @(28, 7)}
+    Write {WRITE, "write", @(30, 7)}
+    Write {WRITE, "write", @(31, 7)}
+      StringLiteral {STRING_LITERAL, "'Results:'", @(31, 19)}
+    Assignment {ASSIGN, "=", @(32, 9)}
+      Identifier {IDENTIFIER, "d", @(32, 7)}
+      Identifier {IDENTIFIER, "det", @(32, 11)}
+        ParenthesisOpen {PARENTHESIS_OPEN, "(", @(32, 14)}
+        Identifier {IDENTIFIER, "a", @(32, 15)}
+        ParenthesisClose {PARENTHESIS_CLOSE, ")", @(32, 16)}
+    DoLoop {DO, "do", @(33, 7)}
+      Label {INT_LITERAL, "20", @(33, 10)}
+      Assignment {ASSIGN, "=", @(33, 15)}
+        Identifier {IDENTIFIER, "i", @(33, 13)}
+        IntLiteral {INT_LITERAL, "1", @(33, 17)}
+      IntLiteral {INT_LITERAL, "3", @(33, 20)}
+      StatementList 
+        Call {CALL, "call", @(34, 11)}
+          Identifier {IDENTIFIER, "replacecolumn", @(34, 16)}
+            ParenthesisOpen {PARENTHESIS_OPEN, "(", @(34, 29)}
+            Identifier {IDENTIFIER, "a", @(34, 30)}
+            Identifier {IDENTIFIER, "b", @(34, 33)}
+            Identifier {IDENTIFIER, "i", @(34, 36)}
+            Identifier {IDENTIFIER, "ai", @(34, 39)}
+            ParenthesisClose {PARENTHESIS_CLOSE, ")", @(34, 41)}
+        Assignment {ASSIGN, "=", @(35, 13)}
+          Identifier {IDENTIFIER, "x", @(35, 11)}
+          Division {DIV, "/", @(35, 23)}
+            Identifier {IDENTIFIER, "det", @(35, 15)}
+              ParenthesisOpen {PARENTHESIS_OPEN, "(", @(35, 18)}
+              Identifier {IDENTIFIER, "ai", @(35, 19)}
+              ParenthesisClose {PARENTHESIS_CLOSE, ")", @(35, 21)}
+            Identifier {IDENTIFIER, "d", @(35, 25)}
+        Write {WRITE, "write", @(36, 11)}
+          StringLiteral {STRING_LITERAL, "'x', i, ' ='", @(36, 23)}
+          Identifier {IDENTIFIER, "x", @(36, 37)}
+        Continue {CONTINUE, "continue", @(37, 7)}
+  Stop {STOP, "stop", @(39, 7)}
+  End {END, "end", @(40, 7)}
+  Function {FUNCTION, "function", @(45, 12)}
+    FunctionType {REAL, "real", @(45, 7)}
+    Identifier {IDENTIFIER, "det", @(45, 21)}
+    ArgumentList 
+      Identifier {IDENTIFIER, "m", @(45, 25)}
+    DeclarationList 
+      Declaration {REAL, "real", @(47, 7)}
+        Identifier {IDENTIFIER, "m", @(47, 12)}
+          FArray 
+            IntLiteral {INT_LITERAL, "3", @(47, 14)}
+            IntLiteral {INT_LITERAL, "3", @(47, 17)}
+    StatementList 
+      Assignment {ASSIGN, "=", @(50, 11)}
+        Identifier {IDENTIFIER, "det", @(50, 7)}
+        Addition {ADD, "+", @(51, 63)}
+          Substraction {NEG, "-", @(50, 63)}
+            Multiplication {MUL, "*", @(50, 21)}
+              Identifier {IDENTIFIER, "m", @(50, 13)}
+                ParenthesisOpen {PARENTHESIS_OPEN, "(", @(50, 14)}
+                IntLiteral {INT_LITERAL, "1", @(50, 15)}
+                IntLiteral {INT_LITERAL, "1", @(50, 18)}
+                ParenthesisClose {PARENTHESIS_CLOSE, ")", @(50, 19)}
+              Substraction {NEG, "-", @(50, 42)}
+                Multiplication {MUL, "*", @(50, 32)}
+                  Identifier {IDENTIFIER, "m", @(50, 24)}
+                    ParenthesisOpen {PARENTHESIS_OPEN, "(", @(50, 25)}
+                    IntLiteral {INT_LITERAL, "2", @(50, 26)}
+                    IntLiteral {INT_LITERAL, "2", @(50, 29)}
+                    ParenthesisClose {PARENTHESIS_CLOSE, ")", @(50, 30)}
+                  Identifier {IDENTIFIER, "m", @(50, 34)}
+                    ParenthesisOpen {PARENTHESIS_OPEN, "(", @(50, 35)}
+                    IntLiteral {INT_LITERAL, "3", @(50, 36)}
+                    IntLiteral {INT_LITERAL, "3", @(50, 39)}
+                    ParenthesisClose {PARENTHESIS_CLOSE, ")", @(50, 40)}
+                Multiplication {MUL, "*", @(50, 52)}
+                  Identifier {IDENTIFIER, "m", @(50, 44)}
+                    ParenthesisOpen {PARENTHESIS_OPEN, "(", @(50, 45)}
+                    IntLiteral {INT_LITERAL, "3", @(50, 46)}
+                    IntLiteral {INT_LITERAL, "2", @(50, 49)}
+                    ParenthesisClose {PARENTHESIS_CLOSE, ")", @(50, 50)}
+                  Identifier {IDENTIFIER, "m", @(50, 54)}
+                    ParenthesisOpen {PARENTHESIS_OPEN, "(", @(50, 55)}
+                    IntLiteral {INT_LITERAL, "2", @(50, 56)}
+                    IntLiteral {INT_LITERAL, "3", @(50, 59)}
+                    ParenthesisClose {PARENTHESIS_CLOSE, ")", @(50, 60)}
+            Multiplication {MUL, "*", @(51, 21)}
+              Identifier {IDENTIFIER, "m", @(51, 13)}
+                ParenthesisOpen {PARENTHESIS_OPEN, "(", @(51, 14)}
+                IntLiteral {INT_LITERAL, "1", @(51, 15)}
+                IntLiteral {INT_LITERAL, "2", @(51, 18)}
+                ParenthesisClose {PARENTHESIS_CLOSE, ")", @(51, 19)}
+              Substraction {NEG, "-", @(51, 42)}
+                Multiplication {MUL, "*", @(51, 32)}
+                  Identifier {IDENTIFIER, "m", @(51, 24)}
+                    ParenthesisOpen {PARENTHESIS_OPEN, "(", @(51, 25)}
+                    IntLiteral {INT_LITERAL, "2", @(51, 26)}
+                    IntLiteral {INT_LITERAL, "1", @(51, 29)}
+                    ParenthesisClose {PARENTHESIS_CLOSE, ")", @(51, 30)}
+                  Identifier {IDENTIFIER, "m", @(51, 34)}
+                    ParenthesisOpen {PARENTHESIS_OPEN, "(", @(51, 35)}
+                    IntLiteral {INT_LITERAL, "3", @(51, 36)}
+                    IntLiteral {INT_LITERAL, "3", @(51, 39)}
+                    ParenthesisClose {PARENTHESIS_CLOSE, ")", @(51, 40)}
+                Multiplication {MUL, "*", @(51, 52)}
+                  Identifier {IDENTIFIER, "m", @(51, 44)}
+                    ParenthesisOpen {PARENTHESIS_OPEN, "(", @(51, 45)}
+                    IntLiteral {INT_LITERAL, "3", @(51, 46)}
+                    IntLiteral {INT_LITERAL, "1", @(51, 49)}
+                    ParenthesisClose {PARENTHESIS_CLOSE, ")", @(51, 50)}
+                  Identifier {IDENTIFIER, "m", @(51, 54)}
+                    ParenthesisOpen {PARENTHESIS_OPEN, "(", @(51, 55)}
+                    IntLiteral {INT_LITERAL, "2", @(51, 56)}
+                    IntLiteral {INT_LITERAL, "3", @(51, 59)}
+                    ParenthesisClose {PARENTHESIS_CLOSE, ")", @(51, 60)}
+          Multiplication {MUL, "*", @(52, 21)}
+            Identifier {IDENTIFIER, "m", @(52, 13)}
+              ParenthesisOpen {PARENTHESIS_OPEN, "(", @(52, 14)}
+              IntLiteral {INT_LITERAL, "1", @(52, 15)}
+              IntLiteral {INT_LITERAL, "3", @(52, 18)}
+              ParenthesisClose {PARENTHESIS_CLOSE, ")", @(52, 19)}
+            Substraction {NEG, "-", @(52, 42)}
+              Multiplication {MUL, "*", @(52, 32)}
+                Identifier {IDENTIFIER, "m", @(52, 24)}
+                  ParenthesisOpen {PARENTHESIS_OPEN, "(", @(52, 25)}
+                  IntLiteral {INT_LITERAL, "2", @(52, 26)}
+                  IntLiteral {INT_LITERAL, "1", @(52, 29)}
+                  ParenthesisClose {PARENTHESIS_CLOSE, ")", @(52, 30)}
+                Identifier {IDENTIFIER, "m", @(52, 34)}
+                  ParenthesisOpen {PARENTHESIS_OPEN, "(", @(52, 35)}
+                  IntLiteral {INT_LITERAL, "3", @(52, 36)}
+                  IntLiteral {INT_LITERAL, "2", @(52, 39)}
+                  ParenthesisClose {PARENTHESIS_CLOSE, ")", @(52, 40)}
+              Multiplication {MUL, "*", @(52, 52)}
+                Identifier {IDENTIFIER, "m", @(52, 44)}
+                  ParenthesisOpen {PARENTHESIS_OPEN, "(", @(52, 45)}
+                  IntLiteral {INT_LITERAL, "3", @(52, 46)}
+                  IntLiteral {INT_LITERAL, "1", @(52, 49)}
+                  ParenthesisClose {PARENTHESIS_CLOSE, ")", @(52, 50)}
+                Identifier {IDENTIFIER, "m", @(52, 54)}
+                  ParenthesisOpen {PARENTHESIS_OPEN, "(", @(52, 55)}
+                  IntLiteral {INT_LITERAL, "2", @(52, 56)}
+                  IntLiteral {INT_LITERAL, "2", @(52, 59)}
+                  ParenthesisClose {PARENTHESIS_CLOSE, ")", @(52, 60)}
+    Return {RETURN, "return", @(54, 7)}
+    End {END, "end", @(55, 7)}
+  Subroutine {SUBROUTINE, "subroutine", @(60, 7)}
+    Identifier {IDENTIFIER, "replacecolumn", @(60, 18)}
+    ArgumentList 
+      Identifier {IDENTIFIER, "a", @(60, 32)}
+      Identifier {IDENTIFIER, "b", @(60, 35)}
+      Identifier {IDENTIFIER, "c", @(60, 38)}
+      Identifier {IDENTIFIER, "ac", @(60, 41)}
+    DeclarationList 
+      Declaration {REAL, "real", @(62, 7)}
+        Identifier {IDENTIFIER, "a", @(62, 12)}
+          FArray 
+            IntLiteral {INT_LITERAL, "3", @(62, 14)}
+            IntLiteral {INT_LITERAL, "3", @(62, 17)}
+        Identifier {IDENTIFIER, "b", @(62, 21)}
+          FArray 
+            IntLiteral {INT_LITERAL, "3", @(62, 23)}
+        Identifier {IDENTIFIER, "ac", @(62, 27)}
+          FArray 
+            IntLiteral {INT_LITERAL, "3", @(62, 30)}
+            IntLiteral {INT_LITERAL, "3", @(62, 33)}
+      Declaration {INTEGER, "integer", @(63, 7)}
+        Identifier {IDENTIFIER, "c", @(63, 15)}
+        Identifier {IDENTIFIER, "i", @(63, 18)}
+        Identifier {IDENTIFIER, "j", @(63, 21)}
+    StatementList 
+      DoLoop {DO, "do", @(65, 7)}
+        Label {INT_LITERAL, "20", @(65, 10)}
+        Assignment {ASSIGN, "=", @(65, 15)}
+          Identifier {IDENTIFIER, "i", @(65, 13)}
+          IntLiteral {INT_LITERAL, "1", @(65, 17)}
+        IntLiteral {INT_LITERAL, "3", @(65, 20)}
+        StatementList 
+          DoLoop {DO, "do", @(66, 11)}
+            Label {INT_LITERAL, "10", @(66, 14)}
+            Assignment {ASSIGN, "=", @(66, 19)}
+              Identifier {IDENTIFIER, "j", @(66, 17)}
+              IntLiteral {INT_LITERAL, "1", @(66, 21)}
+            IntLiteral {INT_LITERAL, "3", @(66, 24)}
+            StatementList 
+              If {IF, "if", @(67, 15)}
+                Equal {EQUAL, ".eq.", @(67, 21)}
+                  Identifier {IDENTIFIER, "j", @(67, 19)}
+                  Identifier {IDENTIFIER, "c", @(67, 26)}
+                StatementList 
+                  Assignment {ASSIGN, "=", @(68, 28)}
+                    Identifier {IDENTIFIER, "ac", @(68, 19)}
+                      FArray 
+                        Identifier {IDENTIFIER, "i", @(68, 22)}
+                        Identifier {IDENTIFIER, "j", @(68, 25)}
+                    Identifier {IDENTIFIER, "b", @(68, 30)}
+                      ParenthesisOpen {PARENTHESIS_OPEN, "(", @(68, 31)}
+                      Identifier {IDENTIFIER, "i", @(68, 32)}
+                      ParenthesisClose {PARENTHESIS_CLOSE, ")", @(68, 33)}
+                Else {ELSE, "else", @(69, 15)}
+                  StatementList 
+                    Assignment {ASSIGN, "=", @(70, 28)}
+                      Identifier {IDENTIFIER, "ac", @(70, 19)}
+                        FArray 
+                          Identifier {IDENTIFIER, "i", @(70, 22)}
+                          Identifier {IDENTIFIER, "j", @(70, 25)}
+                      Identifier {IDENTIFIER, "a", @(70, 30)}
+                        ParenthesisOpen {PARENTHESIS_OPEN, "(", @(70, 31)}
+                        Identifier {IDENTIFIER, "i", @(70, 32)}
+                        Identifier {IDENTIFIER, "j", @(70, 35)}
+                        ParenthesisClose {PARENTHESIS_CLOSE, ")", @(70, 36)}
+              Continue {CONTINUE, "continue", @(72, 11)}
+          Continue {CONTINUE, "continue", @(73, 7)}
+    Return {RETURN, "return", @(75, 7)}
+    End {END, "end", @(76, 7)}
+

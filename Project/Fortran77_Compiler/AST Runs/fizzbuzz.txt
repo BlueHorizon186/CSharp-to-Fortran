@@ -1,0 +1,99 @@
+Fortran 77 compiler, version 0.3
+Copyright © 2016, ITESM CEM.
+This program is free software; you may redistribute it under the terms of
+the GNU General Public License version 3 or later.
+This program has absolutely no warranty.
+
+
+Included in this release:
+   * Lexical Analysis
+   * Syntactic Analysis
+   * AST Construction
+
+
+Program {PROGRAM, "program", @(6, 7)}
+  Identifier {IDENTIFIER, "fizzbuzz", @(6, 15)}
+  DeclarationList 
+    Declaration {INTEGER, "integer", @(8, 7)}
+      Identifier {IDENTIFIER, "rem", @(8, 15)}
+      Identifier {IDENTIFIER, "i", @(8, 20)}
+  StatementList 
+    DoLoop {DO, "do", @(10, 7)}
+      Label {INT_LITERAL, "10", @(10, 10)}
+      Assignment {ASSIGN, "=", @(10, 15)}
+        Identifier {IDENTIFIER, "i", @(10, 13)}
+        IntLiteral {INT_LITERAL, "1", @(10, 17)}
+      IntLiteral {INT_LITERAL, "100", @(10, 20)}
+      StatementList 
+        If {IF, "if", @(12, 11)}
+          Equal {EQUAL, ".eq.", @(12, 26)}
+            Identifier {IDENTIFIER, "rem", @(12, 15)}
+              ParenthesisOpen {PARENTHESIS_OPEN, "(", @(12, 18)}
+              Identifier {IDENTIFIER, "i", @(12, 19)}
+              IntLiteral {INT_LITERAL, "15", @(12, 22)}
+              ParenthesisClose {PARENTHESIS_CLOSE, ")", @(12, 24)}
+            IntLiteral {INT_LITERAL, "0", @(12, 31)}
+          StatementList 
+            Write {WRITE, "write", @(13, 15)}
+              StringLiteral {STRING_LITERAL, "'fizzbuzz'", @(13, 27)}
+          ElseIf {ELSEIF, "elseif", @(14, 11)}
+            Equal {EQUAL, ".eq.", @(14, 29)}
+              Identifier {IDENTIFIER, "rem", @(14, 19)}
+                ParenthesisOpen {PARENTHESIS_OPEN, "(", @(14, 22)}
+                Identifier {IDENTIFIER, "i", @(14, 23)}
+                IntLiteral {INT_LITERAL, "3", @(14, 26)}
+                ParenthesisClose {PARENTHESIS_CLOSE, ")", @(14, 27)}
+              IntLiteral {INT_LITERAL, "0", @(14, 34)}
+            StatementList 
+              Write {WRITE, "write", @(15, 15)}
+                StringLiteral {STRING_LITERAL, "'fizz'", @(15, 27)}
+          ElseIf {ELSEIF, "elseif", @(16, 11)}
+            Equal {EQUAL, ".eq.", @(16, 29)}
+              Identifier {IDENTIFIER, "rem", @(16, 19)}
+                ParenthesisOpen {PARENTHESIS_OPEN, "(", @(16, 22)}
+                Identifier {IDENTIFIER, "i", @(16, 23)}
+                IntLiteral {INT_LITERAL, "5", @(16, 26)}
+                ParenthesisClose {PARENTHESIS_CLOSE, ")", @(16, 27)}
+              IntLiteral {INT_LITERAL, "0", @(16, 34)}
+            StatementList 
+              Write {WRITE, "write", @(17, 15)}
+                StringLiteral {STRING_LITERAL, "'buzz'", @(17, 27)}
+          Else {ELSE, "else", @(18, 11)}
+            StatementList 
+              Write {WRITE, "write", @(19, 15)}
+                Identifier {IDENTIFIER, "i", @(19, 27)}
+        Continue {CONTINUE, "continue", @(22, 7)}
+  Stop {STOP, "stop", @(24, 7)}
+  End {END, "end", @(25, 7)}
+  Function {FUNCTION, "function", @(30, 15)}
+    FunctionType {INTEGER, "integer", @(30, 7)}
+    Identifier {IDENTIFIER, "rem", @(30, 24)}
+    ArgumentList 
+      Identifier {IDENTIFIER, "a", @(30, 28)}
+      Identifier {IDENTIFIER, "b", @(30, 31)}
+    DeclarationList 
+      Declaration {INTEGER, "integer", @(32, 7)}
+        Identifier {IDENTIFIER, "a", @(32, 15)}
+        Identifier {IDENTIFIER, "b", @(32, 18)}
+    StatementList 
+      Assignment {ASSIGN, "=", @(34, 11)}
+        Identifier {IDENTIFIER, "rem", @(34, 7)}
+        Substraction {NEG, "-", @(34, 15)}
+          Identifier {IDENTIFIER, "a", @(34, 13)}
+          Multiplication {MUL, "*", @(34, 41)}
+            Identifier {IDENTIFIER, "int", @(34, 18)}
+              ParenthesisOpen {PARENTHESIS_OPEN, "(", @(34, 21)}
+              Division {DIV, "/", @(34, 30)}
+                Real {REAL, "real", @(34, 22)}
+                  ParenthesisOpen {PARENTHESIS_OPEN, "(", @(34, 26)}
+                  Identifier {IDENTIFIER, "a", @(34, 27)}
+                  ParenthesisClose {PARENTHESIS_CLOSE, ")", @(34, 28)}
+                Real {REAL, "real", @(34, 32)}
+                  ParenthesisOpen {PARENTHESIS_OPEN, "(", @(34, 36)}
+                  Identifier {IDENTIFIER, "b", @(34, 37)}
+                  ParenthesisClose {PARENTHESIS_CLOSE, ")", @(34, 38)}
+              ParenthesisClose {PARENTHESIS_CLOSE, ")", @(34, 39)}
+            Identifier {IDENTIFIER, "b", @(34, 43)}
+    Return {RETURN, "return", @(35, 7)}
+    End {END, "end", @(36, 7)}
+

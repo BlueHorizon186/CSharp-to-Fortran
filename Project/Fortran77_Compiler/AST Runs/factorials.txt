@@ -1,0 +1,120 @@
+Fortran 77 compiler, version 0.3
+Copyright © 2016, ITESM CEM.
+This program is free software; you may redistribute it under the terms of
+the GNU General Public License version 3 or later.
+This program has absolutely no warranty.
+
+
+Included in this release:
+   * Lexical Analysis
+   * Syntactic Analysis
+   * AST Construction
+
+
+Program {PROGRAM, "program", @(4, 7)}
+  Identifier {IDENTIFIER, "factorials", @(4, 15)}
+  DeclarationList 
+    Declaration {INTEGER, "integer", @(6, 7)}
+      Identifier {IDENTIFIER, "factit", @(6, 15)}
+      Identifier {IDENTIFIER, "factrec", @(6, 23)}
+      Identifier {IDENTIFIER, "i", @(6, 32)}
+  StatementList 
+    Write {WRITE, "write", @(8, 7)}
+      StringLiteral {STRING_LITERAL, "'Iterative factorial'", @(8, 19)}
+    DoLoop {DO, "do", @(9, 7)}
+      Label {INT_LITERAL, "10", @(9, 10)}
+      Assignment {ASSIGN, "=", @(9, 15)}
+        Identifier {IDENTIFIER, "i", @(9, 13)}
+        IntLiteral {INT_LITERAL, "0", @(9, 17)}
+      IntLiteral {INT_LITERAL, "10", @(9, 20)}
+      StatementList 
+        Write {WRITE, "write", @(10, 11)}
+          Identifier {IDENTIFIER, "i", @(10, 22)}
+          Identifier {IDENTIFIER, "factit", @(10, 25)}
+            ParenthesisOpen {PARENTHESIS_OPEN, "(", @(10, 31)}
+            Identifier {IDENTIFIER, "i", @(10, 32)}
+            ParenthesisClose {PARENTHESIS_CLOSE, ")", @(10, 33)}
+        Continue {CONTINUE, "continue", @(11, 7)}
+    Write {WRITE, "write", @(13, 7)}
+    Write {WRITE, "write", @(14, 7)}
+      StringLiteral {STRING_LITERAL, "'Recursive factorial'", @(14, 19)}
+    DoLoop {DO, "do", @(15, 7)}
+      Label {INT_LITERAL, "20", @(15, 10)}
+      Assignment {ASSIGN, "=", @(15, 15)}
+        Identifier {IDENTIFIER, "i", @(15, 13)}
+        IntLiteral {INT_LITERAL, "0", @(15, 17)}
+      IntLiteral {INT_LITERAL, "10", @(15, 20)}
+      StatementList 
+        Write {WRITE, "write", @(16, 11)}
+          Identifier {IDENTIFIER, "i", @(16, 22)}
+          Identifier {IDENTIFIER, "factrec", @(16, 25)}
+            ParenthesisOpen {PARENTHESIS_OPEN, "(", @(16, 32)}
+            Identifier {IDENTIFIER, "i", @(16, 33)}
+            ParenthesisClose {PARENTHESIS_CLOSE, ")", @(16, 34)}
+        Continue {CONTINUE, "continue", @(17, 7)}
+  Stop {STOP, "stop", @(19, 7)}
+  End {END, "end", @(20, 7)}
+  Function {FUNCTION, "function", @(25, 15)}
+    FunctionType {INTEGER, "integer", @(25, 7)}
+    Identifier {IDENTIFIER, "factit", @(25, 24)}
+    ArgumentList 
+      Identifier {IDENTIFIER, "n", @(25, 31)}
+    DeclarationList 
+      Declaration {INTEGER, "integer", @(27, 7)}
+        Identifier {IDENTIFIER, "n", @(27, 15)}
+        Identifier {IDENTIFIER, "r", @(27, 18)}
+        Identifier {IDENTIFIER, "i", @(27, 21)}
+    StatementList 
+      Assignment {ASSIGN, "=", @(29, 9)}
+        Identifier {IDENTIFIER, "r", @(29, 7)}
+        IntLiteral {INT_LITERAL, "1", @(29, 11)}
+      DoLoop {DO, "do", @(31, 7)}
+        Label {INT_LITERAL, "10", @(31, 10)}
+        Assignment {ASSIGN, "=", @(31, 15)}
+          Identifier {IDENTIFIER, "i", @(31, 13)}
+          IntLiteral {INT_LITERAL, "2", @(31, 17)}
+        Identifier {IDENTIFIER, "n", @(31, 20)}
+        StatementList 
+          Assignment {ASSIGN, "=", @(32, 13)}
+            Identifier {IDENTIFIER, "r", @(32, 11)}
+            Multiplication {MUL, "*", @(32, 17)}
+              Identifier {IDENTIFIER, "r", @(32, 15)}
+              Identifier {IDENTIFIER, "i", @(32, 19)}
+          Continue {CONTINUE, "continue", @(33, 7)}
+      Assignment {ASSIGN, "=", @(35, 14)}
+        Identifier {IDENTIFIER, "factit", @(35, 7)}
+        Identifier {IDENTIFIER, "r", @(35, 16)}
+    Return {RETURN, "return", @(37, 7)}
+    End {END, "end", @(38, 7)}
+  Function {FUNCTION, "function", @(43, 15)}
+    FunctionType {INTEGER, "integer", @(43, 7)}
+    Identifier {IDENTIFIER, "factrec", @(43, 24)}
+    ArgumentList 
+      Identifier {IDENTIFIER, "n", @(43, 32)}
+    DeclarationList 
+      Declaration {INTEGER, "integer", @(45, 7)}
+        Identifier {IDENTIFIER, "n", @(45, 15)}
+    StatementList 
+      If {IF, "if", @(47, 7)}
+        Equal {EQUAL, ".eq.", @(47, 13)}
+          Identifier {IDENTIFIER, "n", @(47, 11)}
+          IntLiteral {INT_LITERAL, "0", @(47, 18)}
+        StatementList 
+          Assignment {ASSIGN, "=", @(48, 19)}
+            Identifier {IDENTIFIER, "factrec", @(48, 11)}
+            IntLiteral {INT_LITERAL, "1", @(48, 21)}
+        Else {ELSE, "else", @(49, 7)}
+          StatementList 
+            Assignment {ASSIGN, "=", @(50, 19)}
+              Identifier {IDENTIFIER, "factrec", @(50, 11)}
+              Multiplication {MUL, "*", @(50, 23)}
+                Identifier {IDENTIFIER, "n", @(50, 21)}
+                Identifier {IDENTIFIER, "factrec", @(50, 25)}
+                  ParenthesisOpen {PARENTHESIS_OPEN, "(", @(50, 32)}
+                  Substraction {NEG, "-", @(50, 35)}
+                    Identifier {IDENTIFIER, "n", @(50, 33)}
+                    IntLiteral {INT_LITERAL, "1", @(50, 37)}
+                  ParenthesisClose {PARENTHESIS_CLOSE, ")", @(50, 38)}
+    Return {RETURN, "return", @(53, 7)}
+    End {END, "end", @(54, 7)}
+

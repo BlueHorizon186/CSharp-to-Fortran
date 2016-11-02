@@ -1,0 +1,22 @@
+Fortran 77 compiler, version 0.3
+Copyright © 2016, ITESM CEM.
+This program is free software; you may redistribute it under the terms of
+the GNU General Public License version 3 or later.
+This program has absolutely no warranty.
+
+
+Included in this release:
+   * Lexical Analysis
+   * Syntactic Analysis
+   * AST Construction
+
+
+Program {PROGRAM, "program", @(3, 7)}
+  Identifier {IDENTIFIER, "hello", @(3, 15)}
+  DeclarationList 
+  StatementList 
+    Write {WRITE, "write", @(5, 7)}
+      StringLiteral {STRING_LITERAL, "'Hello World!'", @(5, 19)}
+  Stop {STOP, "stop", @(7, 7)}
+  End {END, "end", @(8, 7)}
+

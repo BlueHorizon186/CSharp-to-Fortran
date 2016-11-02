@@ -1,0 +1,176 @@
+Fortran 77 compiler, version 0.3
+Copyright © 2016, ITESM CEM.
+This program is free software; you may redistribute it under the terms of
+the GNU General Public License version 3 or later.
+This program has absolutely no warranty.
+
+
+Included in this release:
+   * Lexical Analysis
+   * Syntactic Analysis
+   * AST Construction
+
+
+Program {PROGRAM, "program", @(3, 7)}
+  Identifier {IDENTIFIER, "largest", @(3, 15)}
+  DeclarationList 
+    Declaration {INTEGER, "integer", @(5, 7)}
+      Identifier {IDENTIFIER, "n", @(5, 15)}
+    Parameter {PARAMETER, "parameter", @(6, 7)}
+      Assignment {ASSIGN, "=", @(6, 19)}
+        Identifier {IDENTIFIER, "n", @(6, 18)}
+        IntLiteral {INT_LITERAL, "100", @(6, 20)}
+    Declaration {INTEGER, "integer", @(7, 7)}
+      Identifier {IDENTIFIER, "i", @(7, 15)}
+      Identifier {IDENTIFIER, "biggest", @(7, 18)}
+      Identifier {IDENTIFIER, "a", @(7, 27)}
+        FArray 
+          Identifier {IDENTIFIER, "n", @(7, 29)}
+    Data {DATA, "data", @(8, 7)}
+      Identifier {IDENTIFIER, "a", @(8, 12)}
+      DataList 
+        IntLiteral {INT_LITERAL, "83", @(8, 14)}
+        IntLiteral {INT_LITERAL, "40", @(8, 18)}
+        IntLiteral {INT_LITERAL, "21", @(8, 22)}
+        IntLiteral {INT_LITERAL, "69", @(8, 26)}
+        IntLiteral {INT_LITERAL, "62", @(8, 30)}
+        IntLiteral {INT_LITERAL, "28", @(8, 34)}
+        IntLiteral {INT_LITERAL, "91", @(8, 38)}
+        IntLiteral {INT_LITERAL, "9", @(8, 43)}
+        IntLiteral {INT_LITERAL, "22", @(8, 46)}
+        IntLiteral {INT_LITERAL, "90", @(8, 50)}
+        IntLiteral {INT_LITERAL, "39", @(9, 14)}
+        IntLiteral {INT_LITERAL, "89", @(9, 18)}
+        IntLiteral {INT_LITERAL, "19", @(9, 22)}
+        IntLiteral {INT_LITERAL, "47", @(9, 26)}
+        IntLiteral {INT_LITERAL, "19", @(9, 30)}
+        IntLiteral {INT_LITERAL, "77", @(9, 34)}
+        IntLiteral {INT_LITERAL, "69", @(9, 38)}
+        IntLiteral {INT_LITERAL, "50", @(9, 42)}
+        IntLiteral {INT_LITERAL, "0", @(9, 47)}
+        IntLiteral {INT_LITERAL, "20", @(9, 50)}
+        IntLiteral {INT_LITERAL, "19", @(10, 14)}
+        IntLiteral {INT_LITERAL, "16", @(10, 18)}
+        IntLiteral {INT_LITERAL, "19", @(10, 22)}
+        IntLiteral {INT_LITERAL, "25", @(10, 26)}
+        IntLiteral {INT_LITERAL, "78", @(10, 30)}
+        IntLiteral {INT_LITERAL, "85", @(10, 34)}
+        IntLiteral {INT_LITERAL, "87", @(10, 38)}
+        IntLiteral {INT_LITERAL, "83", @(10, 42)}
+        IntLiteral {INT_LITERAL, "45", @(10, 46)}
+        IntLiteral {INT_LITERAL, "15", @(10, 50)}
+        IntLiteral {INT_LITERAL, "61", @(11, 14)}
+        IntLiteral {INT_LITERAL, "29", @(11, 18)}
+        IntLiteral {INT_LITERAL, "3", @(11, 23)}
+        IntLiteral {INT_LITERAL, "80", @(11, 26)}
+        IntLiteral {INT_LITERAL, "18", @(11, 30)}
+        IntLiteral {INT_LITERAL, "34", @(11, 34)}
+        IntLiteral {INT_LITERAL, "17", @(11, 38)}
+        IntLiteral {INT_LITERAL, "21", @(11, 42)}
+        IntLiteral {INT_LITERAL, "89", @(11, 46)}
+        IntLiteral {INT_LITERAL, "13", @(11, 50)}
+        IntLiteral {INT_LITERAL, "77", @(12, 14)}
+        IntLiteral {INT_LITERAL, "24", @(12, 18)}
+        IntLiteral {INT_LITERAL, "79", @(12, 22)}
+        IntLiteral {INT_LITERAL, "77", @(12, 26)}
+        IntLiteral {INT_LITERAL, "10", @(12, 30)}
+        IntLiteral {INT_LITERAL, "67", @(12, 34)}
+        IntLiteral {INT_LITERAL, "2", @(12, 39)}
+        IntLiteral {INT_LITERAL, "59", @(12, 42)}
+        IntLiteral {INT_LITERAL, "95", @(12, 46)}
+        IntLiteral {INT_LITERAL, "17", @(12, 50)}
+        IntLiteral {INT_LITERAL, "45", @(13, 14)}
+        IntLiteral {INT_LITERAL, "0", @(13, 19)}
+        IntLiteral {INT_LITERAL, "36", @(13, 22)}
+        IntLiteral {INT_LITERAL, "52", @(13, 26)}
+        IntLiteral {INT_LITERAL, "66", @(13, 30)}
+        IntLiteral {INT_LITERAL, "19", @(13, 34)}
+        IntLiteral {INT_LITERAL, "36", @(13, 38)}
+        IntLiteral {INT_LITERAL, "0", @(13, 43)}
+        IntLiteral {INT_LITERAL, "2", @(13, 47)}
+        IntLiteral {INT_LITERAL, "7", @(13, 51)}
+        IntLiteral {INT_LITERAL, "95", @(14, 14)}
+        IntLiteral {INT_LITERAL, "46", @(14, 18)}
+        IntLiteral {INT_LITERAL, "3", @(14, 23)}
+        IntLiteral {INT_LITERAL, "61", @(14, 26)}
+        IntLiteral {INT_LITERAL, "79", @(14, 30)}
+        IntLiteral {INT_LITERAL, "26", @(14, 34)}
+        IntLiteral {INT_LITERAL, "40", @(14, 38)}
+        IntLiteral {INT_LITERAL, "24", @(14, 42)}
+        IntLiteral {INT_LITERAL, "83", @(14, 46)}
+        IntLiteral {INT_LITERAL, "36", @(14, 50)}
+        IntLiteral {INT_LITERAL, "63", @(15, 14)}
+        IntLiteral {INT_LITERAL, "57", @(15, 18)}
+        IntLiteral {INT_LITERAL, "80", @(15, 22)}
+        IntLiteral {INT_LITERAL, "43", @(15, 26)}
+        IntLiteral {INT_LITERAL, "74", @(15, 30)}
+        IntLiteral {INT_LITERAL, "20", @(15, 34)}
+        IntLiteral {INT_LITERAL, "83", @(15, 38)}
+        IntLiteral {INT_LITERAL, "72", @(15, 42)}
+        IntLiteral {INT_LITERAL, "1", @(15, 47)}
+        IntLiteral {INT_LITERAL, "56", @(15, 50)}
+        IntLiteral {INT_LITERAL, "39", @(16, 14)}
+        IntLiteral {INT_LITERAL, "46", @(16, 18)}
+        IntLiteral {INT_LITERAL, "37", @(16, 22)}
+        IntLiteral {INT_LITERAL, "56", @(16, 26)}
+        IntLiteral {INT_LITERAL, "97", @(16, 30)}
+        IntLiteral {INT_LITERAL, "34", @(16, 34)}
+        IntLiteral {INT_LITERAL, "7", @(16, 39)}
+        IntLiteral {INT_LITERAL, "1", @(16, 43)}
+        IntLiteral {INT_LITERAL, "77", @(16, 46)}
+        IntLiteral {INT_LITERAL, "50", @(16, 50)}
+        IntLiteral {INT_LITERAL, "67", @(17, 14)}
+        IntLiteral {INT_LITERAL, "41", @(17, 18)}
+        IntLiteral {INT_LITERAL, "55", @(17, 22)}
+        IntLiteral {INT_LITERAL, "75", @(17, 26)}
+        IntLiteral {INT_LITERAL, "11", @(17, 30)}
+        IntLiteral {INT_LITERAL, "99", @(17, 34)}
+        IntLiteral {INT_LITERAL, "12", @(17, 38)}
+        IntLiteral {INT_LITERAL, "15", @(17, 42)}
+        IntLiteral {INT_LITERAL, "75", @(17, 46)}
+        IntLiteral {INT_LITERAL, "16", @(17, 50)}
+  StatementList 
+    Assignment {ASSIGN, "=", @(19, 15)}
+      Identifier {IDENTIFIER, "biggest", @(19, 7)}
+      Negation {NEG, "-", @(19, 17)}
+        IntLiteral {INT_LITERAL, "1", @(19, 18)}
+    Assignment {ASSIGN, "=", @(20, 9)}
+      Identifier {IDENTIFIER, "i", @(20, 7)}
+      IntLiteral {INT_LITERAL, "1", @(20, 11)}
+    If {IF, "if", @(21, 7)}
+      GreaterThan {GREATER_THAN, ".gt.", @(21, 16)}
+        Identifier {IDENTIFIER, "a", @(21, 11)}
+          ParenthesisOpen {PARENTHESIS_OPEN, "(", @(21, 12)}
+          Identifier {IDENTIFIER, "i", @(21, 13)}
+          ParenthesisClose {PARENTHESIS_CLOSE, ")", @(21, 14)}
+        Identifier {IDENTIFIER, "biggest", @(21, 21)}
+      StatementList 
+        Assignment {ASSIGN, "=", @(22, 19)}
+          Identifier {IDENTIFIER, "biggest", @(22, 11)}
+          Identifier {IDENTIFIER, "a", @(22, 21)}
+            ParenthesisOpen {PARENTHESIS_OPEN, "(", @(22, 22)}
+            Identifier {IDENTIFIER, "i", @(22, 23)}
+            ParenthesisClose {PARENTHESIS_CLOSE, ")", @(22, 24)}
+        Write {WRITE, "write", @(23, 11)}
+          StringLiteral {STRING_LITERAL, "'Largest number found so far:'", @(23, 23)}
+          Identifier {IDENTIFIER, "biggest", @(23, 55)}
+        Write {WRITE, "write", @(24, 11)}
+          StringLiteral {STRING_LITERAL, "'At index'", @(24, 23)}
+          Identifier {IDENTIFIER, "i", @(24, 35)}
+    If {IF, "if", @(26, 7)}
+      Equal {EQUAL, ".eq.", @(26, 13)}
+        Identifier {IDENTIFIER, "i", @(26, 11)}
+        Identifier {IDENTIFIER, "n", @(26, 18)}
+      StatementList 
+        GoTo {GOTO, "goto", @(26, 21)}
+          Label {INT_LITERAL, "20", @(26, 26)}
+    Assignment {ASSIGN, "=", @(27, 9)}
+      Identifier {IDENTIFIER, "i", @(27, 7)}
+      Addition {ADD, "+", @(27, 13)}
+        Identifier {IDENTIFIER, "i", @(27, 11)}
+        IntLiteral {INT_LITERAL, "1", @(27, 15)}
+    GoTo {GOTO, "goto", @(28, 7)}
+      Label {INT_LITERAL, "10", @(28, 12)}
+  Stop {STOP, "stop", @(29, 7)}
+  End {END, "end", @(30, 7)}
+
