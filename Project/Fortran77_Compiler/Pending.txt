@@ -1,7 +1,4 @@
 Pending Tasks:
-- Declaration (1/2)
-- Array Declaration
-
 - Assignment (1/2)
 - Read (1/2)
 
@@ -10,6 +7,8 @@ Pending Tasks:
 
 Completed Tasks:
 - Program
+- Declaration
+- Array Declaration
 - Evaluate Declarations
 - Evaluate Statements
 

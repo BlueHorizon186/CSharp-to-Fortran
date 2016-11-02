@@ -237,24 +237,31 @@ namespace Fortran77_Compiler
                 AnchorToken = Type()
             };
 
-            declResult.Add(new Identifier() {
+            var declId = new Identifier() {
                 AnchorToken = Expect(TokenCategory.IDENTIFIER)
-            });
+            };
+
+            if (CurrentToken == TokenCategory.PARENTHESIS_OPEN)
+                declId.Add(ArrayDeclaration());
+            declResult.Add(declId);
 
             while (firstOfMultipleDeclarations.Contains(CurrentToken))
             {
-                // Pending...
-                ////////////////////////////////////////////////////////
                 if (CurrentToken == TokenCategory.PARENTHESIS_OPEN)
-                    ArrayDeclaration();
-                ///////////////////////////////////////////////////////
+                {
+                    declId.Add(ArrayDeclaration());
+                    declResult.Add(declId);
+                }
                 
                 else if (CurrentToken == TokenCategory.COMMA)
                 {
                     Expect(TokenCategory.COMMA);
-                    declResult.Add(new Identifier() {
+                    declId = new Identifier() {
                         AnchorToken = Expect(TokenCategory.IDENTIFIER)
-                    });
+                    };
+
+                    if (CurrentToken != TokenCategory.PARENTHESIS_OPEN)
+                        declResult.Add(declId);
                 }
             }
             return declResult;
@@ -267,13 +274,17 @@ namespace Fortran77_Compiler
         public void ArrayDeclaration()
         {
             Expect(TokenCategory.PARENTHESIS_OPEN);
-            Expression();
+            var arr = new FArray();
+            arr.Add(Expression());
+
             while (CurrentToken == TokenCategory.COMMA)
             {
                 Expect(TokenCategory.COMMA);
-                Expression();
+                arr.Add(Expression());
             }
+
             Expect(TokenCategory.PARENTHESIS_CLOSE);
+            return arr;
         }
 
         /****************************************************************
