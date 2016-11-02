@@ -906,10 +906,7 @@ namespace Fortran77_Compiler
                     };
                 
                 case TokenCategory.REAL:
-                    var realFunc = new Real();
-                    realFunc.AnchorToken = Expect(TokenCategory.REAL);
-                    realFunc.Add(Expression());
-                    return realFunc;
+                    return RealFunction();
                 
                 case TokenCategory.REAL_LITERAL:
                     return new RealLiteral() {
@@ -1048,7 +1045,7 @@ namespace Fortran77_Compiler
         }
 
         /****************************************************************
-         *                 Identifier Auxiliary Method
+         *       Identifier and Real Special Case Auxiliary Method
          ***************************************************************/
 
         private Node IdentifierFound()
@@ -1081,6 +1078,39 @@ namespace Fortran77_Compiler
                 });
             }
             return identifier;
+        }
+
+        private Node RealFunction()
+        {
+            var realFunc = new Real() {
+                AnchorToken = Expect(TokenCategory.REAL)
+            };
+
+            if (CurrentToken == TokenCategory.PARENTHESIS_OPEN)
+            {
+                realFunc.Add(new ParenthesisOpen() {
+                    AnchorToken = Expect(TokenCategory.PARENTHESIS_OPEN)
+                });
+
+                if (CurrentToken != TokenCategory.PARENTHESIS_CLOSE)
+                {
+                    var expr = Expression();
+                    realFunc.Add(expr);
+
+                    while (CurrentToken == TokenCategory.COMMA)
+                    {
+                        Expect(TokenCategory.COMMA);
+                        expr = Expression();
+                        realFunc.Add(expr);
+                    }
+                }
+                
+                realFunc.Add(new ParenthesisClose() {
+                    AnchorToken = Expect(TokenCategory.PARENTHESIS_CLOSE)
+                });
+            }
+
+            return realFunc;
         }
 
         /****************************************************************
