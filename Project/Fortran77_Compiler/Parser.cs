@@ -180,16 +180,13 @@ namespace Fortran77_Compiler
             };
             prog.AnchorToken = progToken;
 
-            // Pending...
-            /***************************************************/
             while (CurrentToken != TokenCategory.EOF)
             {
                 if (CurrentToken == TokenCategory.SUBROUTINE)
                     prog.Add(Subroutine());
                 else
-                    Function();
+                    prog.Add(Function());
             }
-            /***************************************************/
 
             Expect(TokenCategory.EOF);
             return prog;
@@ -267,7 +264,7 @@ namespace Fortran77_Compiler
          *                         Arrays Node
          ***************************************************************/
 
-        public Node ArrayDeclaration()
+        public void ArrayDeclaration()
         {
             Expect(TokenCategory.PARENTHESIS_OPEN);
             Expression();
@@ -611,29 +608,53 @@ namespace Fortran77_Compiler
          *                         Function Node
          ***************************************************************/
         
-        public void Function()
+        public Node Function()
         {
-            Type();
-            Expect(TokenCategory.FUNCTION);
-            Expect(TokenCategory.IDENTIFIER);
+            var funcType = new FunctionType() {
+                AnchorToken = Type()
+            };
+            var funcToken = Expect(TokenCategory.FUNCTION);
+
+            var funcId = new Identifier() {
+                AnchorToken = Expect(TokenCategory.IDENTIFIER)
+            };
+
+            var args = new ArgumentList();
             Expect(TokenCategory.PARENTHESIS_OPEN);
             
             if (CurrentToken != TokenCategory.PARENTHESIS_CLOSE)
             {
-                Expect(TokenCategory.IDENTIFIER);
+                args.Add(new Identifier() {
+                    AnchorToken = Expect(TokenCategory.IDENTIFIER)
+                });
+
                 while (CurrentToken == TokenCategory.COMMA)
                 {
                     Expect(TokenCategory.COMMA);
-                    Expect(TokenCategory.IDENTIFIER);
+                    args.Add(new Identifier() {
+                        AnchorToken = Expect(TokenCategory.IDENTIFIER)
+                    });
                 }
             }
             Expect(TokenCategory.PARENTHESIS_CLOSE);
             
-            EvaluateDeclarations();
-            EvaluateStatements();
+            var declList = EvaluateDeclarations();
+            var stmtList = EvaluateStatements();
             
-            Expect(TokenCategory.RETURN);
-            Expect(TokenCategory.END);
+            var ret = new Return() {
+                AnchorToken = Expect(TokenCategory.RETURN)
+            };
+
+            var end = new End() {
+                AnchorToken = Expect(TokenCategory.END)
+            };
+
+            var funcResult = new Function() {
+                funcType, funcId, args, declList, stmtList, ret, end
+            };
+            funcResult.AnchorToken = funcToken;
+            return funcResult;
+
         }
 
         /****************************************************************

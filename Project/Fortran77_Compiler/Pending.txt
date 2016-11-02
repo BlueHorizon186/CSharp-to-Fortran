@@ -1,16 +1,15 @@
 Pending Tasks:
-- Program (1/2)
 - Declaration (1/2)
 - Array Declaration
 
 - Assignment (1/2)
-
-- Function
+- Read (1/2)
 
 /********************************************************************
  *******************************************************************/
 
 Completed Tasks:
+- Program
 - Evaluate Declarations
 - Evaluate Statements
 
@@ -22,11 +21,11 @@ Completed Tasks:
 - Statement
 - If Condition
 - Do Loop
-- Read
 - Write
 - Continue
 - Goto
 
+- Function
 - Subroutine
 
 - Identifier Found

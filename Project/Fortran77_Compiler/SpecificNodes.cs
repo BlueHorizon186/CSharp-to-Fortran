@@ -102,5 +102,7 @@ namespace Fortran77_Compiler
 
     class Function: Node {}
 
+    class FunctionType: Node {}
+
     class Subroutine: Node {}
 }
