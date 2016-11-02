@@ -271,7 +271,7 @@ namespace Fortran77_Compiler
          *                         Arrays Node
          ***************************************************************/
 
-        public void ArrayDeclaration()
+        public Node ArrayDeclaration()
         {
             Expect(TokenCategory.PARENTHESIS_OPEN);
             var arr = new FArray();
@@ -366,7 +366,9 @@ namespace Fortran77_Compiler
         {
             var commonToken = Expect(TokenCategory.COMMON);
             Expect(TokenCategory.DIV);
-            var commonId = Expect(TokenCategory.IDENTIFIER);
+            var commonId = new Identifier() {
+                AnchorToken = Expect(TokenCategory.IDENTIFIER)
+            };
             Expect(TokenCategory.DIV);
 
             var commonFields = new CommonList();
