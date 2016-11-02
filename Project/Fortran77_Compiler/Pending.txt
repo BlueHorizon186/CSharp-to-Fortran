@@ -1,6 +1,5 @@
 Pending Tasks:
-- Assignment (1/2)
-- Read (1/2)
+- No pending tasks! Yay! :)
 
 /********************************************************************
  *******************************************************************/
@@ -18,8 +17,10 @@ Completed Tasks:
 - Common
 
 - Statement
+- Assignment
 - If Condition
 - Do Loop
+- Read
 - Write
 - Continue
 - Goto

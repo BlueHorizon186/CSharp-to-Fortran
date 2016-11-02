@@ -507,11 +507,8 @@ namespace Fortran77_Compiler
                 AnchorToken = Expect(TokenCategory.IDENTIFIER)
             };
 
-            // Pending...
-            ////////////////////////////////////////////////////////
             if (CurrentToken == TokenCategory.PARENTHESIS_OPEN)
-                ArrayDeclaration();
-            ////////////////////////////////////////////////////////
+                id.Add(ArrayDeclaration());
 
             var assgnToken = Expect(TokenCategory.ASSIGN);
             var expr = Expression();
@@ -564,24 +561,31 @@ namespace Fortran77_Compiler
             Expect(TokenCategory.MUL);
             Expect(TokenCategory.PARENTHESIS_CLOSE);
 
-            rdResult.Add(new Identifier() {
+            var readTo = new Identifier() {
                 AnchorToken = Expect(TokenCategory.IDENTIFIER)
-            });
+            };
+
+            if (CurrentToken == TokenCategory.PARENTHESIS_OPEN)
+                readTo.Add(ArrayDeclaration());
+            rdResult.Add(readTo);
 
             while (firstOfMultipleDeclarations.Contains(CurrentToken))
             {
-                // Pending...
-                ////////////////////////////////////////////////////////
                 if (CurrentToken == TokenCategory.PARENTHESIS_OPEN)
-                    ArrayDeclaration();
-                ////////////////////////////////////////////////////////
+                {
+                    readTo.Add(ArrayDeclaration());
+                    rdResult.Add(readTo);
+                }
 
                 else if (CurrentToken == TokenCategory.COMMA)
                 {
                     Expect(TokenCategory.COMMA);
-                    rdResult.Add(new Identifier() {
+                    readTo = new Identifier() {
                         AnchorToken = Expect(TokenCategory.IDENTIFIER)
-                    });
+                    };
+
+                    if (CurrentToken != TokenCategory.PARENTHESIS_OPEN)
+                        rdResult.Add(readTo);
                 }
             }
             return rdResult;
