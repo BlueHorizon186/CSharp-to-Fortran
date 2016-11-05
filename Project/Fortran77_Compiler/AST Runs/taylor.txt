@@ -1,0 +1,132 @@
+Fortran 77 compiler, version 0.3
+Copyright © 2016, ITESM CEM.
+This program is free software; you may redistribute it under the terms of
+the GNU General Public License version 3 or later.
+This program has absolutely no warranty.
+
+
+Included in this release:
+   * Lexical Analysis
+   * Syntactic Analysis
+   * AST Construction
+
+
+Program {PROGRAM, "program", @(3, 7)}
+  Identifier {IDENTIFIER, "taylorprog", @(3, 15)}
+  DeclarationList 
+    Declaration {REAL, "real", @(4, 7)}
+      Identifier {IDENTIFIER, "taylor", @(4, 12)}
+  StatementList 
+    Write {WRITE, "write", @(6, 7)}
+      Identifier {IDENTIFIER, "taylor", @(6, 19)}
+        ParenthesisOpen {PARENTHESIS_OPEN, "(", @(6, 25)}
+        IntLiteral {INT_LITERAL, "1", @(6, 26)}
+        IntLiteral {INT_LITERAL, "1", @(6, 29)}
+        ParenthesisClose {PARENTHESIS_CLOSE, ")", @(6, 30)}
+    Write {WRITE, "write", @(7, 7)}
+      Identifier {IDENTIFIER, "taylor", @(7, 19)}
+        ParenthesisOpen {PARENTHESIS_OPEN, "(", @(7, 25)}
+        IntLiteral {INT_LITERAL, "2", @(7, 26)}
+        IntLiteral {INT_LITERAL, "1", @(7, 29)}
+        ParenthesisClose {PARENTHESIS_CLOSE, ")", @(7, 30)}
+    Write {WRITE, "write", @(8, 7)}
+      Identifier {IDENTIFIER, "taylor", @(8, 19)}
+        ParenthesisOpen {PARENTHESIS_OPEN, "(", @(8, 25)}
+        IntLiteral {INT_LITERAL, "5", @(8, 26)}
+        IntLiteral {INT_LITERAL, "1", @(8, 29)}
+        ParenthesisClose {PARENTHESIS_CLOSE, ")", @(8, 30)}
+    Write {WRITE, "write", @(9, 7)}
+      Identifier {IDENTIFIER, "taylor", @(9, 19)}
+        ParenthesisOpen {PARENTHESIS_OPEN, "(", @(9, 25)}
+        IntLiteral {INT_LITERAL, "10", @(9, 26)}
+        IntLiteral {INT_LITERAL, "1", @(9, 30)}
+        ParenthesisClose {PARENTHESIS_CLOSE, ")", @(9, 31)}
+    Write {WRITE, "write", @(10, 7)}
+      Identifier {IDENTIFIER, "taylor", @(10, 19)}
+        ParenthesisOpen {PARENTHESIS_OPEN, "(", @(10, 25)}
+        IntLiteral {INT_LITERAL, "10", @(10, 26)}
+        IntLiteral {INT_LITERAL, "5", @(10, 30)}
+        ParenthesisClose {PARENTHESIS_CLOSE, ")", @(10, 31)}
+  Stop {STOP, "stop", @(12, 7)}
+  End {END, "end", @(13, 7)}
+  Function {FUNCTION, "function", @(16, 12)}
+    FunctionType {REAL, "real", @(16, 7)}
+    Identifier {IDENTIFIER, "taylor", @(16, 21)}
+    ArgumentList 
+      Identifier {IDENTIFIER, "n", @(16, 28)}
+      Identifier {IDENTIFIER, "x", @(16, 31)}
+    DeclarationList 
+      Declaration {INTEGER, "integer", @(17, 7)}
+        Identifier {IDENTIFIER, "n", @(17, 15)}
+        Identifier {IDENTIFIER, "x", @(17, 18)}
+        Identifier {IDENTIFIER, "i", @(17, 21)}
+        Identifier {IDENTIFIER, "fact", @(17, 24)}
+      Declaration {REAL, "real", @(18, 7)}
+        Identifier {IDENTIFIER, "s", @(18, 12)}
+    StatementList 
+      Assignment {ASSIGN, "=", @(19, 9)}
+        Identifier {IDENTIFIER, "s", @(19, 7)}
+        IntLiteral {INT_LITERAL, "0", @(19, 11)}
+      DoLoop {DO, "do", @(20, 7)}
+        Label {INT_LITERAL, "10", @(20, 10)}
+        Assignment {ASSIGN, "=", @(20, 15)}
+          Identifier {IDENTIFIER, "i", @(20, 13)}
+          IntLiteral {INT_LITERAL, "0", @(20, 17)}
+        Identifier {IDENTIFIER, "n", @(20, 20)}
+        StatementList 
+          Assignment {ASSIGN, "=", @(21, 13)}
+            Identifier {IDENTIFIER, "s", @(21, 11)}
+            Addition {ADD, "+", @(21, 17)}
+              Identifier {IDENTIFIER, "s", @(21, 15)}
+              Division {DIV, "/", @(21, 32)}
+                Real {REAL, "real", @(21, 19)}
+                  ParenthesisOpen {PARENTHESIS_OPEN, "(", @(21, 23)}
+                  Power {EXPONENT, "**", @(21, 26)}
+                    Identifier {IDENTIFIER, "x", @(21, 24)}
+                    Identifier {IDENTIFIER, "i", @(21, 29)}
+                  ParenthesisClose {PARENTHESIS_CLOSE, ")", @(21, 30)}
+                Identifier {IDENTIFIER, "fact", @(21, 34)}
+                  ParenthesisOpen {PARENTHESIS_OPEN, "(", @(21, 38)}
+                  Identifier {IDENTIFIER, "i", @(21, 39)}
+                  ParenthesisClose {PARENTHESIS_CLOSE, ")", @(21, 40)}
+          Continue {CONTINUE, "continue", @(22, 7)}
+            Label {INT_LITERAL, "10", @(22, 1)}
+      Assignment {ASSIGN, "=", @(23, 14)}
+        Identifier {IDENTIFIER, "taylor", @(23, 7)}
+        Identifier {IDENTIFIER, "s", @(23, 16)}
+    Return {RETURN, "return", @(24, 7)}
+    End {END, "end", @(25, 7)}
+  Function {FUNCTION, "function", @(28, 15)}
+    FunctionType {INTEGER, "integer", @(28, 7)}
+    Identifier {IDENTIFIER, "fact", @(28, 24)}
+    ArgumentList 
+      Identifier {IDENTIFIER, "n", @(28, 29)}
+    DeclarationList 
+      Declaration {INTEGER, "integer", @(29, 7)}
+        Identifier {IDENTIFIER, "n", @(29, 15)}
+        Identifier {IDENTIFIER, "i", @(29, 18)}
+        Identifier {IDENTIFIER, "r", @(29, 21)}
+    StatementList 
+      Assignment {ASSIGN, "=", @(30, 9)}
+        Identifier {IDENTIFIER, "r", @(30, 7)}
+        IntLiteral {INT_LITERAL, "1", @(30, 11)}
+      DoLoop {DO, "do", @(31, 7)}
+        Label {INT_LITERAL, "10", @(31, 10)}
+        Assignment {ASSIGN, "=", @(31, 15)}
+          Identifier {IDENTIFIER, "i", @(31, 13)}
+          IntLiteral {INT_LITERAL, "1", @(31, 17)}
+        Identifier {IDENTIFIER, "n", @(31, 20)}
+        StatementList 
+          Assignment {ASSIGN, "=", @(32, 13)}
+            Identifier {IDENTIFIER, "r", @(32, 11)}
+            Multiplication {MUL, "*", @(32, 17)}
+              Identifier {IDENTIFIER, "r", @(32, 15)}
+              Identifier {IDENTIFIER, "i", @(32, 19)}
+          Continue {CONTINUE, "continue", @(33, 7)}
+            Label {INT_LITERAL, "10", @(33, 1)}
+      Assignment {ASSIGN, "=", @(34, 12)}
+        Identifier {IDENTIFIER, "fact", @(34, 7)}
+        Identifier {IDENTIFIER, "r", @(34, 14)}
+    Return {RETURN, "return", @(35, 7)}
+    End {END, "end", @(36, 7)}
+
