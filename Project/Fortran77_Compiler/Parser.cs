@@ -87,11 +87,13 @@ namespace Fortran77_Compiler
             };
 
         IEnumerator<Token> tokenStream;
+        Node labelCache;
 
         public Parser(IEnumerator<Token> tokenStream)
         {
             this.tokenStream = tokenStream;
             this.tokenStream.MoveNext();
+            this.labelCache = null;
         }
 
         public TokenCategory CurrentToken 
@@ -109,7 +111,12 @@ namespace Fortran77_Compiler
             {
                 Token current = tokenStream.Current;
                 tokenStream.MoveNext();
-                CheckForLabel();
+
+                if (this.labelCache == null)
+                    this.labelCache = CheckForLabel();
+                else
+                    CheckForLabel();
+
                 CheckForLineContinuation();
                 return current;
             }
@@ -170,6 +177,12 @@ namespace Fortran77_Compiler
             var stop = new Stop() {
                 AnchorToken = Expect(TokenCategory.STOP)
             };
+
+            if (this.labelCache != null)
+            {
+                stop.Add(this.labelCache);
+                this.labelCache = null;
+            }
 
             var end = new End() {
                 AnchorToken = Expect(TokenCategory.END)
@@ -436,13 +449,22 @@ namespace Fortran77_Compiler
         
         public Node IfCondition()
         {
-            var ifToken = Expect(TokenCategory.IF);
+            var result = new If() {
+                AnchorToken = Expect(TokenCategory.IF)
+            };
+
+            if (this.labelCache != null)
+            {
+                result.Add(this.labelCache);
+                this.labelCache = null;
+            }
+
             var expr1 = Expression();
             CheckForThen();
             var stmtList1 = EvaluateStatements();
 
-            var result = new If() { expr1, stmtList1 };
-            result.AnchorToken = ifToken;
+            result.Add(expr1);
+            result.Add(stmtList1);
             
             while (CurrentToken == TokenCategory.ELSEIF)
             {
@@ -517,6 +539,13 @@ namespace Fortran77_Compiler
 
         public Node Assignment()
         {
+            var assgnResult = new Assignment();
+            if (this.labelCache != null)
+            {
+                assgnResult.Add(this.labelCache);
+                this.labelCache = null;
+            }
+
             var id = new Identifier() {
                 AnchorToken = Expect(TokenCategory.IDENTIFIER)
             };
@@ -527,7 +556,8 @@ namespace Fortran77_Compiler
             var assgnToken = Expect(TokenCategory.ASSIGN);
             var expr = Expression();
 
-            var assgnResult = new Assignment() { id, expr };
+            assgnResult.Add(id);
+            assgnResult.Add(expr);
             assgnResult.AnchorToken = assgnToken;
             return assgnResult;
         }
@@ -541,6 +571,12 @@ namespace Fortran77_Compiler
             var wrtResult = new Write() {
                 AnchorToken = Expect(TokenCategory.WRITE)
             };
+
+            if (this.labelCache != null)
+            {
+                wrtResult.Add(this.labelCache);
+                this.labelCache = null;
+            }
 
             Expect(TokenCategory.PARENTHESIS_OPEN);
             Expect(TokenCategory.MUL);
@@ -568,6 +604,12 @@ namespace Fortran77_Compiler
             var rdResult = new Read() {
                 AnchorToken = Expect(TokenCategory.READ)
             };
+
+            if (this.labelCache != null)
+            {
+                rdResult.Add(this.labelCache);
+                this.labelCache = null;
+            }
 
             Expect(TokenCategory.PARENTHESIS_OPEN);
             Expect(TokenCategory.MUL);
@@ -615,6 +657,12 @@ namespace Fortran77_Compiler
                 AnchorToken = Expect(TokenCategory.GOTO)
             };
 
+            if (this.labelCache != null)
+            {
+                gotoResult.Add(this.labelCache);
+                this.labelCache = null;
+            }
+
             gotoResult.Add(new Label() {
                 AnchorToken = Expect(TokenCategory.INT_LITERAL)
             });
@@ -628,9 +676,17 @@ namespace Fortran77_Compiler
         
         public Node Continue()
         {
-            return new Continue() {
-                AnchorToken = Expect(TokenCategory.CONTINUE)
-            };
+            if (this.labelCache == null)
+            {
+                return new Continue() {
+                    AnchorToken = Expect(TokenCategory.CONTINUE)
+                };
+            }
+
+            var continueResult = new Continue() { this.labelCache };
+            this.labelCache = null;
+            continueResult.AnchorToken = Expect(TokenCategory.CONTINUE);
+            return continueResult;
         }
 
         /****************************************************************
@@ -673,6 +729,12 @@ namespace Fortran77_Compiler
             var ret = new Return() {
                 AnchorToken = Expect(TokenCategory.RETURN)
             };
+
+            if (this.labelCache != null)
+            {
+                ret.Add(this.labelCache);
+                this.labelCache = null;
+            }
 
             var end = new End() {
                 AnchorToken = Expect(TokenCategory.END)
@@ -722,6 +784,12 @@ namespace Fortran77_Compiler
             var ret = new Return() {
                 AnchorToken = Expect(TokenCategory.RETURN)
             };
+
+            if (this.labelCache != null)
+            {
+                ret.Add(this.labelCache);
+                this.labelCache = null;
+            }
 
             var end = new End() {
                 AnchorToken = Expect(TokenCategory.END)
@@ -1129,11 +1197,16 @@ namespace Fortran77_Compiler
          *                   Optional Checks Methods
          ***************************************************************/
         
-        private void CheckForLabel()
+        private Node CheckForLabel()
         {
             if (tokenStream.Current.Category == TokenCategory.INT_LITERAL
                 && tokenStream.Current.Column < 6)
-                Expect(TokenCategory.INT_LITERAL);
+            {
+                return new Label() {
+                    AnchorToken = Expect(TokenCategory.INT_LITERAL)
+                };
+            }
+            return null;
         }
         
         private void CheckForLineContinuation()

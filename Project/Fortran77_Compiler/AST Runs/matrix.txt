@@ -686,7 +686,9 @@ Program {PROGRAM, "program", @(3, 7)}
                     Identifier {IDENTIFIER, "j", @(41, 56)}
                   ParenthesisClose {PARENTHESIS_CLOSE, ")", @(41, 57)}
             Continue {CONTINUE, "continue", @(42, 11)}
+              Label {INT_LITERAL, "10", @(42, 1)}
         Continue {CONTINUE, "continue", @(43, 7)}
+          Label {INT_LITERAL, "20", @(43, 1)}
     Write {WRITE, "write", @(45, 7)}
       Identifier {IDENTIFIER, "r", @(45, 19)}
   Stop {STOP, "stop", @(47, 7)}

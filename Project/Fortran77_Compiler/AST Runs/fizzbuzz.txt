@@ -63,6 +63,7 @@ Program {PROGRAM, "program", @(6, 7)}
               Write {WRITE, "write", @(19, 15)}
                 Identifier {IDENTIFIER, "i", @(19, 27)}
         Continue {CONTINUE, "continue", @(22, 7)}
+          Label {INT_LITERAL, "10", @(22, 1)}
   Stop {STOP, "stop", @(24, 7)}
   End {END, "end", @(25, 7)}
   Function {FUNCTION, "function", @(30, 15)}

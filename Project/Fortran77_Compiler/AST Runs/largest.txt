@@ -138,6 +138,7 @@ Program {PROGRAM, "program", @(3, 7)}
       Identifier {IDENTIFIER, "i", @(20, 7)}
       IntLiteral {INT_LITERAL, "1", @(20, 11)}
     If {IF, "if", @(21, 7)}
+      Label {INT_LITERAL, "10", @(21, 1)}
       GreaterThan {GREATER_THAN, ".gt.", @(21, 16)}
         Identifier {IDENTIFIER, "a", @(21, 11)}
           ParenthesisOpen {PARENTHESIS_OPEN, "(", @(21, 12)}
@@ -172,5 +173,6 @@ Program {PROGRAM, "program", @(3, 7)}
     GoTo {GOTO, "goto", @(28, 7)}
       Label {INT_LITERAL, "10", @(28, 12)}
   Stop {STOP, "stop", @(29, 7)}
+    Label {INT_LITERAL, "20", @(29, 1)}
   End {END, "end", @(30, 7)}
 
