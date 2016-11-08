@@ -54,7 +54,7 @@ namespace Buttercup {
                 TokenCategory.PARENTHESIS_OPEN,
                 TokenCategory.NEG
             };
-                
+
         IEnumerator<Token> tokenStream;
 
         public Parser(IEnumerator<Token> tokenStream) {
