@@ -1,0 +1,47 @@
+#!/usr/bin/env python2
+
+#
+# Buttercup compiler - Full compilation script. 
+# Copyright (C) 2013 Ariel Ortiz, ITESM CEM
+#  
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#  
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#  
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+import sys
+import os.path
+
+def split_noext_dir(path):
+    '''
+    Split path in two: file without extension and directory.
+    '''
+    name =  os.path.basename(path)
+    if name[-5:] == '.bcup':
+        name = name[:-5]
+    return (name, os.path.dirname(path))
+    
+if len(sys.argv) != 2:
+    print >> sys.stderr, "Please specify the name of the input file."
+    sys.exit(1)    
+    
+noext, folder = split_noext_dir(sys.argv[1])
+source        = os.path.join(folder, noext + '.bcup')
+target        = os.path.join(folder, noext + '.il')
+executable    = os.path.join(folder, noext + '.exe')
+
+if os.system('./buttercup.exe %s %s' % (source, target)) == 0:        
+    if os.system('ilasm %s' % (target, )) == 0:
+        if os.system('chmod +x %s' % (executable, )) == 0:
+            sys.exit(0)
+        
+sys.exit(1)
