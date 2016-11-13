@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace Fortran77_Compiler
 {
-    public class SymbolTable: IEnumerable<KeyValuePair<string, Type>>
+    public class SymbolTable: IEnumerable<KeyValuePair<string, SymbolEntry>>
     {
-        IDictionary<string, Type> data = new SortedDictionary<string, Type>();
+        IDictionary<string, SymbolEntry> data = new SortedDictionary<string, SymbolEntry>();
 
         //-----------------------------------------------------------
         public override string ToString()
@@ -15,8 +15,8 @@ namespace Fortran77_Compiler
             sb.Append("Symbol Table\n");
             sb.Append("====================\n");
             foreach (var entry in data) {
-                sb.Append(String.Format("{0}: {1}\n", 
-                                        entry.Key, 
+                sb.Append(String.Format("{0}: {1}\n",
+                                        entry.Key,
                                         entry.Value));
             }
             sb.Append("====================\n");
