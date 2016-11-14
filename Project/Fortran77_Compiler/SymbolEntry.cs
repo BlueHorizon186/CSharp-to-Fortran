@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Collections.Generic;
 
 namespace Fortran77_Compiler
@@ -13,14 +14,24 @@ namespace Fortran77_Compiler
         {
             SymbolType = type;
             IsConstant = false;
-            Params = null;
+            Params = new List<string>();
         }
 
         public override string ToString()
         {
-            return String.Format("Type: {0}, IsConst: {1}",
+            var paramsSb = new StringBuilder();
+            paramsSb.Append("[");
+            foreach (var param in Params)
+            {
+                paramsSb.Append(param);
+                paramsSb.Append(",");
+            }
+            paramsSb.Append("]");
+
+            return String.Format("Type: {0}, IsConst: {1}, Params: {2}",
                                  SymbolType,
-                                 IsConstant);
+                                 IsConstant,
+                                 paramsSb.ToString());
         }
     }
 }

@@ -14,11 +14,14 @@ namespace Fortran77_Compiler
             var sb = new StringBuilder();
             sb.Append("Symbol Table\n");
             sb.Append("====================\n");
-            foreach (var entry in data) {
+
+            foreach (var entry in data)
+            {
                 sb.Append(String.Format("{0}: {1}\n",
                                         entry.Key,
-                                        entry.Value));
+                                        entry.Value.ToString()));
             }
+
             sb.Append("====================\n");
             return sb.ToString();
         }

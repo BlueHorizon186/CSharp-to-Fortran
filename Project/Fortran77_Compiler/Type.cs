@@ -4,10 +4,13 @@ namespace Fortran77_Compiler
 {
     public enum Type
     {
-        BOOL,
-        INT,
+        CHARACTER,
+        FUNCTION,
+        INTEGER,
+        LOGICAL,
         REAL,
         STRING,
+        SUBROUTINE,
         VOID
     }
 }
