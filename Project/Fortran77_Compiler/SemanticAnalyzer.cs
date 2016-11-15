@@ -63,12 +63,20 @@ namespace Fortran77_Compiler
         //-----------------------------------------------------------
         public bool IdHasBeenFound(string id)
         {
-            var tables = Tables[progUnit];
-            foreach (var t in tables)
+            foreach (var entry in Tables)
             {
-                if (t.Contains(id)) return true;
+                foreach (var table in entry.Value)
+                {
+                    if (table.Contains(id))
+                        return true;
+                }
             }
             return false;
+        }
+
+        public Type GetIdType(string id)
+        {
+            return null;
         }
 
         /**********************************************************************
@@ -139,10 +147,24 @@ namespace Fortran77_Compiler
         }
 
         //-----------------------------------------------------------
-//        public Type Visit(Parameter node)
-//        {
-//            return Type.VOID;
-//        }
+        public Type Visit(Parameter node)
+        {
+            var paramAssgn = node[0];
+            var variableName = paramAssgn[0].AnchorToken.Lexeme;
+            var currentTable = Tables[progUnit].Last();
+
+            if (IdHasBeenFound(variableName))
+            {
+                // Do something.
+            }
+            else
+            {
+                throw new SemanticError(
+                    "Undeclared variable: " + variableName,
+                    paramAssgn[0].AnchorToken);
+            }
+            return Type.VOID;
+        }
 
         /**********************************************************************
          *                       Visiting Statements
