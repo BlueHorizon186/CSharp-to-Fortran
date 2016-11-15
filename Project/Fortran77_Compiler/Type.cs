@@ -4,6 +4,7 @@ namespace Fortran77_Compiler
 {
     public enum Type
     {
+        NONE,
         CHARACTER,
         FUNCTION,
         INTEGER,

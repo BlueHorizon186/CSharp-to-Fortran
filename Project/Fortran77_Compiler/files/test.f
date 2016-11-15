@@ -2,12 +2,14 @@
 
       program test
 
-      integer n, k
-      real i
+      integer n, k, m
+      parameter (m=100)
+      real i, p
 
       n = 5
       k = 3
       i = 2.0
+      p = 3.45
 
       write(*, *) 'Hello World!'
 

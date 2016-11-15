@@ -76,7 +76,15 @@ namespace Fortran77_Compiler
 
         public Type GetIdType(string id)
         {
-            return null;
+            foreach (var entry in Tables)
+            {
+                foreach (var table in entry.Value)
+                {
+                    if (table.Contains(id))
+                        return table[id].SymbolType;
+                }
+            }
+            return Type.NONE;
         }
 
         /**********************************************************************
@@ -155,7 +163,23 @@ namespace Fortran77_Compiler
 
             if (IdHasBeenFound(variableName))
             {
-                // Do something.
+                if (!currentTable.Contains(variableName))
+                {
+                    currentTable[variableName] =
+                        new SymbolEntry(GetIdType(variableName));
+                }
+
+                currentTable[variableName].IsConstant = true;
+                var expectedType = currentTable[variableName].SymbolType;
+                var foundType = Visit((dynamic) paramAssgn[1]);
+
+                if (expectedType != foundType)
+                {
+                    throw new SemanticError(
+                        "Expecting type " + expectedType
+                        + " in assignment statement.",
+                        paramAssgn[0].AnchorToken);
+                }
             }
             else
             {
