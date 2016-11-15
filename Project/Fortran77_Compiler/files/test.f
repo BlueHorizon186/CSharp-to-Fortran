@@ -7,7 +7,7 @@
 
       n = 5
       k = 3
-      i = 2
+      i = 2.0
 
       write(*, *) 'Hello World!'
 

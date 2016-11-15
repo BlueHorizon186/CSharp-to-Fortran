@@ -71,5 +71,6 @@
     <None Include="files\pi.f" />
     <None Include="files\stats.f" />
     <None Include="files\taylor.f" />
+    <None Include="files\test.f" />
   </ItemGroup>
 </Project>
