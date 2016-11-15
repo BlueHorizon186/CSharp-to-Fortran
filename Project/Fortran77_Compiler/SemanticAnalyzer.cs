@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Fortran77_Compiler
 {
@@ -21,20 +23,265 @@ namespace Fortran77_Compiler
             new Dictionary<TokenCategory, Type>()
             {
                 { TokenCategory.CHARACTER, Type.CHARACTER },
+                { TokenCategory.FUNCTION, Type.FUNCTION },
                 { TokenCategory.INTEGER, Type.INTEGER },
                 { TokenCategory.LOGICAL, Type.LOGICAL },
-                { TokenCategory.REAL, Type.REAL }
+                { TokenCategory.PROGRAM, Type.PROGRAM },
+                { TokenCategory.REAL, Type.REAL },
+                { TokenCategory.SUBROUTINE, Type.SUBROUTINE }
             };
 
         //-----------------------------------------------------------
-        public List<SymbolTable> Tables { get; private set; }
+        public IDictionary<string, List<SymbolTable>> Tables { get; private set; }
+
+        //-----------------------------------------------------------
+        private string progUnit;
 
         //-----------------------------------------------------------
         public SemanticAnalyzer()
         {
-            Tables = new List<SymbolTable>();
+            Tables = new Dictionary<string, List<SymbolTable>>();
+            progUnit = "";
         }
 
         //-----------------------------------------------------------
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            foreach (KeyValuePair<string, List<SymbolTable>> kvp in Tables)
+            {
+                sb.Append(kvp.Key + ":\n");
+                foreach (var entry in kvp.Value)
+                {
+                    sb.Append(entry.ToString());
+                }
+                sb.Append("\n");
+            }
+            return sb.ToString();
+        }
+
+        //-----------------------------------------------------------
+        public bool IdHasBeenFound(string id)
+        {
+            var tables = Tables[progUnit];
+            foreach (var t in tables)
+            {
+                if (t.Contains(id)) return true;
+            }
+            return false;
+        }
+
+        /**********************************************************************
+         *                         Visiting Methods!
+         * *******************************************************************/
+
+        //-----------------------------------------------------------
+        public Type Visit(Program node)
+        {
+            string programKeyword = node.AnchorToken.Lexeme;
+			Tables.Add(programKeyword, new List<SymbolTable>());
+            Tables[programKeyword].Add(new SymbolTable());
+            progUnit = programKeyword;
+
+            // Add Program's name to Table.
+            var programTable = Tables[progUnit].Last();
+            string programName = node[0].AnchorToken.Lexeme;
+
+            programTable[programName] =
+                new SymbolEntry(typeMapper[node.AnchorToken.Category]);
+
+            // Visit and check all declarations and statements in the program.
+            Visit((dynamic) node[1]);
+            Visit((dynamic) node[2]);
+
+            if (node.NodeChildrenCount() > 5)
+            {
+                for (int i = 5; i < node.NodeChildrenCount(); i++)
+                {
+                    Visit((dynamic) node[i]);
+                }
+            }
+            return Type.VOID;
+        }
+
+        /**********************************************************************
+         *                       Visiting Declarations
+         * *******************************************************************/
+
+        //-----------------------------------------------------------
+        public Type Visit(DeclarationList node)
+        {
+            VisitChildren(node);
+            return Type.VOID;
+        }
+
+        //-----------------------------------------------------------
+        public Type Visit(Declaration node)
+        {
+            var currentTable = Tables[progUnit].Last();
+
+            foreach (var decl in node)
+            {
+                var variableName = decl.AnchorToken.Lexeme;
+                if (currentTable.Contains(variableName))
+                {
+                    throw new SemanticError(
+                        "Duplicated variable: " + variableName,
+                        decl.AnchorToken);
+                }
+                else
+                {
+                    currentTable[variableName] =
+                        new SymbolEntry(typeMapper[node.AnchorToken.Category]);
+                }
+            }
+            return Type.VOID;
+        }
+
+        //-----------------------------------------------------------
+//        public Type Visit(Parameter node)
+//        {
+//            return Type.VOID;
+//        }
+
+        /**********************************************************************
+         *                       Visiting Statements
+         * *******************************************************************/
+
+        //-----------------------------------------------------------
+        public Type Visit(StatementList node)
+        {
+            VisitChildren(node);
+            return Type.VOID;
+        }
+
+        //-----------------------------------------------------------
+        public Type Visit(Assignment node)
+        {
+            var currentTable = Tables[progUnit].Last();
+            var assgnBegin = 0;
+
+            if (node[assgnBegin] is Label)
+            {
+                VisitLabel((Label) node[assgnBegin]);
+                assgnBegin++;
+            }
+
+            var variableName = node[assgnBegin].AnchorToken.Lexeme;
+            if (currentTable.Contains(variableName))
+            {
+                if (currentTable[variableName].IsConstant)
+                {
+                    throw new SemanticError(
+                        "Variable was declared as constant: " + variableName,
+                        node[assgnBegin].AnchorToken);
+                }
+
+                var expectedType = currentTable[variableName].SymbolType;
+                var foundType = Visit((dynamic) node[assgnBegin + 1]);
+
+                if (expectedType != foundType)
+                {
+                    throw new SemanticError(
+                        "Expecting type " + expectedType
+                        + " in assignment statement.",
+                        node[assgnBegin].AnchorToken);
+                }
+            }
+            else
+            {
+                throw new SemanticError(
+                    "Undeclared variable: " + variableName,
+                    node[assgnBegin].AnchorToken);
+            }
+            return Type.VOID;
+        }
+
+        //-----------------------------------------------------------
+        public Type Visit(Write node)
+        {
+            foreach (var ch in node)
+            {
+                node.ExpressionTypes.Add(Visit((dynamic) ch));
+            }
+            return Type.VOID;
+        }
+
+        /**********************************************************************
+         *                       Visiting Literals
+         * *******************************************************************/
+
+        //-----------------------------------------------------------
+        public Type Visit(StringLiteral node)
+        {
+            return Type.STRING;
+        }
+
+        //-----------------------------------------------------------
+        public Type Visit(IntLiteral node)
+        {
+            var intStr = node.AnchorToken.Lexeme;
+            try
+            {
+                Convert.ToInt32(intStr);
+            }
+            catch (OverflowException)
+            {
+                throw new SemanticError(
+                    "Integer literal too large to fit in memory: " + intStr,
+                    node.AnchorToken);
+            }
+            return Type.INTEGER;
+        }
+
+        //-----------------------------------------------------------
+        public Type Visit(RealLiteral node)
+        {
+            var realStr = node.AnchorToken.Lexeme;
+            try
+            {
+                Convert.ToDouble(realStr);
+            }
+            catch (OverflowException)
+            {
+                throw new SemanticError(
+                    "Real literal too large to fit in memory: " + realStr,
+                    node.AnchorToken);
+            }
+            return Type.REAL;
+        }
+
+        //-----------------------------------------------------------
+        public Type VisitLabel(Label node)
+        {
+            var currentTable = Tables[progUnit].Last();
+            var label = node.AnchorToken.Lexeme;
+
+            if (currentTable.Contains(label))
+            {
+                throw new SemanticError(
+                    "Label has already been used: " + label,
+                    node.AnchorToken);
+            }
+            else
+            {
+                currentTable[label] =
+                    new SymbolEntry(Type.LABEL);
+            }
+            return Type.LABEL;
+        }
+
+        /**********************************************************************
+         *                       Auxiliary Functions
+         * *******************************************************************/
+
+        //-----------------------------------------------------------
+        private void VisitChildren(Node node)
+        {
+            foreach (var ch in node)
+            {
+                Visit((dynamic) ch);
+            }
+        }
     }
 }

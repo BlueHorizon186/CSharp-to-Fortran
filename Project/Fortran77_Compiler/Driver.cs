@@ -25,7 +25,7 @@ namespace Fortran77_Compiler
     public class Driver
     {
         // Current compiler version.
-        const string VERSION = "0.3";
+        const string VERSION = "0.4";
 
         //-----------------------------------------------------------
 
@@ -33,7 +33,8 @@ namespace Fortran77_Compiler
         static readonly string[] ReleaseIncludes = {
             "Lexical Analysis",
             "Syntactic Analysis",
-            "AST Construction"
+            "AST Construction",
+            "Semantic Analysis"
         };
 
         //-----------------------------------------------------------
@@ -86,11 +87,24 @@ namespace Fortran77_Compiler
                 var inputCode = File.ReadAllText(inputPath);
                 var parser = new Parser(new Scanner(inputCode).Start().GetEnumerator());
                 var program = parser.Program();
-                Console.WriteLine(program.ToStringTree());
+                //Console.WriteLine(program.ToStringTree());
+                Console.WriteLine("Syntax OK!");
+
+                var semantic = new SemanticAnalyzer();
+                semantic.Visit((dynamic) program);
+
+                Console.WriteLine("Semantics OK.");
+                Console.WriteLine();
+                Console.WriteLine("Symbol Tables");
+                Console.WriteLine("============\n");
+                Console.WriteLine(semantic.ToString());
             }
+
             catch (Exception e)
             {
-                if (e is FileNotFoundException || e is SyntaxError)
+                if (e is FileNotFoundException
+                    || e is SyntaxError
+                    || e is SemanticError)
                 {
                     Console.Error.WriteLine(e.Message);
                     Environment.Exit(1);

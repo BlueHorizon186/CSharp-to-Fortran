@@ -17,7 +17,7 @@ namespace Fortran77_Compiler
 
             foreach (var entry in data)
             {
-                sb.Append(String.Format("{0}: {1}\n",
+                sb.Append(String.Format("{0} ---> {1}\n",
                                         entry.Key,
                                         entry.Value.ToString()));
             }
@@ -27,7 +27,7 @@ namespace Fortran77_Compiler
         }
 
         //-----------------------------------------------------------
-        public Type this[string key]
+        public SymbolEntry this[string key]
         {
             get { return data[key]; }
             set { data[key] = value; }
@@ -40,7 +40,7 @@ namespace Fortran77_Compiler
         }
 
         //-----------------------------------------------------------
-        public IEnumerator<KeyValuePair<string, Type>> GetEnumerator()
+        public IEnumerator<KeyValuePair<string, SymbolEntry>> GetEnumerator()
         {
             return data.GetEnumerator();
         }

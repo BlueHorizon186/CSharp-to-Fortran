@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Fortran77_Compiler
 {
@@ -48,7 +49,14 @@ namespace Fortran77_Compiler
 
     class Read: Node {}
 
-    class Write: Node {}
+    class Write: Node
+    {
+        public List<Type> ExpressionTypes { get; set; }
+        public Write()
+        {
+            ExpressionTypes = new List<Type>();
+        }
+    }
 
     class GoTo: Node {}
 

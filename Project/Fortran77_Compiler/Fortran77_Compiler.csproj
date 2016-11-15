@@ -34,9 +34,42 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Scanner.cs" />
-    <Compile Include="TokenCategory.cs" />
-    <Compile Include="Token.cs" />
     <Compile Include="Driver.cs" />
+    <Compile Include="Node.cs" />
+    <Compile Include="Parser.cs" />
+    <Compile Include="Scanner.cs" />
+    <Compile Include="SemanticAnalyzer.cs" />
+    <Compile Include="SemanticError.cs" />
+    <Compile Include="SpecificNodes.cs" />
+    <Compile Include="SymbolEntry.cs" />
+    <Compile Include="SymbolTable.cs" />
+    <Compile Include="SyntaxError.cs" />
+    <Compile Include="Token.cs" />
+    <Compile Include="TokenCategory.cs" />
+    <Compile Include="Type.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Makefile" />
+    <None Include="Pending.txt" />
+    <None Include="AST Runs\callex.txt" />
+    <None Include="AST Runs\cramer.txt" />
+    <None Include="AST Runs\factorials.txt" />
+    <None Include="AST Runs\fizzbuzz.txt" />
+    <None Include="AST Runs\hello.txt" />
+    <None Include="AST Runs\largest.txt" />
+    <None Include="AST Runs\matrix.txt" />
+    <None Include="AST Runs\pi.txt" />
+    <None Include="AST Runs\stats.txt" />
+    <None Include="AST Runs\taylor.txt" />
+    <None Include="files\callex.f" />
+    <None Include="files\cramer.f" />
+    <None Include="files\factorials.f" />
+    <None Include="files\fizzbuzz.f" />
+    <None Include="files\hello.f" />
+    <None Include="files\largest.f" />
+    <None Include="files\matrix.f" />
+    <None Include="files\pi.f" />
+    <None Include="files\stats.f" />
+    <None Include="files\taylor.f" />
   </ItemGroup>
 </Project>

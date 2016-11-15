@@ -20,6 +20,11 @@ namespace Fortran77_Compiler
             children.Add(node);
         }
 
+        public int NodeChildrenCount()
+        {
+            return children.Count;
+        }
+
         public IEnumerator<Node> GetEnumerator()
         {
             return children.GetEnumerator();
