@@ -28,7 +28,7 @@
 !      i = 2.0
 !      p = 3.45
 
-      read(*, *) i, biggest
+      read(*, *) i, biggest, a(2)
       write(*, *) 'Hello World!'
 
       stop

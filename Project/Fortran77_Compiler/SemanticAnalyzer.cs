@@ -300,7 +300,23 @@ namespace Fortran77_Compiler
             var variableName = node.AnchorToken.Lexeme;
 
             if (currentTable.Contains(variableName))
-                return currentTable[variableName].SymbolType;
+            {
+                var id = currentTable[variableName];
+                if (!id.Params.Any())
+                    return currentTable[variableName].SymbolType;
+
+                if (node[0] is FArray)
+                {
+                    if (node[0].NodeChildrenCount() != id.Params.Count)
+                    {
+                        throw new SemanticError(
+                            "Wrong number of arguments when calling or accessing: "
+                            + variableName,
+                            node.AnchorToken);
+                    }
+                }
+                return id.SymbolType;
+            }
 
             throw new SemanticError(
                 "Undeclared variable: " + variableName,
