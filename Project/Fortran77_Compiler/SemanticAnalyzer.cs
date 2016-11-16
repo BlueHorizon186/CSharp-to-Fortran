@@ -388,6 +388,21 @@ namespace Fortran77_Compiler
             return Type.VOID;
         }
 
+        //-----------------------------------------------------------
+        public Type Visit(GoTo node)
+        {
+            var assgnBegin = 0;
+
+            if (node.NodeChildrenCount() == 2)
+            {
+                VisitLabel((Label) node[assgnBegin]);
+                assgnBegin++;
+            }
+
+            Visit((Label) node[assgnBegin]);
+            return Type.VOID;
+        }
+
         /**********************************************************************
          *                       Visiting Literals
          * *******************************************************************/
@@ -437,6 +452,21 @@ namespace Fortran77_Compiler
                     node.AnchorToken);
             }
             return Type.REAL;
+        }
+
+        //-----------------------------------------------------------
+        public Type Visit(Label node)
+        {
+            var currentTable = Tables[progUnit].Last();
+            var label = node.AnchorToken.Lexeme;
+
+            if (!currentTable.Contains(label))
+            {
+                throw new SemanticError(
+                    "Label has not been defined: " + label,
+                    node.AnchorToken);
+            }
+            return Type.LABEL;
         }
 
         //-----------------------------------------------------------
