@@ -230,18 +230,7 @@ namespace Fortran77_Compiler
                         node[0].AnchorToken);
                 }
 
-                int numDataValues = 1;
-                dataEntry.Params.ForEach(
-                    x => numDataValues *= Convert.ToInt32(x));
-
                 var dataList = node[1];
-                if (dataList.NodeChildrenCount() != numDataValues)
-                {
-                    throw new SemanticError(
-                        "The number of values to assign is different"
-                        + " from the array's capacity: " + variableName,
-                        node[0].AnchorToken);
-                }
 
                 foreach (var n in dataList)
                 {
@@ -333,7 +322,6 @@ namespace Fortran77_Compiler
         //-----------------------------------------------------------
         public Type Visit(If node)
         {
-            var currentTable = Tables[progUnit].Last();
             var assgnBegin = 0;
 
             if (node[assgnBegin] is Label)
@@ -377,6 +365,7 @@ namespace Fortran77_Compiler
                     VisitChildren(node[assgnBegin]);
                 }
             }
+            return Type.VOID;
         }
 
         //-----------------------------------------------------------
@@ -385,6 +374,16 @@ namespace Fortran77_Compiler
             foreach (var ch in node)
             {
                 node.ExpressionTypes.Add(Visit((dynamic) ch));
+            }
+            return Type.VOID;
+        }
+
+        //-----------------------------------------------------------
+        public Type Visit(Read node)
+        {
+            foreach (var ch in node)
+            {
+                Visit((Identifier) ch);
             }
             return Type.VOID;
         }
@@ -409,6 +408,7 @@ namespace Fortran77_Compiler
         public Type Visit(IntLiteral node)
         {
             var intStr = node.AnchorToken.Lexeme;
+
             try
             {
                 Convert.ToInt32(intStr);

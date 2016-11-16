@@ -4,7 +4,7 @@
 
       integer n
       parameter (n=100)
-      integer i, biggest, a(100)
+      integer i, biggest, a(n)
       data a/83, 40, 21, 69, 62, 28, 91,  9, 22, 90,
      +       39, 89, 19, 47, 19, 77, 69, 50,  0, 20,
      +       19, 16, 19, 25, 78, 85, 87, 83, 45, 15,
@@ -27,6 +27,7 @@
 !      i = 2.0
 !      p = 3.45
 
+      read(*, *) i, biggest
       write(*, *) 'Hello World!'
 
       stop
