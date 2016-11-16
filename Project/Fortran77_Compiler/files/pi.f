@@ -5,7 +5,7 @@
       integer numrects, i
       real mid, height, width, area, sum
 
-      sum = 0
+      sum = 0.0
 
       write(*, *) 'Number of rectangles:'
       read(*, *) numrects

@@ -709,18 +709,7 @@ namespace Fortran77_Compiler
             var currentTable = Tables[progUnit].Last();
             var label = node.AnchorToken.Lexeme;
 
-            if (labelStorage.Any())
-            {
-                var prevLabel = labelStorage.Pop();
-                if (label != prevLabel)
-                {
-                    throw new SemanticError(String.Format(
-                        "Expected label {0}, but found {1}.",
-                        prevLabel, label),
-                        node.AnchorToken);
-                }
-            }
-            else if (!currentTable.Contains(label))
+            if (!currentTable.Contains(label))
             {
                 throw new SemanticError(
                     "Label has not been defined: " + label,
@@ -735,7 +724,18 @@ namespace Fortran77_Compiler
             var currentTable = Tables[progUnit].Last();
             var label = node.AnchorToken.Lexeme;
 
-            if (currentTable.Contains(label))
+            if (labelStorage.Any())
+            {
+                var prevLabel = labelStorage.Pop();
+                if (label != prevLabel)
+                {
+                    throw new SemanticError(String.Format(
+                        "Expected label {0}, but found {1}.",
+                        prevLabel, label),
+                        node.AnchorToken);
+                }
+            }
+            else if (currentTable.Contains(label))
             {
                 throw new SemanticError(
                     "Label has already been used: " + label,
