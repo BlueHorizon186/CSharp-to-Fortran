@@ -169,6 +169,26 @@ namespace Fortran77_Compiler
                                     "Only integers can be used as Array dimensions.",
                                     declArray[i].AnchorToken);
                             }
+
+                            if (declArray[i].AnchorToken.Category == TokenCategory.IDENTIFIER)
+                            {
+                                var dimName = declArray[i].AnchorToken.Lexeme;
+                                if (!currentTable.Contains(dimName))
+                                {
+                                    throw new SemanticError(
+                                        "Undeclared dimension: " + dimName,
+                                        declArray[i].AnchorToken);
+                                }
+
+                                if (!currentTable[dimName].IsConstant)
+                                {
+                                    throw new SemanticError(
+                                        "Cannot use non-constant variables as"
+                                        + " array dimensions.",
+                                        declArray[i].AnchorToken);
+                                }
+                            }
+
                             currentTable[variableName].Params
                                 .Add(declArray[i].AnchorToken.Lexeme);
                         }
