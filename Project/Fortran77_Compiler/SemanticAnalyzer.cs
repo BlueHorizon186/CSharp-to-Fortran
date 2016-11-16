@@ -162,8 +162,16 @@ namespace Fortran77_Compiler
                         }
                             
                         for (int i = 0; i < declArray.NodeChildrenCount(); i++)
+                        {
+                            if (Visit((dynamic) declArray[i]) != Type.INTEGER)
+                            {
+                                throw new SemanticError(
+                                    "Only integers can be used as Array dimensions.",
+                                    declArray[i].AnchorToken);
+                            }
                             currentTable[variableName].Params
                                 .Add(declArray[i].AnchorToken.Lexeme);
+                        }
                     }
                 }
             }
@@ -207,11 +215,53 @@ namespace Fortran77_Compiler
         }
 
         //-----------------------------------------------------------
-//        public Type Visit(Data node)
-//        {
-//            var currentTable = Tables[progUnit].Last();
-//            return Type.VOID;
-//        }
+        public Type Visit(Data node)
+        {
+            var currentTable = Tables[progUnit].Last();
+            var variableName = node[0].AnchorToken.Lexeme;
+
+            if (currentTable.Contains(variableName))
+            {
+                var dataEntry = currentTable[variableName];
+                if (!dataEntry.Params.Any())
+                {
+                    throw new SemanticError(
+                        "Cannot set data to a non-Array type: " + variableName,
+                        node[0].AnchorToken);
+                }
+
+                int numDataValues = 1;
+                dataEntry.Params.ForEach(
+                    x => numDataValues *= Convert.ToInt32(x));
+
+                var dataList = node[1];
+                if (dataList.NodeChildrenCount() != numDataValues)
+                {
+                    throw new SemanticError(
+                        "The number of values to assign is different"
+                        + " from the array's capacity: " + variableName,
+                        node[0].AnchorToken);
+                }
+
+                foreach (var n in dataList)
+                {
+                    if (Visit((dynamic) n) != dataEntry.SymbolType)
+                    {
+                        throw new SemanticError(
+                            "Expecting type " + dataEntry.SymbolType
+                            + " in Data Assignment.",
+                            node[0].AnchorToken);
+                    }
+                }
+            }
+            else
+            {
+                throw new SemanticError(
+                    "Undeclared variable: " + variableName,
+                    node[0].AnchorToken);
+            }
+            return Type.VOID;
+        }
 
         /**********************************************************************
          *                       Visiting Statements
