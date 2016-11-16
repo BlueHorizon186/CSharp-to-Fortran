@@ -275,6 +275,20 @@ namespace Fortran77_Compiler
         }
 
         //-----------------------------------------------------------
+        public Type Visit(Identifier node)
+        {
+            var currentTable = Tables[progUnit].Last();
+            var variableName = node.AnchorToken.Lexeme;
+
+            if (currentTable.Contains(variableName))
+                return currentTable[variableName].SymbolType;
+
+            throw new SemanticError(
+                "Undeclared variable: " + variableName,
+                node.AnchorToken);
+        }
+
+        //-----------------------------------------------------------
         public Type Visit(Assignment node)
         {
             var currentTable = Tables[progUnit].Last();
@@ -334,6 +348,12 @@ namespace Fortran77_Compiler
         public Type Visit(StringLiteral node)
         {
             return Type.STRING;
+        }
+
+        //-----------------------------------------------------------
+        public Type Visit(LogicLiteral node)
+        {
+            return Type.LOGICAL;
         }
 
         //-----------------------------------------------------------
