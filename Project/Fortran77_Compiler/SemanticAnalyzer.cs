@@ -192,6 +192,16 @@ namespace Fortran77_Compiler
                     currentTable[variableName] =
                         new SymbolEntry(GetIdType(variableName));
                 }
+                else
+                {
+                    if (currentTable[variableName].IsConstant)
+                    {
+                        throw new SemanticError(
+                            "A variable can only be used in one parameter: "
+                            + variableName,
+                            paramAssgn[0].AnchorToken);
+                    }
+                }
 
                 currentTable[variableName].IsConstant = true;
                 var expectedType = currentTable[variableName].SymbolType;
@@ -365,6 +375,12 @@ namespace Fortran77_Compiler
                     VisitChildren(node[assgnBegin]);
                 }
             }
+            return Type.VOID;
+        }
+
+        //-----------------------------------------------------------
+        public Type Visit(DoLoop node)
+        {
             return Type.VOID;
         }
 
