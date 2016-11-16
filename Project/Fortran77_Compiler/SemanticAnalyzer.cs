@@ -331,6 +331,55 @@ namespace Fortran77_Compiler
         }
 
         //-----------------------------------------------------------
+        public Type Visit(If node)
+        {
+            var currentTable = Tables[progUnit].Last();
+            var assgnBegin = 0;
+
+            if (node[assgnBegin] is Label)
+            {
+                VisitLabel((Label) node[assgnBegin]);
+                assgnBegin++;
+            }
+
+            if (Visit((dynamic) node[assgnBegin]) != Type.LOGICAL)
+            {
+                throw new SemanticError(
+                    "Expecting type " + Type.LOGICAL
+                    + " in Conditional Statement.",
+                    node.AnchorToken);
+            }
+
+            assgnBegin++;
+            VisitChildren(node[assgnBegin]);
+            assgnBegin++;
+
+            if (node.NodeChildrenCount() > assgnBegin)
+            {
+                while (node[assgnBegin].AnchorToken.Category
+                       == TokenCategory.ELSEIF)
+                {
+                    var elseIf = node[assgnBegin];
+                    if (Visit((dynamic) elseIf[0]) != Type.LOGICAL)
+                    {
+                        throw new SemanticError(
+                            "Expecting type " + Type.LOGICAL
+                            + " in Conditional Statement.",
+                            node.AnchorToken);
+                    }
+
+                    VisitChildren(elseIf[1]);
+                    assgnBegin++;
+                }
+
+                if (node[assgnBegin] != null)
+                {
+                    VisitChildren(node[assgnBegin]);
+                }
+            }
+        }
+
+        //-----------------------------------------------------------
         public Type Visit(Write node)
         {
             foreach (var ch in node)
