@@ -38,10 +38,14 @@ namespace Fortran77_Compiler
         private string progUnit;
 
         //-----------------------------------------------------------
+        private Stack<string> labelStorage;
+
+        //-----------------------------------------------------------
         public SemanticAnalyzer()
         {
             Tables = new Dictionary<string, List<SymbolTable>>();
             progUnit = "";
+            labelStorage = new Stack<string>();
         }
 
         //-----------------------------------------------------------
@@ -110,6 +114,10 @@ namespace Fortran77_Compiler
             Visit((dynamic) node[1]);
             Visit((dynamic) node[2]);
 
+            // Visit the stop and end keywords.
+            Visit((dynamic) node[3]);
+            Visit((dynamic) node[4]);
+
             if (node.NodeChildrenCount() > 5)
             {
                 for (int i = 5; i < node.NodeChildrenCount(); i++)
@@ -117,6 +125,20 @@ namespace Fortran77_Compiler
                     Visit((dynamic) node[i]);
                 }
             }
+            return Type.VOID;
+        }
+
+        //-----------------------------------------------------------
+        public Type Visit(Stop node)
+        {
+            if (node.HasChildren())
+                VisitLabel((Label) node[0]);
+            return Type.VOID;
+        }
+
+        //-----------------------------------------------------------
+        public Type Visit(End node)
+        {
             return Type.VOID;
         }
 
@@ -355,6 +377,7 @@ namespace Fortran77_Compiler
                         + " in assignment statement.",
                         node[assgnBegin].AnchorToken);
                 }
+                return expectedType;
             }
             else
             {
@@ -362,7 +385,6 @@ namespace Fortran77_Compiler
                     "Undeclared variable: " + variableName,
                     node[assgnBegin].AnchorToken);
             }
-            return Type.VOID;
         }
 
         //-----------------------------------------------------------
@@ -417,6 +439,34 @@ namespace Fortran77_Compiler
         //-----------------------------------------------------------
         public Type Visit(DoLoop node)
         {
+            labelStorage.Push(node[0].AnchorToken.Lexeme);
+            if (Visit((Assignment) node[1]) != Type.INTEGER)
+            {
+                throw new SemanticError(
+                    "Loop variables can only be integers.",
+                    node[1].AnchorToken);
+            }
+
+            if (Visit((dynamic) node[2]) != Type.INTEGER)
+            {
+                throw new SemanticError(
+                    "Loop variables can only be integers.",
+                    node[2].AnchorToken);
+            }
+
+            var loopEval = 3;
+            if (!(node[loopEval] is StatementList))
+            {
+                if (Visit((dynamic) node[loopEval]) != Type.INTEGER)
+                {
+                    throw new SemanticError(
+                        "Loop variables can only be integers.",
+                        node[loopEval].AnchorToken);
+                }
+                loopEval++;
+            }
+
+            VisitChildren(node[loopEval]);
             return Type.VOID;
         }
 
@@ -463,6 +513,143 @@ namespace Fortran77_Compiler
                 VisitLabel((Label) node[0]);
             }
             return Type.VOID;
+        }
+
+        /**********************************************************************
+         *                       Visiting Expressions
+         * *******************************************************************/
+
+        //-----------------------------------------------------------
+        public Type Visit(Or node)
+        {
+            VisitBinaryOperator(".or.", node, Type.LOGICAL);
+            return Type.LOGICAL;
+        }
+
+        //-----------------------------------------------------------
+        public Type Visit(And node)
+        {
+            VisitBinaryOperator(".and.", node, Type.LOGICAL);
+            return Type.LOGICAL;
+        }
+
+        //-----------------------------------------------------------
+        public Type Visit(Not node)
+        {
+            VisitUnaryOperator(".not.", node, Type.LOGICAL);
+            return Type.LOGICAL;
+        }
+
+        //-----------------------------------------------------------
+        public Type Visit(Equal node)
+        {
+            VisitBinaryNumericOperator(".eq.", node);
+            return Type.LOGICAL;
+        }
+
+        //-----------------------------------------------------------
+        public Type Visit(NotEqual node)
+        {
+            VisitBinaryNumericOperator(".ne.", node);
+            return Type.LOGICAL;
+        }
+
+        //-----------------------------------------------------------
+        public Type Visit(GreaterOrEqual node)
+        {
+            VisitBinaryNumericOperator(".ge.", node);
+            return Type.LOGICAL;
+        }
+
+        //-----------------------------------------------------------
+        public Type Visit(GreaterThan node)
+        {
+            VisitBinaryNumericOperator(".gt.", node);
+            return Type.LOGICAL;
+        }
+
+        //-----------------------------------------------------------
+        public Type Visit(LessOrEqual node)
+        {
+            VisitBinaryNumericOperator(".le.", node);
+            return Type.LOGICAL;
+        }
+
+        //-----------------------------------------------------------
+        public Type Visit(LessThan node)
+        {
+            VisitBinaryNumericOperator(".lt.", node);
+            return Type.LOGICAL;
+        }
+
+        //-----------------------------------------------------------
+        public Type Visit(Addition node)
+        {
+            VisitBinaryNumericOperator("+", node);
+            var firstType = Visit((dynamic) node[0]);
+            var secondType = Visit((dynamic) node[1]);
+
+            return (firstType == Type.REAL || secondType == Type.REAL) ?
+                Type.REAL : Type.INTEGER;
+        }
+
+        //-----------------------------------------------------------
+        public Type Visit(Substraction node)
+        {
+            VisitBinaryNumericOperator("-", node);
+            var firstType = Visit((dynamic) node[0]);
+            var secondType = Visit((dynamic) node[1]);
+
+            return (firstType == Type.REAL || secondType == Type.REAL) ?
+                Type.REAL : Type.INTEGER;
+        }
+
+        //-----------------------------------------------------------
+        public Type Visit(Multiplication node)
+        {
+            VisitBinaryNumericOperator("*", node);
+            var firstType = Visit((dynamic) node[0]);
+            var secondType = Visit((dynamic) node[1]);
+
+            return (firstType == Type.REAL || secondType == Type.REAL) ?
+                Type.REAL : Type.INTEGER;
+        }
+
+        //-----------------------------------------------------------
+        public Type Visit(Division node)
+        {
+            VisitBinaryNumericOperator("/", node);
+            var firstType = Visit((dynamic) node[0]);
+            var secondType = Visit((dynamic) node[1]);
+
+            return (firstType == Type.REAL || secondType == Type.REAL) ?
+                Type.REAL : Type.INTEGER;
+        }
+
+        //-----------------------------------------------------------
+        public Type Visit(Power node)
+        {
+            VisitBinaryNumericOperator("**", node);
+            var firstType = Visit((dynamic) node[0]);
+            var secondType = Visit((dynamic) node[1]);
+
+            return (firstType == Type.REAL || secondType == Type.REAL) ?
+                Type.REAL : Type.INTEGER;
+        }
+
+        //-----------------------------------------------------------
+        public Type Visit(Negation node)
+        {
+            var negExprType = Visit((dynamic) node[0]);
+            if (negExprType != Type.INTEGER
+                && negExprType != Type.REAL)
+            {
+                throw new SemanticError(String.Format(
+                    "Unary operator - requires an operand of type {0} or {1}.",
+                    Type.INTEGER, Type.REAL),
+                    node.AnchorToken);
+            }
+            return negExprType;
         }
 
         /**********************************************************************
@@ -522,7 +709,18 @@ namespace Fortran77_Compiler
             var currentTable = Tables[progUnit].Last();
             var label = node.AnchorToken.Lexeme;
 
-            if (!currentTable.Contains(label))
+            if (labelStorage.Any())
+            {
+                var prevLabel = labelStorage.Pop();
+                if (label != prevLabel)
+                {
+                    throw new SemanticError(String.Format(
+                        "Expected label {0}, but found {1}.",
+                        prevLabel, label),
+                        node.AnchorToken);
+                }
+            }
+            else if (!currentTable.Contains(label))
             {
                 throw new SemanticError(
                     "Label has not been defined: " + label,
@@ -561,6 +759,44 @@ namespace Fortran77_Compiler
             foreach (var ch in node)
             {
                 Visit((dynamic) ch);
+            }
+        }
+
+        private void VisitBinaryOperator(string op, Node node, Type type)
+        {
+            if (Visit((dynamic) node[0]) != type
+                || Visit((dynamic) node[1]) != type)
+            {
+                throw new SemanticError(String.Format(
+                    "Operator {0} requires two operands of type {1}.",
+                    op, type),
+                    node.AnchorToken);
+            }
+        }
+
+        private void VisitUnaryOperator(string op, Node node, Type type)
+        {
+            if (Visit((dynamic) node[0]) != type)
+            {
+                throw new SemanticError(String.Format(
+                    "Operator {0} requires an operand of type {1}.",
+                    op, type),
+                    node.AnchorToken);
+            }
+        }
+
+        private void VisitBinaryNumericOperator(string op, Node node)
+        {
+            var firstType = Visit((dynamic) node[0]);
+            var secondType = Visit((dynamic) node[1]);
+
+            if ((firstType != Type.INTEGER && firstType != Type.REAL)
+                || (secondType != Type.INTEGER && secondType != Type.REAL))
+            {
+                throw new SemanticError(String.Format(
+                    "Operator {0} requires two operands of type {1} or {2}",
+                    op, Type.INTEGER, Type.REAL),
+                    node.AnchorToken);
             }
         }
     }

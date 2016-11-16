@@ -23,7 +23,7 @@
           write(*, *) 'Largest number found so far:', biggest
           write(*, *) 'At index', i
       endif
-      if (i .eq. n) goto 20 endif
+      if (i .eq. n) goto 10 endif
       i = i + 1
       goto 10
 20    stop
