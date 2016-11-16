@@ -25,6 +25,11 @@ namespace Fortran77_Compiler
             return children.Count;
         }
 
+        public bool HasChildren()
+        {
+            return children.Count > 0;
+        }
+
         public IEnumerator<Node> GetEnumerator()
         {
             return children.GetEnumerator();

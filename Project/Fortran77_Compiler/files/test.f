@@ -2,7 +2,7 @@
 
       program test
 
-      integer n, k, m
+      integer n, k, m, a(2, 3)
       parameter (m=100)
       real i, p
 

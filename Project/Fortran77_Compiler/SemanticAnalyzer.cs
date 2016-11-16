@@ -149,6 +149,22 @@ namespace Fortran77_Compiler
                 {
                     currentTable[variableName] =
                         new SymbolEntry(typeMapper[node.AnchorToken.Category]);
+                    
+                    if (decl.HasChildren())
+                    {
+                        var declArray = decl[0];
+                        if (declArray.NodeChildrenCount() > 2)
+                        {
+                            throw new SemanticError(
+                                "An array can have 2 dimensions at most: "
+                                + variableName,
+                                decl.AnchorToken);
+                        }
+                            
+                        for (int i = 0; i < declArray.NodeChildrenCount(); i++)
+                            currentTable[variableName].Params
+                                .Add(declArray[i].AnchorToken.Lexeme);
+                    }
                 }
             }
             return Type.VOID;
@@ -189,6 +205,13 @@ namespace Fortran77_Compiler
             }
             return Type.VOID;
         }
+
+        //-----------------------------------------------------------
+//        public Type Visit(Data node)
+//        {
+//            var currentTable = Tables[progUnit].Last();
+//            return Type.VOID;
+//        }
 
         /**********************************************************************
          *                       Visiting Statements
