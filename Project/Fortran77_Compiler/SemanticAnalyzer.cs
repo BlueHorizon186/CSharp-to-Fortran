@@ -370,6 +370,9 @@ namespace Fortran77_Compiler
                 var expectedType = currentTable[variableName].SymbolType;
                 var foundType = Visit((dynamic) node[assgnBegin + 1]);
 
+                if (expectedType == Type.REAL && foundType == Type.INTEGER)
+                    return expectedType;
+
                 if (expectedType != foundType)
                 {
                     throw new SemanticError(
