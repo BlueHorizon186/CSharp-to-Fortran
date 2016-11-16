@@ -403,6 +403,16 @@ namespace Fortran77_Compiler
             return Type.VOID;
         }
 
+        //-----------------------------------------------------------
+        public Type Visit(Continue node)
+        {
+            if (node.HasChildren())
+            {
+                VisitLabel((Label) node[0]);
+            }
+            return Type.VOID;
+        }
+
         /**********************************************************************
          *                       Visiting Literals
          * *******************************************************************/
