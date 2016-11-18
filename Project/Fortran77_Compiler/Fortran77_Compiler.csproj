@@ -38,7 +38,6 @@
     <Compile Include="Node.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Scanner.cs" />
-    <Compile Include="SemanticAnalyzer.cs" />
     <Compile Include="SemanticError.cs" />
     <Compile Include="SpecificNodes.cs" />
     <Compile Include="SymbolEntry.cs" />
@@ -47,6 +46,9 @@
     <Compile Include="Token.cs" />
     <Compile Include="TokenCategory.cs" />
     <Compile Include="Type.cs" />
+    <Compile Include="SemanticAnalyzer2.cs" />
+    <Compile Include="FunctionSymbolEntry.cs" />
+    <Compile Include="SemanticAnalyzer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />

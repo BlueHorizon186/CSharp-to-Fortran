@@ -21,7 +21,7 @@ using System;
 
 namespace Fortran77_Compiler
 {
-    class Token
+    public class Token
     {
         // Stores the actual text of this token.
         readonly string lexeme;

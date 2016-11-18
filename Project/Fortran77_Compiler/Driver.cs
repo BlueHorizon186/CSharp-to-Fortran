@@ -91,7 +91,7 @@ namespace Fortran77_Compiler
                 Console.WriteLine("Syntax OK!");
 
                 var semantic = new SemanticAnalyzer();
-                semantic.Visit((dynamic) program);
+                semantic.RunAnalyser((dynamic) program);
 
                 Console.WriteLine("Semantics OK.");
                 Console.WriteLine();

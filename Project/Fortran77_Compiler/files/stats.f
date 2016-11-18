@@ -1,13 +1,13 @@
 ! Computes the average and standard deviation of 200 numbers.
-    
+
       program stats
-            
+
       integer n
       parameter (n = 200)
       integer info(n)
       real average, avg, stddev, sd
       common /precomputed/ avg
-      
+
       data info/  191,   290,  6336,  9793,  3803,  3182,  4584,  8726,
      +           8573,  2115,  3475,  5299,  7781,  2438,   902,  3293,
      +           1030,   240,   491,  6732,  7208,  7236,  9335,   664,
@@ -33,25 +33,25 @@
      +           1317,  2034,  9695,  9300,  1924,  4515,  6363,  5177,
      +           3964,  1363,  2954,   861,  6918,  8342,  3967,  7787,
      +           7862,  6986,  8056,  8538,  7123,   910,  6956,  2731/
-     
-      avg = average(info)      
+
+      avg = average(info)
       sd = stddev(info)
-      write(*, *) 'Average =', avg      
+      write(*, *) 'Average =', avg
       write(*, *) 'Standard Deviation =', sd
-      
+
       stop
       end
-      
+
 !-------------------------------------------------------------------------------
 ! Compute the average of info.
-    
+
       real function average(info)
-      
+
       parameter (n = 200)
-      integer info(n)      
+      integer info(n)
       integer i
       real sum
-      
+
       sum = 0
       do 10 i = 1, n
           sum = sum + info(i)
@@ -60,24 +60,23 @@
       average = sum / n
       return
       end
-      
+
 !-------------------------------------------------------------------------------
 ! Compute the standard deviation of info.
-    
+
       real function stddev(info)
-      
+
       parameter (n = 200)
       integer info(n)
       integer i
       real sum, avg
-      common /precomputed/ avg
-      
+!      common /precomputed/ avg
+
       sum = 0
       do 10 i = 1, n
-          sum = sum + ((info(i) - avg) ** 2)          
+          sum = sum + ((info(i) - avg) ** 2)
 10    continue
 
       stddev = sqrt(sum / n)
       return
-      end      
-      
+      end

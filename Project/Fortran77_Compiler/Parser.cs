@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Fortran77_Compiler
 {
-    class Parser
+    public class Parser
     {
         static readonly ISet<TokenCategory> firstOfDeclaration =
             new HashSet<TokenCategory>() {

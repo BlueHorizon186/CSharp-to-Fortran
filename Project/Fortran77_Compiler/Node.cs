@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Fortran77_Compiler
 {
-    class Node: IEnumerable<Node>
+    public class Node: IEnumerable<Node>
     {
         IList<Node> children = new List<Node>();
 

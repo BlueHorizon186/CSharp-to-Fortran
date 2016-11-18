@@ -1,0 +1,40 @@
+Fortran 77 compiler, version 0.4
+Copyright © 2016, ITESM CEM.
+This program is free software; you may redistribute it under the terms of
+the GNU General Public License version 3 or later.
+This program has absolutely no warranty.
+
+
+Included in this release:
+   * Lexical Analysis
+   * Syntactic Analysis
+   * AST Construction
+   * Semantic Analysis
+
+
+Syntax OK!
+m
+i
+i
+i
+i
+j
+j
+n
+i
+i
+j
+j
+m
+i
+i
+i
+i
+j
+j
+n
+i
+i
+j
+j
+r

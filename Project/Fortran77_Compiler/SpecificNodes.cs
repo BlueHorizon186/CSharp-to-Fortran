@@ -3,53 +3,53 @@ using System.Collections.Generic;
 
 namespace Fortran77_Compiler
 {
-    class Program: Node {}
+    public class Program: Node {}
 
-    class DeclarationList: Node {}
+    public class DeclarationList: Node {}
 
-    class Declaration: Node {}
+    public class Declaration: Node {}
 
-    class FArray: Node {}
+    public class FArray: Node {}
 
-    class Parameter: Node {}
+    public class Parameter: Node {}
 
-    class Data: Node {}
+    public class Data: Node {}
 
-    class DataList: Node {}
+    public class DataList: Node {}
 
-    class Common: Node {}
+    public class Common: Node {}
 
-    class CommonList: Node {}
+    public class CommonList: Node {}
 
-    class StatementList: Node {}
+    public class StatementList: Node {}
 
-    class ArgumentList: Node {}
+    public class ArgumentList: Node {}
 
-    class Stop: Node {}
+    public class Stop: Node {}
 
-    class Return: Node {}
+    public class Return: Node {}
 
-    class End: Node {}
+    public class End: Node {}
 
-    class Assignment: Node {}
+    public class Assignment: Node {}
 
-    class ParenthesisOpen: Node {}
+    public class ParenthesisOpen: Node {}
 
-    class ParenthesisClose: Node {}
+    public class ParenthesisClose: Node {}
 
-    class If: Node {}
+    public class If: Node {}
 
-    class ElseIf: Node {}
+    public class ElseIf: Node {}
 
-    class Else: Node {}
+    public class Else: Node {}
 
-    class DoLoop: Node {}
+    public class DoLoop: Node {}
 
-    class Continue: Node {}
+    public class Continue: Node {}
 
-    class Read: Node {}
+    public class Read: Node {}
 
-    class Write: Node
+    public class Write: Node
     {
         public List<Type> ExpressionTypes { get; set; }
         public Write()
@@ -58,61 +58,61 @@ namespace Fortran77_Compiler
         }
     }
 
-    class GoTo: Node {}
+    public class GoTo: Node {}
 
     /* *******************************************************************
      *                        Skip to Expressions.
      ********************************************************************/
 
-    class Identifier: Node {}
+    public class Identifier: Node {}
 
-    class IntLiteral: Node {}
+    public class IntLiteral: Node {}
 
-    class LogicLiteral: Node {}
+    public class LogicLiteral: Node {}
 
-    class RealLiteral: Node {}
+    public class RealLiteral: Node {}
 
-    class StringLiteral: Node {}
+    public class StringLiteral: Node {}
 
-    class Call: Node {}
+    public class Call: Node {}
 
-    class Or: Node {}
+    public class Or: Node {}
 
-    class And: Node {}
+    public class And: Node {}
 
-    class Equal: Node {}
+    public class Equal: Node {}
 
-    class NotEqual: Node {}
+    public class NotEqual: Node {}
 
-    class GreaterOrEqual: Node {}
+    public class GreaterOrEqual: Node {}
 
-    class GreaterThan: Node {}
+    public class GreaterThan: Node {}
 
-    class LessOrEqual: Node {}
+    public class LessOrEqual: Node {}
 
-    class LessThan: Node {}
+    public class LessThan: Node {}
 
-    class Addition: Node {}
+    public class Addition: Node {}
 
-    class Substraction: Node {}
+    public class Substraction: Node {}
 
-    class Multiplication: Node {}
+    public class Multiplication: Node {}
 
-    class Division: Node {}
+    public class Division: Node {}
 
-    class Power: Node {}
+    public class Power: Node {}
 
-    class Negation: Node {}
+    public class Negation: Node {}
 
-    class Not: Node {}
+    public class Not: Node {}
 
-    class Real: Node {}
+    public class Real: Node {}
 
-    class Label: Node {}
+    public class Label: Node {}
 
-    class Function: Node {}
+    public class Function: Node {}
 
-    class FunctionType: Node {}
+    public class FunctionType: Node {}
 
-    class Subroutine: Node {}
+    public class Subroutine: Node {}
 }

@@ -20,7 +20,7 @@
 namespace Fortran77_Compiler
 {
     // Defines the possible categories a Token may belong to.
-    enum TokenCategory
+    public enum TokenCategory
     {
         ADD,
         AND,
