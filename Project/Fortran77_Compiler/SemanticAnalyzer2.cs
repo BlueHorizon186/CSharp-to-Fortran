@@ -3,6 +3,11 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 
+/* **********************************************************************
+ *      NOTE: This file is not used anymore. It's kept just for the
+ *      record and for consulting.
+ * *********************************************************************/
+
 namespace Fortran77_Compiler
 {
     class SemanticAnalyzer
