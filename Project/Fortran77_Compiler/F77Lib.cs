@@ -1,4 +1,5 @@
-﻿namespace Fortran77_Compiler
+﻿
+namespace Fortran77_Compiler
 {
     using System;
 
@@ -14,7 +15,7 @@
             Console.WriteLine(i.ToString());
         }
 
-        public static void Print(double d)
+        public static void Print(float d)
         {
             Console.WriteLine(d.ToString());
         }
