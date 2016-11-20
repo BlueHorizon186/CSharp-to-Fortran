@@ -49,6 +49,7 @@
     <Compile Include="SemanticAnalyzer2.cs" />
     <Compile Include="FunctionSymbolEntry.cs" />
     <Compile Include="SemanticAnalyzer.cs" />
+    <Compile Include="CILGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />

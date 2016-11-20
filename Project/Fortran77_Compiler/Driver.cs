@@ -71,10 +71,10 @@ namespace Fortran77_Compiler
 
             // Check for input file and return an error if
             // it was not provided.
-            if (args.Length != 1)
+            if (args.Length != 2)
             {
                 Console.Error.WriteLine(
-                    "Please specify the name of the input file.");
+                    "Please specify the name of the input and output files.");
                 Environment.Exit(1);
             }
 
@@ -98,6 +98,8 @@ namespace Fortran77_Compiler
                 Console.WriteLine("Symbol Tables");
                 Console.WriteLine("============\n");
                 Console.WriteLine(semantic.ToString());
+
+                //var outputPath = args[1];
             }
 
             catch (Exception e)
