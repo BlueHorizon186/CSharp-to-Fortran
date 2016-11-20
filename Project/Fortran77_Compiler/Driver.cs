@@ -71,7 +71,7 @@ namespace Fortran77_Compiler
 
             // Check for input file and return an error if
             // it was not provided.
-            if (args.Length != 2)
+            if (args.Length != 1)
             {
                 Console.Error.WriteLine(
                     "Please specify the name of the input and output files.");
