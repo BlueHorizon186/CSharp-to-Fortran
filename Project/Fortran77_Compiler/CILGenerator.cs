@@ -5,7 +5,7 @@ namespace Fortran77_Compiler
 {
     public class CILGenerator
     {
-        IDictionary<string, SymbolTable> GlobalTable { get; private set; }
+        public IDictionary<string, SymbolTable> GlobalTable { get; private set; }
         private int labelCounter;
 
         public CILGenerator(IDictionary<string, SymbolTable> table)
@@ -22,16 +22,17 @@ namespace Fortran77_Compiler
 
         //-----------------------------------------------------------
         static readonly IDictionary<Type, string> CILTypes =
+            new Dictionary<Type, string>()
             {
                 { Type.LOGICAL, "bool" },
-                { Type.INTEGER, "int32" }
+                { Type.INTEGER, "int32" },
+                { Type.REAL, "float32" }
             };
 
         //-----------------------------------------------------------
         public string Visit(Program node)
         {
-            return "";
+            return "// Generated code goes here.";
         }
     }
 }
-

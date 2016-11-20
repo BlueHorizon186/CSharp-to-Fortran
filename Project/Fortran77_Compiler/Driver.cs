@@ -71,7 +71,7 @@ namespace Fortran77_Compiler
 
             // Check for input file and return an error if
             // it was not provided.
-            if (args.Length != 1)
+            if (args.Length != 2)
             {
                 Console.Error.WriteLine(
                     "Please specify the name of the input and output files.");
@@ -86,12 +86,12 @@ namespace Fortran77_Compiler
                 var inputPath = args[0];
                 var inputCode = File.ReadAllText(inputPath);
                 var parser = new Parser(new Scanner(inputCode).Start().GetEnumerator());
-                var program = parser.Program();
+                var ast = parser.Program();
                 //Console.WriteLine(program.ToStringTree());
                 Console.WriteLine("Syntax OK!");
 
                 var semantic = new SemanticAnalyzer();
-                semantic.RunAnalyser((dynamic) program);
+                semantic.RunAnalyser((dynamic) ast);
 
                 Console.WriteLine("Semantics OK.");
                 Console.WriteLine();
@@ -99,7 +99,11 @@ namespace Fortran77_Compiler
                 Console.WriteLine("============\n");
                 Console.WriteLine(semantic.ToString());
 
-                //var outputPath = args[1];
+                var outputPath = args[1];
+                var codeGen = new CILGenerator(semantic.GlobalTable);
+                File.WriteAllText(outputPath,
+                    codeGen.Visit((Program) ast));
+                Console.WriteLine("Generated CIL code to '" + outputPath + "'.\n");
             }
 
             catch (Exception e)
