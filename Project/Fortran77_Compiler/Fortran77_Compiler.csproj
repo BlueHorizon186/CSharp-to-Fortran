@@ -50,6 +50,7 @@
     <Compile Include="FunctionSymbolEntry.cs" />
     <Compile Include="SemanticAnalyzer.cs" />
     <Compile Include="CILGenerator.cs" />
+    <Compile Include="F77Lib.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />

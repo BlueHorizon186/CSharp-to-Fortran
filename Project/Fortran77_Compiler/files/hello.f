@@ -2,7 +2,7 @@
     
       program hello
       
-      write(*, *) 'Hello World!'
+      write(*, *) 'Hello World!', 5.3
       
       stop
       end

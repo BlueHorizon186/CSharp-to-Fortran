@@ -2,11 +2,15 @@
 
 .assembly 'csf77' {}
 
+.assembly extern 'F77Lib' {}
+
 .class public 'hello' extends ['mscorlib']'System'.'Object' {
 	.method public static void 'start'() {
 		.entrypoint
 		ldstr "'Hello World!'"
-		call void ['mscorlib']'System'.'Console'::'WriteLine'(string)
+		call void class ['F77Lib']'Fortran77_Compiler'.'Utils'::'Print'(string)
+		ldc.r4 5.3
+		call void class ['F77Lib']'Fortran77_Compiler'.'Utils'::'Print'(float32)
 		ret
 	}
 }
