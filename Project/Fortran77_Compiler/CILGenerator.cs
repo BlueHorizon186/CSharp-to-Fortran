@@ -33,6 +33,10 @@ namespace Fortran77_Compiler
                 { Type.STRING, "string" }
             };
 
+        /* **********************************************************
+         *                   Program and Declarations
+         * *********************************************************/
+
         //-----------------------------------------------------------
         public string Visit(Program node)
         {
@@ -74,6 +78,10 @@ namespace Fortran77_Compiler
             // This method is never called.
             return null;
         }
+
+        /* **********************************************************
+         *                        Statements
+         * *********************************************************/
 
         //-----------------------------------------------------------
         public string Visit(StatementList node)
@@ -121,6 +129,66 @@ namespace Fortran77_Compiler
             return sb.ToString();
         }
 
+        /* **********************************************************
+         *                       Expressions
+         * *********************************************************/
+
+        //-----------------------------------------------------------
+        public string Visit(And node)
+        {
+            return VisitBinaryOperator("and", node);
+        }
+
+        //-----------------------------------------------------------
+        public string Visit(Or node)
+        {
+            return VisitBinaryOperator("or", node);
+        }
+
+        //-----------------------------------------------------------
+        public string Visit(Not node)
+        {
+            return Visit((dynamic) node[0])
+                + "\t\tldc.i4.1\n"
+                + "\t\txor\n";
+        }
+
+        //-----------------------------------------------------------
+        public string Visit(Negation node)
+        {
+            return "\t\tldc.i4.0\n"
+                + Visit((dynamic) node[0])
+                + "\t\tsub\n";
+        }
+
+        //-----------------------------------------------------------
+        public string Visit(Addition node)
+        {
+            return VisitBinaryOperator("add", node);
+        }
+
+        //-----------------------------------------------------------
+        public string Visit(Substraction node)
+        {
+            return VisitBinaryOperator("sub", node);
+        }
+
+        //-----------------------------------------------------------
+        public string Visit(Multiplication node)
+        {
+            return VisitBinaryOperator("mul", node);    
+        }
+
+        //-----------------------------------------------------------
+        public string Visit(Division node)
+        {
+            return VisitBinaryOperator("div", node);    
+        }
+
+        /* **********************************************************
+         *                        Literals
+         * *********************************************************/
+
         //-----------------------------------------------------------
         public string Visit(StringLiteral node)
         {
@@ -160,6 +228,10 @@ namespace Fortran77_Compiler
             else
                 return "\t\tldc.i4.0\n";
         }
+
+        /* **********************************************************
+         *                     Auxiliary Methods
+         * *********************************************************/
 
         //-----------------------------------------------------------
         private string VisitChildren(Node node)
