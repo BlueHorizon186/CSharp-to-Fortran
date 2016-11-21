@@ -7,15 +7,15 @@
 .class public 'hello' extends ['mscorlib']'System'.'Object' {
 	.method public static void 'start'() {
 		.entrypoint
-		.locals init (int32 'i')
-		ldc.i4.0
-		ldc.i4.1
-		sub
+		.locals init (bool 'i')
+		ldc.i4.5
+		ldc.i4.7
+		clt
 		stloc 'i'
 		ldstr "'Hello World!'"
 		call void class ['F77Lib']'Fortran77_Compiler'.'Utils'::'Print'(string)
 		ldloc 'i'
-		call void class ['F77Lib']'Fortran77_Compiler'.'Utils'::'Print'(int32)
+		call void class ['F77Lib']'Fortran77_Compiler'.'Utils'::'Print'(bool)
 		ret
 	}
 }
