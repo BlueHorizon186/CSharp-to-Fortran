@@ -1,9 +1,9 @@
 ! The world famous "Hello World!" program.
     
       program hello
-      integer i
+      logical i
 
-      i = 5
+      i = .true.
       
       write(*, *) 'Hello World!', i
       

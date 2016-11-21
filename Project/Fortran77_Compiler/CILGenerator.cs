@@ -153,6 +153,15 @@ namespace Fortran77_Compiler
         }
 
         //-----------------------------------------------------------
+        public string Visit(LogicLiteral node)
+        {
+            if (node.AnchorToken.Lexeme == ".true.")
+                return "\t\tldc.i4.1\n";
+            else
+                return "\t\tldc.i4.0\n";
+        }
+
+        //-----------------------------------------------------------
         private string VisitChildren(Node node)
         {
             var sb = new StringBuilder();
