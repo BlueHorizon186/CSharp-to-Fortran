@@ -185,6 +185,24 @@ namespace Fortran77_Compiler
             return VisitBinaryOperator("div", node);    
         }
 
+        //-----------------------------------------------------------
+        public string Visit(LessThan node)
+        {
+            return VisitBinaryOperator("clt", node);
+        }
+
+        //-----------------------------------------------------------
+        public string Visit(GreaterThan node)
+        {
+            return VisitBinaryOperator("cgt", node);
+        }
+
+        //-----------------------------------------------------------
+        public string Visit(Equal node)
+        {
+            return VisitBinaryOperator("ceq", node);
+        }
+
         /* **********************************************************
          *                        Literals
          * *********************************************************/
